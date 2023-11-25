@@ -1,17 +1,30 @@
-import { ComponentProps, ReactNode, forwardRef, useEffect, useRef, useState } from 'react';
-type Prop = {
-    type: string, name: string, id?: string, value?: string,
+import { InputTypeOption } from '@/Models/App/InputTypes';
+import { ComponentProps, ReactNode, type ChangeEvent, useEffect, useRef, useState } from 'react';
+
+type Named<T extends HTMLElement, Name extends string> =T&{name:Name};
+
+type Prop<T extends InputTypeOption, Name extends string> = {
+    type: T,
+    name: Name,
+    id?: string,
+    value?: string,
     label?: string,
-    prefix?: string, suffix?: string,
-    className?: string, required?: boolean, autoComplete?: string, isFocused?: boolean, onChange?: (e: React.ChangeEvent<HTMLInputElement>) => any, underlineStyle?: boolean,
+    prefix?: string,
+    suffix?: string,
+    className?: string,
+    required?: boolean,
+    readOnly?:boolean,
+    onChange?: (e: ChangeEvent<Named<HTMLInputElement,Name>>) => any,
+    underlineStyle?: boolean,
     customValidator?: (value: string) => { validity: boolean, errorMessage: string; };
+    list?: [value: any, label?: ReactNode][],
 } & ComponentProps<"input">;
 
 /**
  *
  * id指定無しの場合はnameとおなじになる
  */
-export default function TextInput(
+export default function TextInput<T extends InputTypeOption,Name extends string>(
     {
         type = 'text',
         name,
@@ -23,29 +36,23 @@ export default function TextInput(
         className,
         autoComplete,
         required,
-        isFocused,
         onChange = () => { },
         underlineStyle,
         defaultValue,
         customValidator,
         readOnly,
+        list,
         ...rest
-    }: Prop
+    }: Prop<T,Name>
 ) {
     const [error, setError] = useState<ReactNode>("");
     function addError(msg: ReactNode) {
         setError(error => !!error ? <>{error}<br />{msg}</> : msg);
     }
-    const input = useRef<HTMLInputElement>(null);
-    useEffect(() => {
-        if (isFocused && input.current) {
-            input.current.focus();
-        }
-    }, []);
     // function validate(){
 
     // }
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: ChangeEvent<Named<HTMLInputElement,Name>>) {
         setError(undefined);
         const { validity, validationMessage } = e.target;
         if (!validity.valid) {
@@ -64,32 +71,51 @@ export default function TextInput(
         }
 
     }
+    function isSelect(type:InputTypeOption): type is "select"{
+        return type ==="select";
+    }
     return (
         <label className='flex flex-col gap-1'>
             {label}
             <div className="inline-flex flex-row gap-1 items-end">
                 {prefix}
-                <input
-                    ref={input}
-                    maxLength={128}
-                    min={-99999}
-                    max={99999}
-                    {...rest}
-                    type={type}
-                    name={name}
-                    id={id ?? name}
-                    value={value}
-                    autoFocus={false}
-                    className={
-                        (underlineStyle
-                            ? `border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 invalid:border-red-300 focus:invalid:border-red-300 focus:invalid:ring-red-300 backdrop-blur read-only:bg-stone-50 read-only:focus:border-cyan-700/30 read-only:focus:ring-cyan-700/30 `
-                            : `border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 invalid:border-red-300 focus:invalid:border-red-300 focus:invalid:ring-red-300 rounded-md shadow-sm read-only:bg-stone-50 read-only:focus:border-cyan-700/30 read-only:focus:ring-cyan-700/30 `) + className
-                    }
-                    autoComplete={autoComplete}
-                    required={required}
-                    readOnly={readOnly}
-                    onChange={handleChange}
-                />
+                {isSelect(type)
+                    ? <select
+                        {...rest}
+                        name={name}
+                        id={id ?? name}
+                        value={value}
+                        className={
+                            (underlineStyle
+                                ? `border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 invalid:border-red-300 focus:invalid:border-red-300 focus:invalid:ring-red-300 backdrop-blur read-only:bg-stone-50 read-only:focus:border-cyan-700/30 read-only:focus:ring-cyan-700/30 `
+                                : `border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 invalid:border-red-300 focus:invalid:border-red-300 focus:invalid:ring-red-300 rounded-md shadow-sm read-only:bg-stone-50 read-only:focus:border-cyan-700/30 read-only:focus:ring-cyan-700/30 `) + className
+                        }
+                        autoComplete={autoComplete}
+                        required={required}
+                        readOnly={readOnly}
+                        onChange={handleChange}>
+                        {list?.map(([value, label]) => <option key={name + String(value)} value={value}>{label ?? value}</option>)}
+                    </select>
+                    : <input
+                        maxLength={128}
+                        min={-99999}
+                        max={99999}
+                        {...rest}
+                        type={type}
+                        name={name}
+                        id={id ?? name}
+                        value={value}
+                        autoFocus={false}
+                        className={
+                            (underlineStyle
+                                ? `border-0 border-b-2 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 invalid:border-red-300 focus:invalid:border-red-300 focus:invalid:ring-red-300 backdrop-blur read-only:bg-stone-50 read-only:focus:border-cyan-700/30 read-only:focus:ring-cyan-700/30 `
+                                : `border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 invalid:border-red-300 focus:invalid:border-red-300 focus:invalid:ring-red-300 rounded-md shadow-sm read-only:bg-stone-50 read-only:focus:border-cyan-700/30 read-only:focus:ring-cyan-700/30 `) + className
+                        }
+                        autoComplete={autoComplete}
+                        required={required}
+                        readOnly={readOnly}
+                        onChange={handleChange}
+                    />}
                 {suffix}
             </div>
         </label>

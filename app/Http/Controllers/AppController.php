@@ -21,13 +21,6 @@ class AppController extends Controller
     {
         return Inertia::render('App/Create');
     }
-    public function edit(Request $request, string $app_code)
-    {
-        $app=App::where('app_code', $app_code)->first();
-        return Inertia::render('App/Edit',[
-            "app" => $app,
-        ]);
-    }
 
     public function preflightStore(Request $request)
     {
@@ -38,12 +31,19 @@ class AppController extends Controller
     public function store(Request $request)
     {
         $service = new CreateAppService();
-        $app = $service->createApp($request->appCode, $request->appName, $request->description ?? "", $request->icon, $request->form, $request->formKeys);
+        $app = $service->createApp($request->code, $request->name, $request->description ?? "", $request->icon, $request->form, $request->form_keys);
         return to_route("record.index", [
             "app_id" => $app->id
         ]);
     }
-    public function update(Request $request)
+    public function edit(Request $request, string $app_code)
+    {
+        $app=App::where('app_code', $app_code)->first();
+        return Inertia::render('App/Edit',[
+            "app" => $app,
+        ]);
+    }
+    public function update(Request $request, string $app_code)
     {
 
     }

@@ -1,4 +1,4 @@
-import IAppInput from './AppInput';
+import IAppInput from './IAppInput';
 
 export default class App {
     constructor(

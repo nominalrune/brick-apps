@@ -1,4 +1,4 @@
-import IAppInput from '@/Models/App/AppInput';
+import IAppInput from '@/Models/App/IAppInput';
 
 export default class CreateAppService {
     constructor() { }

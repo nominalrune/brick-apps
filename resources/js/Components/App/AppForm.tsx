@@ -1,5 +1,5 @@
 import Address from '@/Models/Address';
-import AppInput from '@/Models/App/InputData';
+import AppInput from '@/Models/App/AppInput';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import TextInput from '../TextInput';
 import { BiCog, BiX } from 'react-icons/bi';
@@ -7,7 +7,7 @@ import { useState, type ReactNode, type FormEvent } from 'react';
 import InputSettingModal from './InputSettingModal';
 
 type Select = ({ addr, input }: { addr: Address, input: AppInput; }) => void;
-export default function AppForm({ table, update, remove }: { table: AppInput[][], update: ([x, y]: Address, value: AppInput<string>) => void, remove: ([x, y]: Address) => void; }) {
+export default function AppForm({ table, update, remove }: { table: AppInput[][], update: ([x, y]: Address, value: AppInput) => void, remove: ([x, y]: Address) => void; }) {
     const [selectedInput, setSelectedInput] = useState<{ addr: Address, input: AppInput; } | undefined>(undefined);
 
     function handleConfigChange(e: FormEvent<HTMLFormElement>) {

@@ -1,11 +1,10 @@
 import { ChangeEvent, FormEventHandler, useReducer } from 'react';
 import Modal from '../Modal';
 import TextInput from '../TextInput';
-import AppInput from '@/Models/App/InputData';
+import AppInput from '@/Models/App/AppInput';
+import AppInputData from '@/Models/App/AppInputData';
 import Button from '../Button';
 import PrimaryButton from '../PrimaryButton';
-import IAppInput from '@/Models/App/AppInput';
-import AppInputData from '@/Models/App/AppInputData';
 export default function InputSettingModal({ inputData, onClose, onSubmit }: { inputData: AppInput | undefined, onClose: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
     if (!inputData) { return <></>; }
     return <Modal show={!!inputData} onClose={onClose}>
@@ -13,15 +12,14 @@ export default function InputSettingModal({ inputData, onClose, onSubmit }: { in
     </Modal>;
 }
 function InputSettingForm({ inputData, close, onSubmit }: { inputData: AppInput, close: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
-    const [state, reducer] = useReducer((state: AppInput, action: { key: "code" | "defaultValue" | "label" | "prefix" | "suffix" | "rules" | "referringAppName"|"type", value: any; }) => {
+    const [state, reducer] = useReducer((state: AppInput, action: { key: keyof AppInputData, value: any; }) => {
         if (!state) { return inputData; }
-        console.log("before update",state);
-        const newData = state.update(action.key, action.value)
-        console.log("update",newData);
+        const newData = state.update(action.key, action.value);
+        console.log("update", newData);
         return newData;
     }, inputData?.clone());
 
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: ChangeEvent<Named<HTMLInputElement,keyof AppInputData>>) {
         const element = e.target;
         const value = element.type === 'checkbox' ? element.checked : element.value;
         reducer({ key: element.name, value });
@@ -34,9 +32,9 @@ function InputSettingForm({ inputData, close, onSubmit }: { inputData: AppInput,
             <option value="date">date</option>
             <option value="time">time</option></select>
         </label>
-        <label className="flex flex-col">表示名: <TextInput name={"label"} type='text' onChange={handleChange} value={state.label} /></label>
-        <label className="flex flex-col">名前: <TextInput name={"code"} type='text' onChange={handleChange} value={state.code} /></label>
-        <label className="flex flex-col">デフォルト値: <TextInput name={"defaultValue"} type={inputData.type} onChange={handleChange} value={state.defaultValue} /></label>
+        <TextInput prefix="表示名: " name={"label"} type='text' onChange={handleChange} value={state.label} />
+        <TextInput prefix='名前: ' name={"code"} type='text' onChange={handleChange} value={state.code} />
+        <TextInput prefix='デフォルト値: ' name={"defaultValue"} type={inputData.type} onChange={handleChange} value={state.defaultValue} />
 
         <div className="flex gap-4">
             <label>

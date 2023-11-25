@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import AppInput from './App/InputData';
-import Address from './Address';
+import AppInput from '../Models/App/AppInput';
+import Address from '../Models/Address';
 
 export default function useInputsTable(numberOfRows: number = 10) {
     const [table, setTable] = useState<AppInput[][]>(init(numberOfRows));

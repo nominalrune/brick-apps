@@ -3,7 +3,7 @@ import { FiMoreVertical } from 'react-icons/fi';
 import TextInput from '../TextInput';
 export default Palette;
 
-function Palette({ items }: { items: string[]; }) {
+function Palette({ items }: { items: readonly string[]; }) {
     return <Droppable droppableId="palette" >
         {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
