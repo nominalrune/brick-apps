@@ -1,15 +1,16 @@
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { FiMoreVertical } from 'react-icons/fi';
-import TextInput from '../TextInput';
+import Input from '../Input';
+import { InputTypeOption } from '@/Models/App/InputTypes';
 export default Palette;
 
-function Palette({ items }: { items: readonly string[]; }) {
-    return <Droppable droppableId="palette" >
+function Palette({ items, name }: { items: readonly InputTypeOption[],name:string, }) {
+    return <Droppable droppableId={name} >
         {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
                 {
                     items.map((item, i) => (
-                        <Draggable draggableId={item + "-" + (i - items.length).toString()} index={i} key={item + "-" + (i - items.length).toString()}>{
+                        <Draggable draggableId={item} index={i} key={item + "-" + (i - items.length).toString()}>{
                             provided => (
                                 <div className="m-1 p-1 py-2 border-[1px] border-slate-100 rounded bg-slate-50 cursor-grab flex flex-shrink items-center"
                                     ref={provided.innerRef}
@@ -17,10 +18,10 @@ function Palette({ items }: { items: readonly string[]; }) {
                                     {...provided.dragHandleProps}
                                 >
                                     <FiMoreVertical className="p-1 text-2xl text-slate-500" />
-                                    <TextInput
+                                    <Input
                                         type={item}
-                                        name={item + "-" + (i - items.length).toString()}
-                                        value={item === "color" ? "#000000" : ""}
+                                        name={item + "-" + (i).toString()}
+                                        value={""}
                                         placeholder={item}
                                         disabled
                                         className="max-w-[9rem]"

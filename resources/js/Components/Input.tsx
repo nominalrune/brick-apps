@@ -1,8 +1,6 @@
 import { InputTypeOption } from '@/Models/App/InputTypes';
 import { ComponentProps, ReactNode, type ChangeEvent, useEffect, useRef, useState } from 'react';
 
-type Named<T extends HTMLElement, Name extends string> =T&{name:Name};
-
 type Prop<T extends InputTypeOption, Name extends string> = {
     type: T,
     name: Name,
@@ -17,14 +15,14 @@ type Prop<T extends InputTypeOption, Name extends string> = {
     onChange?: (e: ChangeEvent<Named<HTMLInputElement,Name>>) => any,
     underlineStyle?: boolean,
     customValidator?: (value: string) => { validity: boolean, errorMessage: string; };
-    list?: [value: any, label?: ReactNode][],
-} & ComponentProps<"input">;
+    options?: ([value:any]|[value: any, label: ReactNode])[],
+} & Omit<ComponentProps<"input">,"list"|"type">;
 
 /**
  *
  * id指定無しの場合はnameとおなじになる
  */
-export default function TextInput<T extends InputTypeOption,Name extends string>(
+export default function Input<T extends InputTypeOption,Name extends string>(
     {
         type = 'text',
         name,
@@ -41,7 +39,7 @@ export default function TextInput<T extends InputTypeOption,Name extends string>
         defaultValue,
         customValidator,
         readOnly,
-        list,
+        options,
         ...rest
     }: Prop<T,Name>
 ) {
@@ -94,7 +92,7 @@ export default function TextInput<T extends InputTypeOption,Name extends string>
                         required={required}
                         readOnly={readOnly}
                         onChange={handleChange}>
-                        {list?.map(([value, label]) => <option key={name + String(value)} value={value}>{label ?? value}</option>)}
+                        {options?.map(([value, label]) => <option key={name + String(value)} value={value}>{label ?? value}</option>)}
                     </select>
                     : <input
                         maxLength={128}

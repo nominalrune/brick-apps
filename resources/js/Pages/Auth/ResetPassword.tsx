@@ -3,7 +3,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import Input from '@/Components/Input';
 import { Head, useForm } from '@inertiajs/react';
 
 export default function ResetPassword({ token, email }: { token: string, email: string }) {
@@ -34,7 +34,7 @@ export default function ResetPassword({ token, email }: { token: string, email: 
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
-                    <TextInput
+                    <Input
                         id="email"
                         type="email"
                         name="email"
@@ -50,7 +50,7 @@ export default function ResetPassword({ token, email }: { token: string, email: 
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
 
-                    <TextInput
+                    <Input
                         id="password"
                         type="password"
                         name="password"
@@ -67,7 +67,7 @@ export default function ResetPassword({ token, email }: { token: string, email: 
                 <div className="mt-4">
                     <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
 
-                    <TextInput
+                    <Input
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}

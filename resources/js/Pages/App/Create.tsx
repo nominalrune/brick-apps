@@ -6,34 +6,34 @@ import AppInput from '@/Models/App/AppInput';
 import Palette from '@/Components/App/Palette';
 import AppForm from '@/Components/App/AppForm';
 import useDnDAppEditor from '@/Hooks/useDnDAppEditor';
-import { paletteItems } from '@/Models/App/InputTypes';
+import { inputItems } from '@/Models/App/InputTypes';
 import AppEditHeader from '@/Components/App/AppEditHeader';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { AppData } from '@/Models/App/App';
+import App, { AppData } from '@/Models/App/App';
 
 export default function Create({ auth }: PageProps) {
-    const { table, update, remove, onDragEnd } = useDnDAppEditor("palette", paletteItems);
+    const { table, update, remove, onDragEnd } = useDnDAppEditor("palette", inputItems);
 
     const { data, setData, transform, reset, errors, post, processing } = useForm({
         name: "新しいアプリ",
-        code: "new_app",
+        code: "",
         description: "説明をここに書く",
         icon: "1",
-        form: [] as AppInput[][],
-        form_keys: [] as string[],
+        ...table.toDTO()
     });
+    // const { data, setData, transform, reset, errors, post, processing } = useForm(new App(undefined,"","新しいアプリ","説明をここに書く","0",table));
     function handleChange(e: ChangeEvent<Named<HTMLInputElement,Exclude<keyof AppData,"id">>>) {
         setData(e.target.name, e.target.value);
     }
     async function handleSubmit(e: ReactMouseEvent<HTMLButtonElement, MouseEvent>) {
+        console.log(table.toDTO())
         const _confirm = confirm("アプリを作成しますか？");
         if (!_confirm) { return; }
         transform(data => ({
             ...data,
-            form: table,
-            form_keys: table.flat().map(form => form.code),
+            ...table.toDTO()
         }));
-        post("/app/create");
+        post("/app/create", {onBefore:(e)=>{console.log("data",e.data)}});
     }
     function handleCancel() {
         window.history.back();
@@ -51,13 +51,14 @@ export default function Create({ auth }: PageProps) {
         }
     >
         <Head title="create new app" />
+        {errors&&<div>{Object.entries(errors).map(([key,msg])=>(<div key={key} className="text-red-600">{key}:{msg}</div>))}</div>}
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="grid grid-cols-4 h-screen">
                 <div className='col-span-1 bg-white'>
-                    <Palette items={paletteItems} />
+                    <Palette items={inputItems} name="palette" />
                 </div>
                 <div className='col-span-3 flex flex-col'>
-                    <AppForm table={table} update={update} remove={remove} />
+                    <AppForm table={table.form} update={update} remove={remove} />
                 </div>
             </div>
         </DragDropContext>

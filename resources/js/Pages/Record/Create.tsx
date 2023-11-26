@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, Fragment, FormEventHandler } from 'react';
-import TextInput from '@/Components/TextInput';
+import Input from '@/Components/Input';
 import Button from '@/Components/Button';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { AppData } from '@/Models/App/App';

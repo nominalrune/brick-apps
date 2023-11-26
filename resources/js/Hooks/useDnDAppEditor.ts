@@ -1,9 +1,10 @@
 import { DropResult } from "react-beautiful-dnd";
 import useInputsTable from './useInputTable';
 import AppInput from '../Models/App/AppInput';
+import AppInputData from '@/Models/App/AppInputData';
 import { InputTypeOption, defaultValueTypeMap } from '@/Models/App/InputTypes';
-export default function useDnDAppEditor(paletteName:string, paletteItems: readonly InputTypeOption[] ) {
-    const { table, get, insert, move, update, remove } = useInputsTable(1);
+export default function useDnDAppEditor(paletteName:string, paletteItems: readonly InputTypeOption[], initialTable?:AppInputData[][] ) {
+    const { table, get, insert, move, update, remove } = useInputsTable(initialTable);
     function onDragEnd({ draggableId, destination, source }: DropResult) {
         console.log({ draggableId, destination, source });
         if (!destination || destination.droppableId === paletteName) {
@@ -13,7 +14,7 @@ export default function useDnDAppEditor(paletteName:string, paletteItems: readon
         const destCol = destination.index;
         if (source.droppableId === paletteName) {
             const type = paletteItems[source.index];
-            const code = (type + "-" + Math.max(...table.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite)) + 1);
+            const code = type + "-" + (1 + Math.max(0, ...table.form.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite)));
             insert([destRow, destCol], new AppInput(type, code, defaultValueTypeMap[type]));
             return;
         }

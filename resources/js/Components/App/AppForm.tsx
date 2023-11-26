@@ -1,13 +1,19 @@
 import Address from '@/Models/Address';
 import AppInput from '@/Models/App/AppInput';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import TextInput from '../TextInput';
+import Input from '../Input';
 import { BiCog, BiX } from 'react-icons/bi';
 import { useState, type ReactNode, type FormEvent } from 'react';
 import InputSettingModal from './InputSettingModal';
 
 type Select = ({ addr, input }: { addr: Address, input: AppInput; }) => void;
-export default function AppForm({ table, update, remove }: { table: AppInput[][], update: ([x, y]: Address, value: AppInput) => void, remove: ([x, y]: Address) => void; }) {
+interface Param {
+    table: AppInput[][],
+    update: ([x, y]: Address, value: AppInput) => void,
+    remove: ([x, y]: Address) => void,
+}
+
+export default function AppForm({ table, update, remove }: Param) {
     const [selectedInput, setSelectedInput] = useState<{ addr: Address, input: AppInput; } | undefined>(undefined);
 
     function handleConfigChange(e: FormEvent<HTMLFormElement>) {
@@ -15,8 +21,10 @@ export default function AppForm({ table, update, remove }: { table: AppInput[][]
         if (!selectedInput) { return; }
         const form = e.currentTarget;
         if (!(form instanceof HTMLFormElement)) { return; }
-        const { code, label, defaultValue, prefix, suffix } = Object.fromEntries((new FormData(form)).entries());
+        const { code, label,type, valueType, defaultValue, prefix, suffix } = Object.fromEntries((new FormData(form)).entries());
         const newInput = selectedInput.input
+            .update("type", type)
+            .update("valueType",valueType)
             .update("code", code)
             .update("label", label)
             .update("defaultValue", defaultValue)
@@ -26,14 +34,20 @@ export default function AppForm({ table, update, remove }: { table: AppInput[][]
         update(selectedInput.addr, newInput);
         setSelectedInput(undefined);
     }
-    const rows = Array.from({ length: table.length }, (_, i) => <AppFormRow
-        row={table[i]}
-        rowIndex={i}
-        key={i}
+    const extraRow = <AppFormRow
+        key={table.length + 1}
+        row={[]}
+        rowIndex={table.length + 1}
         select={(param) => setSelectedInput(param)}
         remove={remove}
-    />
-    );
+    />;
+    const rows = table.map((row, i) => <AppFormRow
+        key={i}
+        row={row}
+        rowIndex={i}
+        select={(param) => setSelectedInput(param)}
+        remove={remove}
+    />).concat(extraRow);
     return <>
         <InputSettingModal
             inputData={selectedInput?.input}
@@ -53,7 +67,7 @@ function AppFormRow({ row, rowIndex, select, remove }: { row: AppInput[], rowInd
                     key={item.code}
                     onConfig={() => { select({ addr: [rowIndex, col], input: item }); }}
                     remove={() => remove([rowIndex, col])}>
-                    <TextInput label={item.label || "(no name)"} disabled type={item.type} name={item.code} value={item.defaultValue} className="opacity-90 text-slate-700" />
+                    <Input label={item.label || "(no name)"} disabled type={item.type} name={item.code} value={item.defaultValue} className="opacity-90 text-slate-700" />
                     <div className='text-red-500'>{item.error}</div>
                 </AppFormItem>)}
                 {provided.placeholder}
