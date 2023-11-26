@@ -54,7 +54,8 @@ class AppController extends Controller
             "app_code" => $app->code
         ]);
     }
-    public function destroy(Request $request)
+
+    public function destroy(Request $request, string $app_code)
     {
 
     }

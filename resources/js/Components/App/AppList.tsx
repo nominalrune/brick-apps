@@ -18,8 +18,8 @@ export default function AppList({ apps }: { apps: AppData[]; }) {
 
 function AppListItem({ app }: { app: AppData; }) {
     return <tr className='hover:bg-sky-100 group'>
-        <td className="p-2 group-last:rounded-bl-lg border-[1px] border-r-0" ><Link href={"/app/" + app.code}><AppIcon className='w-16 h-16' src={app.icon} /></Link></td>
-        <td className="p-2 text-xl border-b-[1px]" ><Link href={"/app/" + app.code}>{app.name}</Link></td>
+        <td className="p-2 group-last:rounded-bl-lg border-[1px] border-r-0" ><Link href={"/web/" + app.code}><AppIcon className='w-16 h-16' src={app.icon} /></Link></td>
+        <td className="p-2 text-xl border-b-[1px]" ><Link href={"/web/" + app.code}>{app.name}</Link></td>
         <td className='p-2 w-max border-b-[1px]'>{app.description}</td>
         <td className="p-2 group-last:rounded-br-lg border-[1px] border-l-0">records:<span className='p-1'>{42}</span></td>
     </tr>;

@@ -25,7 +25,7 @@ export default function RecordList({ records, app }: Prop) {
                     <tr key={record.id} className='h hover:bg-sky-400/10 group'>
                         {columns.map(column => (
                             <td key={record.id + column} className='p-2 border-[1px] border-t-0 border-slate-200 group-last:first:rounded-bl group-last:last:rounded-br'>
-                                <Link href={`/app/${app.code}/${record.id}`}>{record[column]}</Link>
+                                <Link href={`/web/${app.code}/${record.id}`}>{record[column]}</Link>
                             </td>
                         ))}
                     </tr>

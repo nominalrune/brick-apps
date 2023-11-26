@@ -54,6 +54,14 @@ class App extends Model
     {
         // \Illuminate\Database\Eloquent\Relations\Relation
         // $this->new
-        return $this->newEloquentBuilder(Db::table($this->code, Record::class));
+        return $this->newEloquentBuilder(Db::table($this->code));
+    }
+    public static function findByCode(string $appCode) : App
+    {
+        $app = self::where("code", $appCode)->first();
+        if (is_null($app)) {
+            throw new \Exception("app not found with code ${appCode}");
+        }
+        return $app;
     }
 }

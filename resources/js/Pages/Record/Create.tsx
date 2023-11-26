@@ -17,7 +17,7 @@ export default function Create({ auth, app }: PageProps & { app: AppData; }) {
         const f=new FormData(e.currentTarget)
         const inputs=Object.fromEntries(f.entries());
         transform(data=>({...inputs}));
-        post(`/app/${app.code}/create`);
+        post(`/web/${app.code}/create`);
     }
     function handleCancel() {
         window.history.back();
@@ -27,7 +27,7 @@ export default function Create({ auth, app }: PageProps & { app: AppData; }) {
         user={auth.user}
         header={<div className='flex gap-4 items-center'>
             <AppIcon src={app.icon} />
-            <Link href={`/app/${app.code}`} className='text-xl'>{app.name}</Link>
+            <Link href={`/web/${app.code}`} className='text-xl'>{app.name}</Link>
             <span>新規レコード作成</span>
             <div className='flex-grow flex gap-4 justify-end'>
                 <PrimaryButton type="submit" form={id}>作成</PrimaryButton>

@@ -13,9 +13,9 @@ export default function Index({ auth, app, records }: PageProps & { records: Rec
         user={auth.user}
         header={<div className='flex gap-4 items-center'>
             <AppIcon src={app.icon} />
-            <Link href={`/app/${app.code}`} className='text-xl '>{app.name}</Link>
+            <Link href={`/web/${app.code}`} className='text-xl '>{app.name}</Link>
             <div className='flex-grow flex gap-4 justify-end items-center'>
-                <Link href={`/app/${app.code}/create`} ><PrimaryButton>新規作成</PrimaryButton></Link>
+                <Link href={`/web/${app.code}/create`} ><PrimaryButton>新規作成</PrimaryButton></Link>
                 <Link href={`/app/${app.code}/edit`} ><MdSettings className="text-3xl text-slate-600 hover:text-slate-800 hover:drop-shadow transition-colors" /></Link>
             </div>
         </div>}

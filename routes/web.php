@@ -48,13 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/app/{app_code}/edit', [AppController::class, 'update'])->name('app.update');
     Route::delete('/app/{app_code}', [AppController::class, 'destroy'])->name('app.delete');
 
-    Route::get('/app/{app_code}', [RecordController::class, 'index'])->name('record.index');
-    Route::get('/app/{app_code}/create', [RecordController::class, 'create'])->name('record.create');
-    Route::post('/app/{app_code}/create', [RecordController::class, 'store'])->name('record.store');
-    Route::get('/app/{app_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
-    Route::get('/app/{app_code}/{record_id}/edit', [RecordController::class, 'index'])->name('record.edit');
-    Route::post('/app/{app_code}/{record_id}/edit', [RecordController::class, 'index'])->name('record.update');
-    Route::delete('/app/{app_code}/{record_id}', [RecordController::class, 'index'])->name('record.delete');
+    Route::get('/web/{app_code}', [RecordController::class, 'index'])->name('record.index');
+    Route::get('/web/{app_code}/create', [RecordController::class, 'create'])->name('record.create');
+    Route::post('/web/{app_code}/create', [RecordController::class, 'store'])->name('record.store');
+    Route::get('/web/{app_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
+    Route::get('/web/{app_code}/{record_id}/edit', [RecordController::class, 'edit'])->name('record.edit');
+    Route::post('/web/{app_code}/{record_id}/edit', [RecordController::class, 'update'])->name('record.update');
+    Route::delete('/web/{app_code}/{record_id}', [RecordController::class, 'destroy'])->name('record.delete');
 });
 
 require __DIR__ . '/auth.php';

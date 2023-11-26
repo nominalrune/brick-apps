@@ -4,14 +4,15 @@ import { FormEventHandler, Fragment } from 'react';
 import Input from '../Input';
 
 interface Param {
+    id: string,
     form: AppData["form"],
     record: any,
     onSubmit: FormEventHandler,
     edit: boolean,
 }
 
-export default function RecordShow({ form, record, onSubmit, edit }: Param) {
-    return <form className='m-4 flex flex-col gap-6' onSubmit={onSubmit}>{
+export default function RecordShow({ id, form, record, onSubmit, edit }: Param) {
+    return <form id={id} className='m-4 flex flex-col gap-6' onSubmit={onSubmit}>{
         form.map((inputs, i) => <div key={i} className='flex gap-4'>{
             inputs.map(input => <Fragment key={input.code}>
                 <Input
