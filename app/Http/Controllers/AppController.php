@@ -57,7 +57,10 @@ class AppController extends Controller
 
     public function destroy(Request $request, string $app_code)
     {
-
+        $app = App::findByCode($app_code);
+        $service = new DeleteAppService();
+        $service->delete($app);
+        return;
     }
 
 }

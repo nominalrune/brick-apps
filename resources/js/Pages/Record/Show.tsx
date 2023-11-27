@@ -20,7 +20,7 @@ export default function Show({ auth, app, record }: PageProps & { record: Record
         if (!(form instanceof HTMLFormElement)) { return; }
         const formData = Object.fromEntries(new FormData(form).entries());
         transform(data => formData);
-        post(`/web/${app.code}/edit`, { onSuccess: (e) => { setIsEdit(false); } });
+        post(`/web/${app.code}/${record.id}/edit`, { onSuccess: (e) => { setIsEdit(false); } });
     }
     function handleDelete() {
         if (!confirm("本当に削除しますか？")) { return; }
@@ -35,7 +35,7 @@ export default function Show({ auth, app, record }: PageProps & { record: Record
                 <div className='flex-grow flex gap-4 justify-end'>
                     {!isEdit && <Button type="button" onClick={() => edit()}>編集</Button>}
                     {isEdit && <Button type="submit" form={record.id.toString()}>保存</Button>}
-                    <Button className="text-white bg-red-400 hover:bg-red-300 hover:box-shadow" onClick={handleDelete}><MdDelete/>削除</Button>
+                    <Button className="pl-2 pr-2 text-white bg-red-600 hover:bg-red-500 hover:box-shadow" onClick={handleDelete}><MdDelete className="text-xl"/>削除</Button>
                 </div>
             </div>
         }

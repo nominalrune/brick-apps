@@ -10,11 +10,13 @@ import AppEditHeader from '@/Components/App/AppEditHeader';
 import useDnDAppEditor from '@/Hooks/useDnDAppEditor';
 import { inputItems } from '@/Models/App/InputTypes';
 import AppInputData from '@/Models/App/AppInputData';
+import { MdDelete } from 'react-icons/md';
+import Button from '@/Components/Button';
 
 export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
     console.log({ app });
     const { table, update, remove, onDragEnd } = useDnDAppEditor("palette", inputItems, app.form);
-    const { data, setData, transform, reset, errors, post, processing } = useForm({
+    const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
         name: app.name,
         code: app.code,
         description: app.description,
@@ -38,15 +40,21 @@ export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
         post(`/app/${app.code}/edit`,{onBefore:(e)=>{console.log("data",e.data)}});
     }
 
+    function handleDelete() {
+        if (!confirm("本当に削除しますか？")) { return; }
+        destroy(`/app/${app.code}`);
+    }
     return <AuthenticatedLayout
         user={auth.user}
-        header={
+        header={<>
             <AppEditHeader
                 submitLabel={"更新"}
                 data={data}
                 onChange={handleChange}
                 onCancel={handleCancel}
-                onSubmit={handleSubmit} />
+                onSubmit={handleSubmit}
+                onDelete={handleDelete} />
+                </>
         }
     >
         <Head title={"edit app: " + data.name} />
