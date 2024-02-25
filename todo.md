@@ -17,12 +17,40 @@ backend
 controllerをindex, store, uodate, destroyで分ける
 
 
-frontend
-resource内でよいので、api専用にしたい
+# frontend
+（のちのち独立したsubrepositoryにしたいが、いまはresource内でよい。）
 
-domain
-App
-model
-service
+inertiaの範囲内でやること⸺
+はじめにはデータロードせず、
+データ取得はapiでやる
+
+
+domainのなかで、app, record, user, groupそれぞれのservice, model, hook, componentを配置する
+
+共通部分はdomainの外の
+common/hooksとか、なんとかで、baseClassとして用意していく
+
+- domain/
+  - App/
+    - models/
+    - services/
+      - UpdateService
+      - ParseService
+    - hooks/
+    - components/
+  - Records/
+- common/
+  - hooks/
+    - useLocalStorge
+  - services/
+    - BaseUpdateService（いろんなリポジトリにアップデートをかけるまとめ役。event drivenにしないために、update時の処理はここに集める。）
+    - 
+Monthなどのクラスをどこに配置するかは考えないと。パッケージ化しちゃう?
+
+
+
+ところで、textareを拡張した、markdownエリアを作りたいな。
+
+
 
 Record
