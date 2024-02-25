@@ -49,7 +49,13 @@ class AppController extends Controller
     {
         // dd(["req"=>$request->all()]);
         $service = new UpdateAppService();
-        $app = $service->updateApp($request->code, $request->name, $request->description ?? "", $request->icon, $request->form, $request->form_keys);
+        $app = $service->updateApp(
+            $request->code,
+            $request->name,
+            $request->description ?? "",
+            $request->icon,
+            $request->form
+        );
         return to_route("record.index", [
             "app_code" => $app->code
         ]);

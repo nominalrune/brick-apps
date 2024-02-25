@@ -7,6 +7,7 @@ use App\Models\App;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+use App\Services\DB\Column;
 
 class UpdateAppService
 {
@@ -18,12 +19,13 @@ class UpdateAppService
      * @param string $description
      * @param array $form
      */
-    public function updateApp(string $code, string $name, string $description, string $icon, array $form, array $form_keys)
+    public function updateApp(string $code, string $name, string $description, string $icon, array $form)
     {
         $app = App::where("code", $code)->first();
         /** @var Collection<int,{code:string;type:string;valueType:string;label:string;prefix:string;suffix:string;defaultValue:mixed;referringAppCode:string;rules:array}> $originalColumns*/
         $originalColumns = collect($app->form)->flatten(1);
         /** @var Collection<int,{code:string;type:string;valueType:string;label:string;prefix:string;suffix:string;defaultValue:mixed;referringAppCode:string;rules:array}> $newColumns*/
+        $form_keys = collect($form)->flatten(1)->map(fn ($i) => $i['code']);
         $newColumns = collect($form)->flatten(1);
         $columnsToAdd = $newColumns->whereNotIn('code', $originalColumns->pluck('code')->all());
         // $columnsToChange =[];
@@ -35,7 +37,7 @@ class UpdateAppService
             return $item["valueType"] !== $col['valueType'];
         });
         $columnsToDelete = $originalColumns->whereNotIn('code', $newColumns->pluck('code')->all());
-        // dd(["old"=>$originalColumns,"new"=>$newColumns, "add"=>$columnsToAdd, "change"=>$columnsToChange, "delete"=>$columnsToDelete]);
+        Log::info(print_r(["old"=>$originalColumns,"new"=>$newColumns, "add"=>$columnsToAdd, "change"=>$columnsToChange, "delete"=>$columnsToDelete],true));
         $app->update([
             'name' => $name,
             'description' => $description,
@@ -52,99 +54,23 @@ class UpdateAppService
             foreach ($columnsToAdd as $col) {
                 $code = $col['code'];
                 $valueType = $col['valueType'];
-                if ($valueType === 'reference') {
-                    $table->foreignId($code)->nullable()->constrained($col['referringAppCode'])->onUpdate('restrict')->onDelete('set null');
-                    continue;
-                }
-                $this->declareColumn($table, $code, $valueType);
+                $this->declareColumn($table, $code, $valueType, $col['refereingAppCode']);
             }
             foreach ($columnsToChange as $col) {
                 $code = $col['code'];
                 $valueType = $col['valueType'];
-                if ($valueType === 'reference') {
-                    $table->foreignId($code)->nullable()->constrained($col['referringAppCode'])->onUpdate('restrict')->onDelete('set null')->change();
-                    continue;
-                }
-                $this->declareColumn($table, $code, $valueType);
+                $this->declareColumn($table, $code, $valueType, $col['refereingAppCode']);
             }
-
             $table->dropColumn($columnsToDelete->pluck('code')->all());
-
         });
         return $app;
     }
-    private function declareColumn(Blueprint $table, string $name, string $valueType)
+    private function declareColumn(Blueprint $table, string $name, string $valueType, string $referringAppName = '')
     {
-        switch ($valueType) {
-            case 'varchar':
-                $table->string($name, 255);
-                break;
-            case 'text':
-                $table->text($name);
-                break;
-            case 'integer':
-                $table->integer($name);
-                break;
-            case 'double':
-                $table->double($name);
-                break;
-            case 'boolean':
-                $table->boolean($name);
-                break;
-            case 'date':
-                $table->date($name);
-                break;
-            case 'datetime':
-                $table->datetime($name);
-                break;
-            case 'time':
-                $table->time($name);
-                break;
-            case 'json':
-                $table->json($name);
-                break;
-            case 'blob':
-                $table->binary($name);
-                break;
-            default:
-                throw new \Exception('invalid value type' . "name:{$name}, valueType:{$valueType}");
-        }
+        Column::declareColumn($table, $name, $valueType);
     }
-    private function changeColumn(Blueprint $table, string $name, string $valueType)
+    private function changeColumn(Blueprint $table, string $name, string $valueType, string $referringAppName = '')
     {
-        switch ($valueType) {
-            case 'varchar':
-                $table->string($name, 255)->change();
-                break;
-            case 'text':
-                $table->text($name)->change();
-                break;
-            case 'integer':
-                $table->integer($name)->change();
-                break;
-            case 'double':
-                $table->double($name)->change();
-                break;
-            case 'boolean':
-                $table->boolean($name)->change();
-                break;
-            case 'date':
-                $table->date($name)->change();
-                break;
-            case 'datetime':
-                $table->datetime($name)->change();
-                break;
-            case 'time':
-                $table->time($name)->change();
-                break;
-            case 'json':
-                $table->json($name)->change();
-                break;
-            case 'blob':
-                $table->binary($name)->change();
-                break;
-            default:
-                throw new \Exception('invalid value type' . "name:{$name}, valueType:{$valueType}");
-        }
+        Column::changeColumn($table, $name, $valueType, $referringAppName);
     }
 }

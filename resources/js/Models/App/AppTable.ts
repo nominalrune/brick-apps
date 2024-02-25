@@ -29,11 +29,11 @@ export default class AppTable {
     }
     update([x, y]: Address, value: AppInput) {
         const updatedRow = this.at(x).toSpliced(y, 1, value);
-        console.log("updated row:", updatedRow);
-        return new AppTable(this
+        const newInstance = new AppTable(this
             .map((row, i) => i === x ? updatedRow : row)
             .filter((row) => (row && row.length !== 0))
         );
+        return newInstance;
     }
     move([fromRow, fromCol]: Address, [toRow, toCol]: Address) {
         if (fromRow === toRow) {
@@ -60,7 +60,7 @@ export default class AppTable {
     }
     toDTO() {
         return {
-            form: this.form.map(row=>row.map(col=>col.toDTO())),
+            form: this.form.map(row => row.map(col => col.toDTO())),
             form_keys: this.formKeys
         };
     }

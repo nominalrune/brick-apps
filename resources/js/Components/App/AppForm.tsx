@@ -30,7 +30,7 @@ export default function AppForm({ table, update, remove }: Param) {
             .update("defaultValue", defaultValue)
             .update("prefix", prefix)
             .update("suffix", suffix);
-
+        console.log({ newInput })
         update(selectedInput.addr, newInput);
         setSelectedInput(undefined);
     }

@@ -14,7 +14,6 @@ import { MdDelete } from 'react-icons/md';
 import Button from '@/Components/Button';
 
 export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
-    console.log({ app });
     const { table, update, remove, onDragEnd } = useDnDAppEditor("palette", inputItems, app.form);
     const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
         name: app.name,

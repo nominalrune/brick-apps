@@ -7,6 +7,7 @@ use App\Models\App;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
 
+use App\Services\DB\Column;
 class CreateAppService
 {
     public function __construct()
@@ -53,39 +54,6 @@ class CreateAppService
     }
     private function declareColumn(Blueprint $table, string $name, string $valueType)
     {
-        switch ($valueType) {
-            case 'varchar':
-                $table->string($name, 255);
-                break;
-            case 'text':
-                $table->text($name);
-                break;
-            case 'integer':
-                $table->integer($name);
-                break;
-            case 'double':
-                $table->double($name);
-                break;
-            case 'boolean':
-                $table->boolean($name);
-                break;
-            case 'date':
-                $table->date($name);
-                break;
-            case 'datetime':
-                $table->datetime($name);
-                break;
-            case 'time':
-                $table->time($name);
-                break;
-            case 'json':
-                $table->json($name);
-                break;
-            case 'blob':
-                $table->binary($name);
-                break;
-            default:
-                throw new \Exception('invalid value type' . "name:{$name}, valueType:{$valueType}");
-        }
+        Column::declareColumn($table, $name, $valueType);
     }
 }

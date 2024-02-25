@@ -24,7 +24,6 @@ class AppUpdateRequest extends FormRequest
             'form.*' => ['required', 'array', 'min:1'],
             'form.*.*' => ['required','array'],
             'form.*.*.code' => ['string'],
-            'form_keys' => ['required', 'array'],
         ];
     }
 }
