@@ -12,3 +12,17 @@
 - [ ] アプリ作成のパレットにカスタムブロックを追加
 - [ ] アプリ削除機能を作る
 - [ ] レコード検索機能を作る
+
+backend
+controllerをindex, store, uodate, destroyで分ける
+
+
+frontend
+resource内でよいので、api専用にしたい
+
+domain
+App
+model
+service
+
+Record
