@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -50,11 +51,36 @@ class App extends Model
         'form' => 'array',
         'form_keys' => 'array'
     ];
+    public function className() : Attribute
+    {
+        return new Attribute(function () {
+            return $this->snakeCaseToCamelCase($this->code);
+        });
+    }
+    public function classFullName() : Attribute
+    {
+        return new Attribute(function () {
+            return '\\App\\Models\\UserDefined\\' . $this->className();
+        });
+    }
+
+    /**
+     * e.g. from user_group to UserGroup
+     */
+    private function snakeCaseToCamelCase(string $target)
+    {
+        $words = explode('_', $target);
+        foreach ($words as $key => $word) {
+            $words[$key] = ucfirst($word);
+        }
+        return implode('', $words);
+    }
     public function records()
     {
-        // \Illuminate\Database\Eloquent\Relations\Relation
-        // $this->new
-        return $this->newEloquentBuilder(Db::table($this->code));
+        $classFiler = new \App\Repository\App\UserDefinedModelClassRepository($this);
+        $classFiler->require();
+        return $this->hasMany($this->classFullName);
+        // return $this->newEloquentBuilder(Db::table($this->code, $this->classFullName));
     }
     public static function findByCode(string $appCode) : App
     {

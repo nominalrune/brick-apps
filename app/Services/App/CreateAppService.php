@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\App;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
+use App\Repository\App\UserDefinedModelClassRepository;
 
 use App\Services\DB\Column;
 class CreateAppService
@@ -20,15 +21,27 @@ class CreateAppService
      */
     public function createApp(string $code, string $name, string $description, string $icon, array $form, array $form_keys)
     {
+        $app = $this->createAppRecord($code, $name, $description, $icon, $form, $form_keys);
+        $this->createAppTable($code, $form);
+        $this->createUserDefinedModelClassFile($app);
+        Log::info('app created', ['app' => $app]);
+
+        return $app;
+    }
+    private function createAppRecord(string $code, string $name, string $description, string $icon, array $form, array $form_keys)
+    {
         $app = App::create([
             'code' => $code,
             'name' => $name,
             'description' => $description,
             'icon' => $icon,
             'form' => $form,
-            'form_keys'=>$form_keys,
+            'form_keys' => $form_keys,
         ]);
-        Log::info('app created', ['app' => $app]);
+        return $app;
+    }
+    private function createAppTable(string $code, array $form)
+    {
         $connection = DB::connection(env('DB_CONNECTION'));
         if ($connection->getSchemaBuilder()->hasTable($code)) {
             throw new \Exception('table already exists' . "name:{$code}");
@@ -50,8 +63,13 @@ class CreateAppService
                 }
             }
         });
-        return $app;
     }
+    private function createUserDefinedModelClassFile(App $app)
+    {
+        $repository = new UserDefinedModelClassRepository($app);
+        $repository->create();
+    }
+
     private function declareColumn(Blueprint $table, string $name, string $valueType)
     {
         Column::declareColumn($table, $name, $valueType);

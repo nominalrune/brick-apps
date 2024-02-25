@@ -7,28 +7,22 @@ use App\Models\App;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
-use App\Services\DB\Column;
+use App\Repository\App\UserDefinedModelClassRepository;
+
 
 class UpdateAppService
 {
-    public function __construct()
-    {
-    }
     /**
-     * @param string $name
-     * @param string $description
-     * @param array $form
      */
     public function updateApp(string $code, string $name, string $description, string $icon, array $form)
     {
-        $app = App::where("code", $code)->first();
+        $app = App::findByCode($code);
         /** @var Collection<int,{code:string;type:string;valueType:string;label:string;prefix:string;suffix:string;defaultValue:mixed;referringAppCode:string;rules:array}> $originalColumns*/
         $originalColumns = collect($app->form)->flatten(1);
         /** @var Collection<int,{code:string;type:string;valueType:string;label:string;prefix:string;suffix:string;defaultValue:mixed;referringAppCode:string;rules:array}> $newColumns*/
         $form_keys = collect($form)->flatten(1)->map(fn ($i) => $i['code']);
         $newColumns = collect($form)->flatten(1);
         $columnsToAdd = $newColumns->whereNotIn('code', $originalColumns->pluck('code')->all());
-        // $columnsToChange =[];
         $columnsToChange = $newColumns->filter(function ($col) use ($originalColumns) {
             $item = $originalColumns->firstWhere('code', $col['code']);
             if (! $item) {
@@ -36,8 +30,16 @@ class UpdateAppService
             }
             return $item["valueType"] !== $col['valueType'];
         });
+        // dd(["old"=>$originalColumns,"new"=>$newColumns, "add"=>$columnsToAdd, "change"=>$columnsToChange, "delete"=>$columnsToDelete]);
         $columnsToDelete = $originalColumns->whereNotIn('code', $newColumns->pluck('code')->all());
-        Log::info(print_r(["old"=>$originalColumns,"new"=>$newColumns, "add"=>$columnsToAdd, "change"=>$columnsToChange, "delete"=>$columnsToDelete],true));
+        $this->updateAppRecord($app, $name,$description, $icon, $form, $form_keys);
+
+        $this->updateAppTable($code, $columnsToAdd, $columnsToChange, $columnsToDelete);
+        Log::info('app updated', ['app' => $app]);
+        return $app;
+    }
+    private function updateAppRecord(App $app, string $name, string $description, string $icon, array $form, array $form_keys)
+    {
         $app->update([
             'name' => $name,
             'description' => $description,
@@ -45,10 +47,13 @@ class UpdateAppService
             'form' => $form,
             'form_keys' => $form_keys,
         ]);
-        Log::info('app updated', ['app' => $app]);
+        return $app;
+    }
+    private function updateAppTable(string $code, Collection $columnsToAdd, Collection $columnsToChange, Collection $columnsToDelete)
+    {
         $connection = DB::connection(env('DB_CONNECTION'));
-        if (! $connection->getSchemaBuilder()->hasTable($code)) {
-            throw new \Exception('table does not exist. ' . "name:{$code}");
+        if ($connection->getSchemaBuilder()->hasTable($code)) {
+            throw new \Exception('table already exists' . "name:{$code}");
         }
         $connection->getSchemaBuilder()->table($code, function (Blueprint $table) use ($columnsToAdd, $columnsToChange, $columnsToDelete) {
             foreach ($columnsToAdd as $col) {
@@ -63,9 +68,14 @@ class UpdateAppService
             }
             $table->dropColumn($columnsToDelete->pluck('code')->all());
         });
-        return $app;
     }
-    private function declareColumn(Blueprint $table, string $name, string $valueType, string $referringAppName = '')
+    private function updateUserDefinedModelClassFile(App $app)
+    {
+        $repository = new UserDefinedModelClassRepository($app);
+        $repository->update();
+    }
+
+    private function declareColumn(Blueprint $table, string $name, string $valueType)
     {
         Column::declareColumn($table, $name, $valueType);
     }
