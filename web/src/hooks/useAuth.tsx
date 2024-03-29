@@ -10,17 +10,20 @@ import {
 	UseMutationOptions,
 } from 'react-query';
 
-export interface ReactQueryAuthConfig<
-	User,
-	LoginCredentials,
-	RegisterCredentials
-> {
-	userFn: QueryFunction<User, QueryKey>;
-	loginFn: MutationFunction<User, LoginCredentials>;
-	registerFn: MutationFunction<User, RegisterCredentials>;
-	logoutFn: MutationFunction<unknown, unknown>;
-	userKey?: QueryKey;
-}
+import useApi from './useApi';
+import { IUserData } from 'models/User';
+
+// export interface ReactQueryAuthConfig<
+// 	User,
+// 	LoginCredentials,
+// 	RegisterCredentials
+// > {
+// 	userFn: QueryFunction<User, QueryKey>;
+// 	loginFn: MutationFunction<User, LoginCredentials>;
+// 	registerFn: MutationFunction<User, RegisterCredentials>;
+// 	logoutFn: MutationFunction<unknown, unknown>;
+// 	userKey?: QueryKey;
+// }
 
 export interface AuthProviderProps {
 	children: React.ReactNode;
@@ -31,21 +34,15 @@ export function configureAuth<
 	Error,
 	LoginCredentials,
 	RegisterCredentials
->(config: ReactQueryAuthConfig<User, LoginCredentials, RegisterCredentials>) {
-	const {
-		userFn,
-		userKey = ['auth'],
-		loginFn,
-		registerFn,
-		logoutFn,
-	} = config;
+>() {
+	const userKey = ['auth']
 
 	const useUser = (
 		options?: Omit<
 			UseQueryOptions<User, Error, User, QueryKey>,
 			'queryKey' | 'queryFn'
 		>
-	) => useQuery(userKey, userFn, options);
+	) => useQuery(userKey, getUser, options);
 
 	const useLogin = (
 		options?: Omit<
@@ -61,7 +58,7 @@ export function configureAuth<
 		);
 
 		return useMutation({
-			mutationFn: loginFn,
+			mutationFn: login,
 			...options,
 			onSuccess: (user, ...rest) => {
 				setUser(user);
@@ -84,7 +81,7 @@ export function configureAuth<
 		);
 
 		return useMutation({
-			mutationFn: registerFn,
+			mutationFn: register,
 			...options,
 			onSuccess: (user, ...rest) => {
 				setUser(user);
@@ -102,7 +99,7 @@ export function configureAuth<
 		);
 
 		return useMutation({
-			mutationFn: logoutFn,
+			mutationFn: logout,
 			...options,
 			onSuccess: (...args) => {
 				setUser(null);
@@ -149,4 +146,29 @@ export function configureAuth<
 		useLogout,
 		AuthLoader,
 	};
+}
+
+function getUser(){
+	const api = useApi();
+	return api<IUserData>('/auth');
+}
+
+interface LoginCredentials {
+	email: string;
+	password: string;
+}
+
+function login(credentials: LoginCredentials, signal?: AbortSignal){
+	const api = useApi();
+	return api('/auth/login','POST', credentials, signal);
+}
+
+function logout(){
+	const api = useApi();
+	return api('/auth/logout');
+}
+
+function register(credentials: LoginCredentials){
+	const api = useApi();
+	return api('/auth/register','POST', credentials);
 }
