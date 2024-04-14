@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use App\Casts\App\Fields;
 /**
  * App\Models\App
  *
@@ -21,7 +21,7 @@ class App extends Model
 		'fields',
 	];
 	protected $casts = [
-		'fields' => 'array',
+		'fields' => Fields::class,
 	];
 	public function views(User $user, int $permission = Permission::READ)
 	{
@@ -90,7 +90,7 @@ class App extends Model
 	}
 	public function records()
 	{
-		$classFiler = new \App\Repository\App\UserDefinedModelClassRepository($this);
+		$classFiler = new \Repository\App\UserDefinedModelClassRepository($this);
 		$classFiler->require();
 		return $this->hasMany($this->classFullName);
 		// return $this->newEloquentBuilder(Db::table($this->code, $this->classFullName));
