@@ -21,13 +21,7 @@ class App extends Model
 		'fields',
 	];
 	protected $casts = [
-		'fields' => 'array',We have a normal laravel app. We might want to bring a idea of DDD.
-In laravel, the Model class behaves like both Domain object and Repository.
-And I think we should not move this App\Model namespace to somewhere else, because some third party libraries assume Model should be defined there.
-
-So I think it's better to have `domain` dir outside of `app` dir and also have `repository` direvtory. `domain` directory will have `User` dir which has `User` domain class itself and its ValueObjects or Domain services.
-
-Do you think this is a common idea? (or at least logical idea?)
+		'fields' => 'array',
 	];
 	public function views(User $user, int $permission = Permission::READ)
 	{
