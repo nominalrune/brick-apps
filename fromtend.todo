@@ -1,0 +1,40 @@
+# frontend
+（のちのち独立したsubrepositoryにしたいが、いまはresource内でよい。）
+
+inertiaの範囲内でやること⸺⸺
+はじめにはデータロードせず、
+データ取得はapiでやる
+
+
+- [ ] useApiを作り、csrfを通過する
+- [ ] フォームをuseApiを使うフックにする（→正常にデータをサーバーに送れることを確認）
+
+- [ ] 9domainのなかで、app, record, user, groupそれぞれのservice, model, hook, componentを配置する
+
+共通部分はdomainの外の
+common/hooksとか、なんとかで、baseClassとして用意していく
+
+- domain/
+  - App/
+    - models/
+    - services/
+      - UpdateService
+      - ParseService
+    - hooks/
+    - components/
+  - Records/
+- common/
+  - hooks/
+    - useLocalStorge
+  - services/
+    - BaseUpdateService（いろんなリポジトリにアップデートをかけるまとめ役。event drivenにしないために、update時の処理はここに集める。）
+    -
+Monthなどのクラスをどこに配置するかは考えないと。パッケージ化しちゃう?
+
+
+
+ところで、textareを拡張した、markdownエリアを作りたいな。
+
+
+
+Record
