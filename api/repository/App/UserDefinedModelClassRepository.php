@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Repository\App;
+namespace Repository\App;
 
 use App\Models\App;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\App;
+namespace Domain\App\Services;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\App;
@@ -8,7 +8,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 use App\Repository\App\UserDefinedModelClassRepository;
-
+use Repository\App\Column;
 
 class UpdateAppService
 {
@@ -38,6 +38,10 @@ class UpdateAppService
         Log::info('app updated', ['app' => $app]);
         return $app;
     }
+	/**
+	 * update app data on `apps` table
+	 * TODO : move to repository
+	 */
     private function updateAppRecord(App $app, string $name, string $description, string $icon, array $form, array $form_keys)
     {
         $app->update([
@@ -49,6 +53,10 @@ class UpdateAppService
         ]);
         return $app;
     }
+	/**
+	 * update user-defined-table on the running database
+	 * TODO : move to repository
+	 */
     private function updateAppTable(string $code, Collection $columnsToAdd, Collection $columnsToChange, Collection $columnsToDelete)
     {
         $connection = DB::connection(env('DB_CONNECTION'));
@@ -59,28 +67,21 @@ class UpdateAppService
             foreach ($columnsToAdd as $col) {
                 $code = $col['code'];
                 $valueType = $col['valueType'];
-                $this->declareColumn($table, $code, $valueType, $col['refereingAppCode']);
+                Column::declareColumn($table, $code, $valueType, $col['refereingAppCode']);
             }
             foreach ($columnsToChange as $col) {
                 $code = $col['code'];
                 $valueType = $col['valueType'];
-                $this->declareColumn($table, $code, $valueType, $col['refereingAppCode']);
+                Column::declareColumn($table, $code, $valueType, $col['refereingAppCode']);
             }
             $table->dropColumn($columnsToDelete->pluck('code')->all());
         });
     }
+
     private function updateUserDefinedModelClassFile(App $app)
     {
         $repository = new UserDefinedModelClassRepository($app);
         $repository->update();
     }
 
-    private function declareColumn(Blueprint $table, string $name, string $valueType)
-    {
-        Column::declareColumn($table, $name, $valueType);
-    }
-    private function changeColumn(Blueprint $table, string $name, string $valueType, string $referringAppName = '')
-    {
-        Column::changeColumn($table, $name, $valueType, $referringAppName);
-    }
 }

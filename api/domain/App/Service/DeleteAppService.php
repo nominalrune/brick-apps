@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Services\App;
+namespace Domain\App\Services;
 
 use App\Models\App as AppModel;
 use Illuminate\Support\Facades\DB;
+use Repository\Record\RecordRepository;
 
 class DeleteAppService{
     public function delete(string $app_code){
 
         $app = AppModel::findByCode($app_code);
-        $this->deleteAppRecord($app);
-        $this->deleteAppTable($app_code);
+        $this->deleteAppMetadata($app);
+        $this->dropAppTable($app_code);
         $this->deleteUserDefinedModelClassFile($app_code);
     }
-    private function deleteAppRecord(App $app)
+    private function deleteAppMetadata(AppModel $app)
     {
-        $app->delete();
+        $app->forceDelete();
     }
-    private function deleteAppTable(string $code)
+    private function dropAppTable(string $code)
     {
         $connection = new RecordRepository($code);
         $connection = DB::connection(env('DB_CONNECTION'))->setDatabaseName(env('DB_DATABASE'));

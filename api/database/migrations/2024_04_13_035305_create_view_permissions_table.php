@@ -12,8 +12,10 @@ return new class extends Migration {
 	{
 		Schema::create('view_permissions', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
-			$table->foreignId('target_id')->constrained('views')->onDelete('cascade');
+			$table->foreignId('group_id')
+				->constrained('groups')->onUpdate('cascade')->onDelete('cascade');
+			$table->foreignId('target_id')
+				->constrained('views')->onUpdate('cascade')->onDelete('cascade');
 			$table->integer('permission');
 		});
 	}

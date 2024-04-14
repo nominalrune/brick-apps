@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PermissionBase extends Model
 {
+	protected $timestamps = false;
 	protected $fillable = [
 		'group_id',
 		'target_id',

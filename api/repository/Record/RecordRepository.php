@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Record;
+namespace Repository\Record;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\App;
@@ -33,4 +33,19 @@ class RecordRepository
         $id = $this->table->insertGetId($record);
         return $id;
     }
+	public function delete(int $id)
+	{
+		$record = $this->get($id);
+		$this->table->where("id", $id)->delete();
+		return $record;
+	}
+	public function update(int $id, array $record)
+	{
+		$this->get($id);
+		$this->table->where("id", $id)->update($record);
+		return $this->get($id);
+	}
+	public function getTable(){
+		return $this->table;
+	}
 }

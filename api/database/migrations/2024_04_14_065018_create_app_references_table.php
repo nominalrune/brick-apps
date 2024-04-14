@@ -10,12 +10,16 @@ return new class extends Migration {
 	 */
 	public function up() : void
 	{
-		Schema::create('user_group', function (Blueprint $table) {
+		Schema::create('app_references', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('user_id')->constrained('users')
+			$table->string('parent_code', 255);
+			$table->string('target_code', 255);
+			$table->foreign('parent_code')
+				->references('code')->on('apps')
 				->onUpdate('cascade')->onDelete('cascade');
-			$table->foreignId('group_id')->constrained('groups')
-				->onUpdate('cascade')->onDelete('cascade');
+			$table->foreign('target_code')
+				->references('code')->on('apps')
+				->onUpdate('cascade')->onDelete('restrict');
 		});
 	}
 
@@ -24,6 +28,6 @@ return new class extends Migration {
 	 */
 	public function down() : void
 	{
-		Schema::dropIfExists('user_group');
+		Schema::dropIfExists('app_references');
 	}
 };

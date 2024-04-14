@@ -17,12 +17,11 @@ return new class extends Migration {
 			$table->integer('permission');
 		});
 	}
-
 	/**
 	 * Reverse the migrations.
 	 */
 	public function down() : void
 	{
-		Schema::dropIfExists('table_permissions');
+		Schema::dropIfExists('app_permissions');
 	}
 };

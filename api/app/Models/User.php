@@ -44,20 +44,22 @@ class User extends Authenticatable
 	public function appPermissions()
 	{
 		$relation = $this->hasMany(AppPermission::class);
-		$relation->getQuery()
+		$query = $relation->getQuery()
 			->distinct()
 			->select('permissions.*')
 			->join('groups', 'permissions.group_id', '=', 'groups.group_id')
 			->join('user_group', 'groups.group_id', '=', 'user_group.group_id')
 			->where('user_group.user_id', $this->id)
+			->getQuery()
 		;
+		$relation->setQuery($query);
 		return $relation;
 	}
 
 	public function apps(int $permission = Permission::READ)
 	{
 		$relation = $this->hasMany(App::class);
-		$relation->getQuery()
+		$query = $relation->getQuery()
 			->distinct()
 			->select('apps.*')
 			->join('app_permissions', 'apps.id', '=', 'app_permissions.target_id')
@@ -65,7 +67,9 @@ class User extends Authenticatable
 			->join('user_group', 'groups.id', '=', 'user_group.group_id')
 			->where('user_group.user_id', $this->id)
 			->whereRaw("(app_permissions.permission & {$permission}) = {$permission}")
+			->getQuery()
 		;
+		$relation->setQuery($query);
 		return $relation;
 	}
 	// public function apps() : Attribute

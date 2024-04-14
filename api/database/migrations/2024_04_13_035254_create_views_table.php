@@ -13,15 +13,24 @@ return new class extends Migration {
 		Schema::create('views', function (Blueprint $table) {
 			$table->id();
 			$table->timestamps();
-			$table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-			$table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
-			$table->foreignId('app_id')->constrained('apps')->onDelete('cascade');
+			$table->foreignId('created_by')->nullable()
+				->constrained('users')->onDelete('set null');
+			$table->foreignId('updated_by')->nullable()
+				->constrained('users')->onDelete('set null');
+			$table->string('app_code', 255);
+			$table->foreign('app_code')
+				->references('code')->on('apps')
+				->onUpdate('cascade')
+				->onDelete('cascade');
 			$table->string('name');
 			$table->text('description')->nullable();
 			$table->json('content');
 		});
 		Schema::table('apps', function (Blueprint $table) {
-			$table->foreignId('default_form_id')->constrained('views')->onDelete('restrict');
+			$table->foreignId('default_form_id')
+				->constrained('views')
+				->onUpdate('cascade')
+				->onDelete('restrict');
 		});
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\DB;
+namespace Repository\App;
 
 use Illuminate\Database\Schema\Blueprint;
 
