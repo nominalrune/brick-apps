@@ -10,10 +10,10 @@ return new class extends Migration {
 	 */
 	public function up() : void
 	{
-		Schema::create('view_permissions', function (Blueprint $table) {
+		Schema::create('app_permissions', function (Blueprint $table) {
 			$table->id();
 			$table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
-			$table->foreignId('target_id')->constrained('views')->onDelete('cascade');
+			$table->foreignId('target_id')->constrained('apps')->onDelete('cascade');
 			$table->integer('permission');
 		});
 	}
@@ -23,6 +23,6 @@ return new class extends Migration {
 	 */
 	public function down() : void
 	{
-		Schema::dropIfExists('view_permissions');
+		Schema::dropIfExists('table_permissions');
 	}
 };

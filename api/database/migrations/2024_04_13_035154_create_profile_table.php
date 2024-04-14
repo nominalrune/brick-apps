@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('profile', function (Blueprint $table) {
             $table->foreignId('user_id')->primary()->constrained('users')->onDelete('cascade');
             $table->timestamps();
-			$table->string('first_name');
-			$table->string('last_name');
-			$table->string('avatar')->nullable();
+			$table->string('name',255);
+			$table->text('description')->nullable();
+			$table->string('avatar',255)->nullable();
 			$table->dateTime('archived_at')->nullable();
         });
     }

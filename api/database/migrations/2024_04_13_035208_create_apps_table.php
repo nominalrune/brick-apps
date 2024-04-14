@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('code', 255)->unique();
             $table->string('name', 255);
             $table->string('icon', 255)->default('1');
-            $table->text('description');
-            $table->json('form');
+            $table->text('description')->nullable();
+			$table->json('fields');
         });
     }
 
