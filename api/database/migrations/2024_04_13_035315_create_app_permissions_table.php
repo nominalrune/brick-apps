@@ -12,8 +12,14 @@ return new class extends Migration {
 	{
 		Schema::create('app_permissions', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
-			$table->foreignId('target_id')->constrained('apps')->onDelete('cascade');
+			$table->string('group_code', 255);
+			$table->string('app_code', 255);
+			$table->foreign('group_code')
+				->references('code')->on('groups')
+				->onUpdate('cascade')->onDelete('cascade');
+			$table->foreign('app_code')
+				->references('code')->on('apps')
+				->onUpdate('cascade')->onDelete('cascade');
 			$table->integer('permission');
 		});
 	}

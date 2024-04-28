@@ -17,24 +17,5 @@ use App\Http\Controllers\AppController;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/profile', function (Request $request) {
-        return $request->user();
-    });
-    Route::post('/profile', function (Request $request) {
-        return $request->user();
-    });
-    Route::delete('/profile', function (Request $request) {});
-
-    Route::get('/app', function (Request $request) {});
-    Route::post('/app', function (Request $request) {});
-
-    Route::get('/app/{app_code}', function (Request $request) {});
-    Route::post('/app/{app_code}', function (Request $request) {});
-    Route::delete('/app/{app_code}', function (Request $request) {});
-    
-    Route::post('/app/{app_code}/new', function (Request $request) {});
-    Route::get('/app/{app_code}/{id}', function (Request $request) {});
-    Route::post('/app/{app_code}/{id}', function (Request $request) {});
-    Route::delete('/app/{app_code}/{id}', function (Request $request) {});
 
 });

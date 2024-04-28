@@ -1,7 +1,7 @@
-import Nav from './Nav';
+import NavBar from './NavBar';
 
 export default function Layout() {
 	return (
-		<Nav />
+		<NavBar />
 	);
 }

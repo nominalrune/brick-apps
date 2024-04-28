@@ -12,6 +12,7 @@ return new class extends Migration {
 	{
 		Schema::create('views', function (Blueprint $table) {
 			$table->id();
+			$table->string('code', 255)->unique();
 			$table->timestamps();
 			$table->foreignId('created_by')->nullable()
 				->constrained('users')->onDelete('set null');
@@ -23,7 +24,7 @@ return new class extends Migration {
 				->onUpdate('cascade')
 				->onDelete('cascade');
 			$table->string('name');
-			$table->text('description')->nullable();
+			$table->text('description');
 			$table->json('content');
 		});
 		Schema::table('apps', function (Blueprint $table) {

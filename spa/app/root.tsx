@@ -6,7 +6,15 @@ import {
 	ScrollRestoration,
 } from "@remix-run/react";
 
-import Nav from "./components/Layout/Nav";
+import NavBar from "~/components/layouts/NavBar";
+import type { LinksFunction } from "@remix-run/node";
+import stylesheet from "~/index.css?url";
+
+import Contexts from './contexts/Contexts';
+
+export const links: LinksFunction = () => [
+	{ rel: "stylesheet", href: stylesheet },
+];
 
 export function Layout({ children }: { children: React.ReactNode; }) {
 	return (
@@ -18,8 +26,10 @@ export function Layout({ children }: { children: React.ReactNode; }) {
 				<Links />
 			</head>
 			<body>
-				<Nav />
-				{children}
+				<Contexts>
+					<NavBar />
+					{children}
+				</Contexts>
 				<ScrollRestoration />
 				<Scripts />
 			</body>

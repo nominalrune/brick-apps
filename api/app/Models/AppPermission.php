@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class AppPermission extends PermissionBase
 {
 	use HasFactory;
-	public function target()
+	public function app()
 	{
-		return $this->belongsTo(App::class);
+		return $this->belongsTo(App::class, 'app_code', 'code');
 	}
 }

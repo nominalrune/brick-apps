@@ -17,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
 	use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-	static const DELETED_AT = 'archived_at';
+	const DELETED_AT = 'archived_at';
 	protected $fillable = [
 		'email',
 		'password',
@@ -46,8 +46,8 @@ class User extends Authenticatable
 		$relation = $this->hasMany(AppPermission::class);
 		$query = $relation->getQuery()
 			->distinct()
-			->select('permissions.*')
-			->join('groups', 'permissions.group_id', '=', 'groups.group_id')
+			->select('app_permissions.*')
+			->join('groups', 'app_permissions.group_code', '=', 'groups.code')
 			->join('user_group', 'groups.group_id', '=', 'user_group.group_id')
 			->where('user_group.user_id', $this->id)
 			->getQuery()
@@ -62,8 +62,8 @@ class User extends Authenticatable
 		$query = $relation->getQuery()
 			->distinct()
 			->select('apps.*')
-			->join('app_permissions', 'apps.id', '=', 'app_permissions.target_id')
-			->join('groups', 'app_permissions.group_id', '=', 'groups.id')
+			->join('app_permissions', 'apps.code', '=', 'app_permissions.app_code')
+			->join('groups', 'app_permissions.group_code', '=', 'groups.code')
 			->join('user_group', 'groups.id', '=', 'user_group.group_id')
 			->where('user_group.user_id', $this->id)
 			->whereRaw("(app_permissions.permission & {$permission}) = {$permission}")

@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ViewPermission extends PermissionBase
 {
 	use HasFactory;
-	public function target()
+	public function view()
 	{
-		return $this->belongsTo(View::class);
+		return $this->belongsTo(View::class, 'view_code', 'code');
 	}
 }

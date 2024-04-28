@@ -1,7 +1,7 @@
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
 
 async function getClientData(request: Request) {
-	const response = {name: "Remix", version: "1.0.0"};
+	const response = {};
 	return response;
 }
 
@@ -17,6 +17,8 @@ export async function clientLoader({
 // }
 
 export default function Component() {
-	const data = useLoaderData(); // (2) - client data
-	return <>{data.name}</>;
+	const data = useLoaderData();
+	return <>
+		this is propfile index page
+	</>;
 }
