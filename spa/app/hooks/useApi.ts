@@ -1,5 +1,5 @@
-import { get } from 'http';
 import { useState, useEffect } from 'react';
+import config from '~/config';
 
 function getOptions(method = "GET", signal: AbortSignal | null = null) {
 	return {
@@ -14,12 +14,13 @@ function getOptions(method = "GET", signal: AbortSignal | null = null) {
 	} as const;
 };
 
-export default function useApi(baseUrl: string) {
+export default function useApi() {
+	const baseUrl = config.baseUrl;
 	const [locked, setLocked] = useState(false);
 	const csrf = async () => {
 		return await fetch(`${baseUrl}/auth/csrf-cookie`, getOptions('GET'));
 	};
-	const api = async (url: string, method: string, body: object) => {
+	const api = async (url: string, method: string, body?: object) => {
 		if (locked) return;
 		setLocked(true);
 		await csrf();

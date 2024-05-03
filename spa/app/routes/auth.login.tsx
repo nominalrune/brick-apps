@@ -1,6 +1,8 @@
 import Form from "~/lib/react-structured-form/src/Form";
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
-import useAuth from '~/hooks/useAuth';
+import { useContext } from 'react';
+import AuthContext from '~/contexts/Auth/AuthContext';
+
 
 async function getClientData(request: Request) {
 	const response = {};
@@ -25,7 +27,7 @@ export async function clientLoader({
 // };
 
 export default function Login() {
-	const {user, login} = useAuth();
+	const {user, login} = useContext(AuthContext);
 	if(user){
 		return <div>ログイン済み</div>;
 	}
@@ -33,7 +35,7 @@ export default function Login() {
 		<div>
 			<Form
 				actions={[
-					{ "label": "ログイン", onClick: (data) => {login(data.email, data.password) } },
+					{ "label": "ログイン", onClick: (data) => {login(data) } },
 					{ "label": "キャンセル", onClick: () => { console.log("cancel"); } },
 				]}
 				properties={[
