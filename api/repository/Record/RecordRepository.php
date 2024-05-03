@@ -8,12 +8,14 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
+
 class RecordRepository
 {
     private Builder $table;
-    public function __construct(string $table)
+    public function __construct(App $app)
     {
-        $this->table = DB::table($table);
+		$tableName = $app->code;
+        $this->table = DB::table($tableName);
     }
     public function get(int $id){
         $record = $this->table->where("id","=", $id)->first();
