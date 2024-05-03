@@ -9,34 +9,42 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\JsonResponse;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+	public function index(Request $request) : Response
+	{
+		$user = $request->user();
+		$user->load('profile');
+		return $user;
+	}
 
-        $request->session()->regenerate();
+	/**
+	 * Handle an incoming authentication request.
+	 */
+	public function store(LoginRequest $request) : JsonResponse
+	{
+		$request->authenticate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
-    }
+		$request->session()->regenerate();
+		/** @var \App\Models\User */
+		$user = $request->user();
+		return response()->json($user);
+	}
 
-    /**
-     * Destroy an authenticated session.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        Auth::guard('web')->logout();
+	/**
+	 * Destroy an authenticated session.
+	 */
+	public function destroy(Request $request) : RedirectResponse
+	{
+		Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
+		$request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+		$request->session()->regenerateToken();
 
-        return redirect('/');
-    }
+		return redirect('/');
+	}
 }

@@ -3,10 +3,9 @@
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecordController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Models\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,24 +29,36 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 	Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-	Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+	Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 	Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-	Route::get('/app', [AppController::class, 'index'])->name('app.index');
-	Route::get('/app/create', [AppController::class, 'create'])->name('app.create');
-	Route::post('/app/create/dry', [AppController::class, 'preflightStore'])->name('app.store.dry');
-	Route::post('/app/create', [AppController::class, 'store'])->name('app.store');
-	Route::get('/{app_code}/edit', [AppController::class, 'edit'])->name('app.edit');
-	Route::post('/{app_code}/edit', [AppController::class, 'update'])->name('app.update');
-	Route::delete('/{app_code}', [AppController::class, 'destroy'])->name('app.delete');
+	Route::get('/users',[UserController::class, 'index'])->name('user.index');
+	Route::post('/users',[UserController::class, 'store'])->name('user.store');
+	Route::get('/users/{user_id}',[UserController::class, 'show'])->name('user.show');
+	Route::post('/users/{user_id}',[UserController::class, 'update'])->name('user.update');
+	Route::get('/users/{user_id}/archive',[UserController::class, 'archive'])->name('user.archive');
+	Route::delete('/users/{user_id}',[UserController::class, 'destroy'])->name('user.delete');
 
-	Route::get('/web/{app_code}', [RecordController::class, 'index'])->name('record.index');
-	Route::get('/web/{app_code}/create', [RecordController::class, 'create'])->name('record.create');
-	Route::post('/web/{app_code}/create', [RecordController::class, 'store'])->name('record.store');
-	Route::get('/web/{app_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
-	Route::get('/web/{app_code}/{record_id}/edit', [RecordController::class, 'edit'])->name('record.edit');
-	Route::post('/web/{app_code}/{record_id}/edit', [RecordController::class, 'update'])->name('record.update');
-	Route::delete('/web/{app_code}/{record_id}', [RecordController::class, 'destroy'])->name('record.delete');
+	Route::get('/app', [AppController::class, 'index'])->name('app.index');
+	Route::post('/app', [AppController::class, 'store'])->name('app.store');
+	Route::post('/app/dry', [AppController::class, 'previewStore'])->name('app.store.dry');
+
+	Route::post('/app/{app_code}', [AppController::class, 'update'])->name('app.update');
+	Route::post('/app/{app_code}/dry', [AppController::class, 'previewUpdate'])->name('app.update.dry');
+	Route::get('/app/{app_code}/archive', [AppController::class, 'archive'])->name('app.archive');
+	Route::delete('/app/{app_code}', [AppController::class, 'destroy'])->name('app.delete');
+
+	Route::get('/app/{app_code}/{view_code}', [RecordController::class, 'index'])->name('record.index');
+	Route::post('/app/{app_code}/{view_code}', [RecordController::class, 'store'])->name('record.store');
+	Route::get('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
+	Route::post('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'update'])->name('record.update');
+	Route::delete('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'destroy'])->name('record.delete');
+
+	Route::get('/view', [ViewController::class, 'index'])->name('view.index');
+	Route::post('/view', [ViewController::class, 'store'])->name('view.store');
+	Route::get('/view/{view_code}', [ViewController::class, 'show'])->name('view.show');
+	Route::post('/view/{view_code}', [ViewController::class, 'update'])->name('view.update');
+	Route::delete('/view/{view_code}', [ViewController::class, 'destroy'])->name('view.delete');
 });
 
 require __DIR__ . '/auth.php';

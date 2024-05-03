@@ -17,9 +17,6 @@ Route::prefix("auth")->middleware('guest')->group(function () {
 
 	Route::post('register', [RegisteredUserController::class, 'store']);
 
-	Route::get('login', [AuthenticatedSessionController::class, 'create'])
-		->name('login');
-
 	Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
 	Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
@@ -36,7 +33,7 @@ Route::prefix("auth")->middleware('guest')->group(function () {
 });
 
 Route::prefix("auth")->middleware('auth:sanctum')->group(function () {
-	Route::get('/', fn ($request) => response()->json($request->user()->toArray()))->name('user');
+	Route::get('/', [AuthenticatedSessionController::class, 'index'])->name('user');
 
 	Route::get('verify-email', EmailVerificationPromptController::class)
 		->name('verification.notice');

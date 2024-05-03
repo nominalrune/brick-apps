@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Profile
@@ -11,8 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Profile extends Model
 {
-	use SoftDeletes;
-	static const DELETED_AT = 'archived_at';
+	use HasFactory,SoftDeletes;
+	const DELETED_AT = 'archived_at';
 
 	protected $fillable = [
 		'name',

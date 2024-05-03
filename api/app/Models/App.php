@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use App\Casts\App\Fields;
+use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\App
  *
  */
 class App extends Model
 {
+	use HasFactory,SoftDeletes;
+	const DELETED_AT = 'archived_at';
 	protected $fillable = [
 		'code',
 		'name',
@@ -55,6 +57,19 @@ class App extends Model
 	public function permissions()
 	{
 		return $this->hasMany(AppPermission::class);
+	}
+	public function groups()
+	{
+		$relation = $this->hasMany(Group::class);
+		$query = $relation->getQuery()
+			->distinct()
+			->select('groups.*')
+			->join('app_permissions', 'groups.id', '=', 'app_permissions.group_id')
+			->where('app_permissions.target_id', $this->id)
+			->getQuery()
+		;
+		$relation->setQuery($query);
+		return $relation;
 	}
 
 	public function users()

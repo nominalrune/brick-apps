@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserGroup extends Model
 {
+	use HasFactory;
 	protected $table = 'user_group';
-	protected $timestamps = false;
+	public $timestamps = false;
 	protected $fillable = ['user_id', 'group_id'];
 }
