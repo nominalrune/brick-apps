@@ -1,9 +1,9 @@
 import { useState, Fragment } from 'react';
 import Form from '~/lib/react-structured-form/src/Form';
 import Modal from '~/components/common/Modal';
-import User from '~/model/User';
+import User from '~/model/User/User';
 
-import UserData from '~/model/UserData';
+import UserData from '~/model/User/UserData';
 interface EditModalProps {
 	user: UserData;
 	show:boolean;

@@ -1,5 +1,5 @@
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
-import api from '~/lib/api';
+import api from '~/lib/api/_index';
 import { Link } from '@remix-run/react';
 export async function clientLoader({
 	request,

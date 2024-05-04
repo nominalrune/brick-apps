@@ -1,5 +1,5 @@
 export default interface ProfileData {
-	user_id?: number;
+	user_id: number;
 	name: string;
 	description: string;
 	avatar: string;

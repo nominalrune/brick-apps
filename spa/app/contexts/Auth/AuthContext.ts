@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import User from '~/model/User';
-import UserData from '~/model/UserData';
+import User from '~/model/User/User';
+import UserData from '~/model/User/UserData';
 
 interface IAuthContext {
 	user: User | null;

@@ -1,4 +1,4 @@
-import User from '~/model/User';
+import User from '~/model/User/User';
 import { Popover } from '@headlessui/react'
 import NavItem from './NavItem';
 export default function Profile({ user, logout }: { user: User; logout:()=>unknown }) {

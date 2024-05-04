@@ -1,6 +1,6 @@
 import { ClientLoaderFunctionArgs, useLoaderData } from '@remix-run/react';
-import api from '~/lib/api';
-import User from '~/model/User';
+import api from '~/lib/api/_index';
+import User from '~/model/User/User';
 import EditModal from '~/components/User/EditModal';
 import { useState } from 'react';
 export async function clientLoader({

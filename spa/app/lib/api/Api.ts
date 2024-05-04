@@ -1,12 +1,16 @@
-import { json } from '@remix-run/node';
-import config from '~/config';
+import Url from '../Url/Url';
+
+type Method = 'GET'|'POST'|'PUT'|'PATCH'|'DELETE';
 
 export default class Api {
-	private baseUrl: string;
-	constructor() {
-		this.baseUrl = config.baseUrl;
+	private csrfTokenPath = 'auth/csrf-cookie';
+	private baseUrl : Url;
+	constructor(
+		baseUrl:string|URL
+	) {
+		this.baseUrl = new Url(baseUrl);
 	}
-	getOptions(method = "GET", signal: AbortSignal | null = null) {
+	getOptions(method:Method, signal: AbortSignal | null = null) {
 		return {
 			mode: "cors",
 			credentials: "include",
@@ -19,20 +23,20 @@ export default class Api {
 		} as const;
 	};
 	private async getCsrfToken() {
-		return await fetch(`${this.baseUrl}/auth/csrf-cookie`, this.getOptions('GET'));
+		return await fetch(this.baseUrl.withAppendedPath(this.csrfTokenPath), this.getOptions('GET'));
 	};
-	private async request(method: string, urlPath: string, body?: object) {
-		const url = new URL(urlPath, this.baseUrl);
+	private async request(method: Method, urlPath: string|URL, body?: object, searchParams?:object) {
+		const url = this.baseUrl.withAppendedPath(urlPath).withQuery(searchParams??{});
 		await this.getCsrfToken();
 		const controller = new AbortController();
 		// try {
-		const response = fetch(
+		const response = await fetch(
 			url, {
 			...this.getOptions(method, controller.signal),
 			body: JSON.stringify(body),
 		});
-		const json = () => response.then(res=>res.json());
-		return { response, controller, json };
+		// const json = () => response.then<unknown>(res=>res.json());
+		return await response.json();
 		// 	if (response.ok) {
 		// 		return await response.json();
 		// 	} else {
@@ -42,16 +46,16 @@ export default class Api {
 		// 	controller.abort();
 		// }
 	}
-	async get(url: string) {
-		return await this.request('GET', url);
+	async get(url: string|URL, searchParam?:object) {
+		return await this.request('GET', url, undefined, searchParam);
 	}
-	async post(url: string, body: object) {
+	async post(url: string|URL, body: object) {
 		return await this.request('POST', url, body);
 	}
-	async put(url: string, body: object) {
+	async put(url: string|URL, body: object) {
 		return await this.request('PUT', url, body);
 	}
-	async delete(url: string) {
+	async delete(url: string|URL) {
 		return await this.request('DELETE', url);
 	}
 }

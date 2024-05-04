@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import useApi from './useApi';
-import User from '~/model/User';
+import User from '~/model/User/User';
 import { useNavigate } from '@remix-run/react';
 
 export default function useAuth() {

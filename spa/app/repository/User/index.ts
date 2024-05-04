@@ -1,6 +1,7 @@
-import api from '~/lib/api';
+import api from '~/lib/api/_index';
 
 export default class UserRepository {
+	private api;
 	constructor() {
 		this.api = api;
 	}
