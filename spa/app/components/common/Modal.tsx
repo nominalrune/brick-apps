@@ -1,13 +1,15 @@
 import { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { twMerge } from 'tailwind-merge';
 
 interface ModalProps {
 	children: React.ReactNode;
 	show: boolean;
 	close: () => void;
+	className?: string;
 }
 
-export default function Modal({ children, show, close }: ModalProps) {
+export default function Modal({ children, show, close, className }: ModalProps) {
 	return (
 		<Transition show={show} as={Fragment}>
 			<Dialog onClose={close}>
@@ -32,7 +34,9 @@ export default function Modal({ children, show, close }: ModalProps) {
 					leaveTo="opacity-0 scale-95"
 				>
 					<Dialog.Panel>
-						{children}
+						<div className={twMerge("relative", className)}>
+							{children}
+						</div>
 					</Dialog.Panel>
 				</Transition.Child>
 			</Dialog>

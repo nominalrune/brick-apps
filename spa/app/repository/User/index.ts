@@ -1,16 +1,9 @@
-import api from '~/lib/api/_index';
+import Api from '~/lib/api';
+import User from '~/model/User/User';
+import RepositoryBase from '../common/RepositoryBase';
 
-export default class UserRepository {
-	private api;
+export default class UserRepository extends RepositoryBase<User> {
 	constructor() {
-		this.api = api;
-	}
-	async getProfile() {
-		const data = await this.api('/profile', 'GET');
-		return data;
-	}
-	async updateProfile(profile) {
-		const data = await this.api('/profile', 'POST', profile);
-		return data;
+		super('/users');
 	}
 }

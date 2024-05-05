@@ -1,16 +1,16 @@
 import Url from '../Url/Url';
-
-type Method = 'GET'|'POST'|'PUT'|'PATCH'|'DELETE';
+import config from '~/config';
+type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export default class Api {
 	private csrfTokenPath = 'auth/csrf-cookie';
-	private baseUrl : Url;
+	private baseUrl: Url;
 	constructor(
-		baseUrl:string|URL
+		baseUrl: string | URL = config.baseUrl
 	) {
 		this.baseUrl = new Url(baseUrl);
 	}
-	getOptions(method:Method, signal: AbortSignal | null = null) {
+	getOptions(method: Method, signal: AbortSignal | null = null) {
 		return {
 			mode: "cors",
 			credentials: "include",
@@ -25,14 +25,13 @@ export default class Api {
 	private async getCsrfToken() {
 		return await fetch(this.baseUrl.withAppendedPath(this.csrfTokenPath), this.getOptions('GET'));
 	};
-	private async request(method: Method, urlPath: string|URL, body?: object, searchParams?:object) {
-		const url = this.baseUrl.withAppendedPath(urlPath).withQuery(searchParams??{});
+	private async request(method: Method, urlPath: string | URL, { body, searchParams, signal }: { body?: object, searchParams?: object; signal?: AbortSignal | null; } = { body: {}, searchParams: {}, signal: null }) {
+		const url = this.baseUrl.withAppendedPath(urlPath).withQuery(searchParams ?? {});
 		await this.getCsrfToken();
-		const controller = new AbortController();
 		// try {
 		const response = await fetch(
 			url, {
-			...this.getOptions(method, controller.signal),
+			...this.getOptions(method, signal),
 			body: JSON.stringify(body),
 		});
 		// const json = () => response.then<unknown>(res=>res.json());
@@ -46,16 +45,16 @@ export default class Api {
 		// 	controller.abort();
 		// }
 	}
-	async get(url: string|URL, searchParam?:object) {
-		return await this.request('GET', url, undefined, searchParam);
+	async get(url: string | URL, searchParams?: object, signal?: AbortSignal) {
+		return await this.request('GET', url, { searchParams, signal });
 	}
-	async post(url: string|URL, body: object) {
-		return await this.request('POST', url, body);
+	async post(url: string | URL, body: object, signal?: AbortSignal) {
+		return await this.request('POST', url, { body, signal });
 	}
-	async put(url: string|URL, body: object) {
-		return await this.request('PUT', url, body);
+	async put(url: string | URL, body: object, signal?: AbortSignal) {
+		return await this.request('PUT', url, { body, signal });
 	}
-	async delete(url: string|URL) {
-		return await this.request('DELETE', url);
+	async delete(url: string | URL, signal?: AbortSignal) {
+		return await this.request('DELETE', url, { signal });
 	}
 }

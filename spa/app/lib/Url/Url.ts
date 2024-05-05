@@ -15,11 +15,11 @@ export default class Url extends URL {
 	}
 	withAppendedPath(path: string|URL): Url {
 		const newUrl = new Url(this)
-		const _path = path.toString().startsWith("/") ? path : `/${path}`;
+		const _path = path.toString().replace(/^\//,"");
 		newUrl.pathname = newUrl.pathname + _path;
 		return newUrl;
 	}
-	/** NOTE 
+	/** NOTE
 	 * 1. this only works for PHP framework
 	 */
 	private appendArrayToQuery(key: string, query: string[] | number[] | boolean[] | object[]) {

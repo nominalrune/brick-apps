@@ -1,21 +1,24 @@
 import { ClientLoaderFunctionArgs, useLoaderData } from '@remix-run/react';
-import api from '~/lib/api/_index';
 import User from '~/model/User/User';
+import UserRepository from '~/repository/User';
 import EditModal from '~/components/User/EditModal';
 import { useState } from 'react';
 export async function clientLoader({
 	params,
 }: ClientLoaderFunctionArgs) {
-	const userData = await api(`/users/${params.id}`, 'GET');
+	const id = params.id;
+	if(!id) return;
+	const userData = await new UserRepository().find(id);
 	return User.fromData(userData);
 }
 export default function Component() {
 	const [modalShow, setModalShow] = useState(false);
 	const user = useLoaderData<typeof clientLoader>();
+	if(!user) return <div>invlid user id</div>;
 	return <div className='m-6'>
 		<div className='flex gap-3 items-baseline'>
-			<h1 className='text-2xl'>{user.profile?.name}</h1>
 			<img className="size-12 rounded" src={user.profile?.avatar} alt="avatar" />
+			<h1 className='text-2xl'>{user.profile?.name}</h1>
 		</div>
 		<hr />
 		<div className='flex flex-col gap-3 p-3'>

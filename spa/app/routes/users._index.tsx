@@ -1,10 +1,10 @@
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
-import api from '~/lib/api/_index';
+import UserRepository from '~/repository/User';
 import { Link } from '@remix-run/react';
 export async function clientLoader({
 	request,
 }: ClientLoaderFunctionArgs) {
-	const responseJson = await api('/users', 'GET');
+	const responseJson = await new UserRepository().get();
 	return responseJson;
 }
 
@@ -17,7 +17,6 @@ export default function Component() {
 	return <>
 		this is users index page
 		<div className='flex m-6 gap-3'>
-
 			{data.map((user) => (
 				<Link key={user.id} to={`/users/${user.id}`}>
 					<div className="m-3 p-3 flex gap-3 rounded bg-slate-100 hover:bg-slate-50 shadow">
