@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\App\UpdateAppService;
+use App\Services\App\DeleteAppService;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use App\Services\App\CreateAppService;
 use Illuminate\Support\Facades\Log;
 use App\Models\App;
@@ -14,15 +14,10 @@ class AppController extends Controller
 {
     public function index(Request $request)
     {
-        return Inertia::render("App/Index", [
-            "apps" => App::all(),
-        ]);
+		$apps = App::all();
+        return response()->json($apps);
     }
 
-    public function create(Request $request)
-    {
-        return Inertia::render('App/Create');
-    }
 
     public function preflightStore(Request $request)
     {
@@ -36,13 +31,6 @@ class AppController extends Controller
         $app = $service->createApp($request->code, $request->name, $request->description ?? "", $request->icon, $request->form, $request->form_keys);
         return to_route("record.index", [
             "app_code" => $app->code
-        ]);
-    }
-    public function edit(Request $request, string $app_code)
-    {
-        $app = App::where('code', $app_code)->first();
-        return Inertia::render('App/Edit', [
-            "app" => $app,
         ]);
     }
     public function update(AppUpdateRequest $request, string $app_code)

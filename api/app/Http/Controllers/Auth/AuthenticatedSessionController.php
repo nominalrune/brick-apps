@@ -9,16 +9,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Response;
 use Illuminate\Http\JsonResponse;
 
 class AuthenticatedSessionController extends Controller
 {
-	public function index(Request $request) : Response
+	public function index(Request $request) : JsonResponse
 	{
 		$user = $request->user();
 		$user->load('profile');
-		return $user;
+		return response()->json($user);
 	}
 
 	/**
