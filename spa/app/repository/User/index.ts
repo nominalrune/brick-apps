@@ -1,11 +1,10 @@
-import Api from '~/lib/api';
 import User from '~/model/User/User';
 import RepositoryBase from '../common/RepositoryBase';
 import NewUser from '~/model/User/NewUser';
 
 export default class UserRepository extends RepositoryBase<NewUser, User> {
 	constructor() {
-		super('/users');
+		super('users');
 	}
 	async find(id: number) {
 		const data = await super.find(id);
@@ -15,7 +14,7 @@ export default class UserRepository extends RepositoryBase<NewUser, User> {
 		const data = await super.get();
 		return data.map((user: any) => User.fromData(user));
 	}
-	async create(user: User) {
+	async create(user: NewUser) {
 		const data = await super.create(user);
 		return User.fromData(data);
 	}

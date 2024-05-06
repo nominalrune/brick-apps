@@ -1,7 +1,8 @@
 import Group from '~/model/Group/Group';
 import RepositoryBase from '../common/RepositoryBase';
+import NewGroup from '~/model/Group/NewGroup';
 
-export default class GroupRepository extends RepositoryBase<Group>{
+export default class GroupRepository extends RepositoryBase<NewGroup, Group>{
 	constructor() {
 		super('groups');
 	}
@@ -9,15 +10,15 @@ export default class GroupRepository extends RepositoryBase<Group>{
 		return await super.get();
 	}
 	async find(id: number) {
-		return await super.get(id);
+		return await super.find(id);
 	}
-	async create(group: GroupWithoutId) {
-		return await super.create('groups', group);
+	async create(group: NewGroup) {
+		return await super.create(group);
 	}
 	async update(group: Group) {
-		return await super.post(`groups/${group.id}`, group);
+		return await super.update(group);
 	}
 	async delete(id: number) {
-		return await super.delete(`groups/${id}`);
+		return await super.delete(id);
 	}
 }
