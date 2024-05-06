@@ -2,23 +2,34 @@ import Form from '~/lib/react-structured-form/src/Form';
 import Modal from '~/components/common/Modal';
 import User from '~/model/User/User';
 import NewUser from '~/model/User/NewUser';
-interface EditModalProps {
+import UserRepository from '~/repository/User';
+import ProfileWithoutId from '~/model/Profile/ProfileWithoutId';
+interface CreateModalProps {
 	user: User | NewUser;
 	show: boolean;
 	close: () => void;
 }
-export default function EditModal({ user = User.blank(), show, close }: EditModalProps) {
-	function handleSubmit(values:WithoutId<UserData>) {
-		console.log({ values });
+export default function CreateModal({ user = NewUser.blank(), show, close }: CreateModalProps) {
+	function handleSubmit(values: Record<"name"|"avatar"|"email"|"password"|"description", string>) {
+		user.email = values.email;
+		user.profile = new ProfileWithoutId({
+			name: values.name,
+			avatar: values.avatar,
+			description: values.description,
+		});
+		const repository = new UserRepository();
+		repository.create(user).then((responseJson) => {
+			console.log({ responseJson });
+			close();
+		});
 	}
-	const properties = ([
-		("id" in user ? { name: 'id', type: 'hidden', defaultValue: (user.id) } as const : null),
+	const properties = [
 		{ name: 'name', label: 'Name', type: 'text', defaultValue: user.profile?.name },
 		{ name: 'avatar', label: 'Avatar', type: 'url', defaultValue: user.profile?.avatar },
 		{ name: 'email', label: 'Email', type: 'email', defaultValue: user.email },
-		("id" in user ? null : { name: 'password', label: 'Password', type: ("id" in user ? "hidden" : "password"), defaultValue: '' } as const),
+		{ name: 'password', label: 'Password', type: 'password', defaultValue: '' },
 		{ name: 'description', label: 'Description', type: 'textarea', defaultValue: user.profile?.description },
-	] as const).filter((item):item is Exclude<typeof item, null>=>!!item);
+	] as const;
 	return (
 		<Modal show={show} close={close} className='mx-6 p-4 bg-slate-50 rounded'>
 			<Form

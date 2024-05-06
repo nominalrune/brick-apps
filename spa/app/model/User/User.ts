@@ -2,9 +2,9 @@ import Group from '../Group/Group';
 import Profile from '../Profile/Profile';
 import WithoutMethods from '../common/WithoutMethods';
 import UserData from './UserData';
-import UserWithoutId from './UserWithoutId';
+import NewUser from './NewUser';
 
-export default class User extends UserWithoutId{
+export default class User extends NewUser{
 	public readonly id: number;
 	// NOTE overwriting type: Profile | null over ProfileWithoutId | null
 	public readonly profile: Profile | null;

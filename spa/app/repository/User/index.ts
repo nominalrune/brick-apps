@@ -1,8 +1,9 @@
 import Api from '~/lib/api';
 import User from '~/model/User/User';
 import RepositoryBase from '../common/RepositoryBase';
+import NewUser from '~/model/User/NewUser';
 
-export default class UserRepository extends RepositoryBase<User> {
+export default class UserRepository extends RepositoryBase<NewUser, User> {
 	constructor() {
 		super('/users');
 	}

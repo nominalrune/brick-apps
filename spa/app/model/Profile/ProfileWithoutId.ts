@@ -8,12 +8,12 @@ export default class ProfileWithoutId {
 	public readonly created_at: Date;
 	public readonly updated_at: Date;
 	public readonly archived_at: Date | null;
-	constructor(profile: Omit<WithoutMethods<Profile>, "user_id">) {
+	constructor(profile: Omit<IProfile, "user_id"|"created_at"|"updated_at"|"archived_at"> & { created_at?: string; updated_at?: string; archived_at?: string | null; }) {
 		this.name = profile.name;
 		this.description = profile.description;
 		this.avatar = profile.avatar;
-		this.created_at = new Date(profile.created_at);
-		this.updated_at = new Date(profile.updated_at);
+		this.created_at = new Date(profile.created_at ?? Date.now());
+		this.updated_at = new Date(profile.updated_at ?? Date.now());
 		this.archived_at = profile.archived_at ? new Date(profile.archived_at) : null;
 	}
 	toJSON() {

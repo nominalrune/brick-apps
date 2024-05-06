@@ -6,12 +6,11 @@ import WithoutId from '../common/WithoutId';
 import WithoutMethods from '../common/WithoutMethods';
 import User from './User';
 
-export default class UserWithoutId {
+export default class NewUser {
 	public email: string;
-	public profile: ProfileWithoutId | null;
-	public groups: Group[] | null;
-	// constructor(user: WithoutId<WithoutMethods<User>, "id"|"user_id">) {
-	constructor(user: IUserWithoutId) {
+	public profile: ProfileWithoutId;
+	public password: string | null = null
+	constructor(user: WithoutMethods<NewUser>) {
 		this.email = user.email;
 		this.profile = user.profile ? new ProfileWithoutId(user.profile) : null;
 		this.groups = user.groups ? user.groups.map(group => new Group(group)) : null;
@@ -23,7 +22,7 @@ export default class UserWithoutId {
 		};
 	}
 	static blank() {
-		return new UserWithoutId({
+		return new NewUser({
 			email: '',
 			profile: ProfileWithoutId.blank(),
 			groups: null,
