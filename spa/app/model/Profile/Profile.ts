@@ -1,10 +1,10 @@
-import IProfile from './IProfile';
+import WithoutMethods from '../common/WithoutMethods';
 import ProfileData from './ProfileData';
 import ProfileWithoutId from './ProfileWithoutId';
 
 export default class Profile extends ProfileWithoutId {
 	public readonly user_id: number;
-	constructor(profile: IProfile) {
+	constructor(profile: WithoutMethods<Profile>) {
 		super(profile);
 		this.user_id = profile.user_id;
 	}

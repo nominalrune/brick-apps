@@ -1,4 +1,5 @@
-import IProfile from './IProfile';
+import WithoutMethods from '../common/WithoutMethods';
+import Profile from './Profile';
 
 export default class ProfileWithoutId {
 	public readonly name: string;
@@ -7,7 +8,7 @@ export default class ProfileWithoutId {
 	public readonly created_at: Date;
 	public readonly updated_at: Date;
 	public readonly archived_at: Date | null;
-	constructor(profile: Omit<IProfile, "user_id">) {
+	constructor(profile: Omit<WithoutMethods<Profile>, "user_id">) {
 		this.name = profile.name;
 		this.description = profile.description;
 		this.avatar = profile.avatar;

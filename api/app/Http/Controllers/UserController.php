@@ -22,26 +22,26 @@ class UserController extends Controller
 		$user = User::create($request->validated());
 		return response()->json($user);
 	}
-	public function show(Request $request, int $user_id)
+	public function show(Request $request, int $id)
 	{
-		$user = User::findOrFail($user_id);
+		$user = User::findOrFail($id);
 		return response()->json($user);
 	}
-	public function update(Request $request, int $user_id)
+	public function update(Request $request, int $id)
 	{
-		$user = User::findOrFail($user_id);
+		$user = User::findOrFail($id);
 		$user->update($request->validated());
 		return response()->json($user);
 	}
-	public function archive(Request $request, int $user_id)
+	public function archive(Request $request, int $id)
 	{
-		$user = User::findOrFail($user_id);
+		$user = User::findOrFail($id);
 		$user->delete();
 		return response(status: 204);
 	}
-	public function destroy(Request $request, int $user_id)
+	public function destroy(Request $request, int $id)
 	{
-		$user = User::findOrFail($user_id);
+		$user = User::findOrFail($id);
 		$user->forceDelete();
 		return response(status: 204);
 	}

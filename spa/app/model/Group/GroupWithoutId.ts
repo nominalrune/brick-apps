@@ -1,11 +1,12 @@
 import User from '../User/User';
-import { IGroup } from './IGroup';
+import WithoutMethods from '../common/WithoutMethods';
+import Group from './Group';
 
 export default class GroupWithoutId {
 	public name: string;
 	public description: string;
 	public users: User[];
-	constructor(group: Omit<IGroup, "id">) {
+	constructor(group: Omit<WithoutMethods<Group>, "id">) {
 		this.name = group.name;
 		this.description = group.description;
 		this.users = group.users.map(user=>new User(user));

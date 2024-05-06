@@ -1,1 +1,0 @@
-type WithOut<T, Id extends string = "id"> = T & { [key in Id]:never; }

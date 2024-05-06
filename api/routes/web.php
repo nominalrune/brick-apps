@@ -34,31 +34,32 @@ Route::middleware('auth:sanctum')->group(function () {
 
 	Route::get('/users',[UserController::class, 'index'])->name('user.index');
 	Route::post('/users',[UserController::class, 'store'])->name('user.store');
-	Route::get('/users/{user_id}',[UserController::class, 'show'])->name('user.show');
-	Route::post('/users/{user_id}',[UserController::class, 'update'])->name('user.update');
-	Route::get('/users/{user_id}/archive',[UserController::class, 'archive'])->name('user.archive');
-	Route::delete('/users/{user_id}',[UserController::class, 'destroy'])->name('user.delete');
+	Route::get('/users/{id}',[UserController::class, 'show'])->name('user.show');
+	Route::post('/users/{id}',[UserController::class, 'update'])->name('user.update');
+	Route::get('/users/{id}/archive',[UserController::class, 'archive'])->name('user.archive');
+	Route::delete('/users/{id}',[UserController::class, 'destroy'])->name('user.delete');
 
-	Route::get('/app', [AppController::class, 'index'])->name('app.index');
-	Route::post('/app', [AppController::class, 'store'])->name('app.store');
-	Route::post('/app/dry', [AppController::class, 'previewStore'])->name('app.store.dry');
+	Route::get('/apps', [AppController::class, 'index'])->name('app.index');
+	Route::post('/apps', [AppController::class, 'store'])->name('app.store');
+	Route::post('/apps/dry', [AppController::class, 'previewStore'])->name('app.store.dry');
 
-	Route::post('/app/{app_code}', [AppController::class, 'update'])->name('app.update');
-	Route::post('/app/{app_code}/dry', [AppController::class, 'previewUpdate'])->name('app.update.dry');
-	Route::get('/app/{app_code}/archive', [AppController::class, 'archive'])->name('app.archive');
-	Route::delete('/app/{app_code}', [AppController::class, 'destroy'])->name('app.delete');
+	Route::post('/apps/{app_code}', [AppController::class, 'update'])->name('app.update');
+	Route::post('/apps/{app_code}/dry', [AppController::class, 'previewUpdate'])->name('app.update.dry');
+	Route::get('/apps/{app_code}/archive', [AppController::class, 'archive'])->name('app.archive');
+	Route::delete('/apps/{app_code}', [AppController::class, 'destroy'])->name('app.delete');
 
-	Route::get('/app/{app_code}/{view_code}', [RecordController::class, 'index'])->name('record.index');
-	Route::post('/app/{app_code}/{view_code}', [RecordController::class, 'store'])->name('record.store');
-	Route::get('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
-	Route::post('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'update'])->name('record.update');
-	Route::delete('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'destroy'])->name('record.delete');
+	Route::get('/app-{app_code}/{view_code}', [RecordController::class, 'index'])->name('record.index');
+	Route::post('/app-{app_code}/{view_code}', [RecordController::class, 'store'])->name('record.store');
+	Route::get('/app-{app_code}/{view_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
+	Route::post('/app-{app_code}/{view_code}/{record_id}', [RecordController::class, 'update'])->name('record.update');
+	Route::delete('/app-{app_code}/{view_code}/{record_id}', [RecordController::class, 'destroy'])->name('record.delete');
 
-	Route::get('/view', [ViewController::class, 'index'])->name('view.index');
-	Route::post('/view', [ViewController::class, 'store'])->name('view.store');
-	Route::get('/view/{view_code}', [ViewController::class, 'show'])->name('view.show');
-	Route::post('/view/{view_code}', [ViewController::class, 'update'])->name('view.update');
-	Route::delete('/view/{view_code}', [ViewController::class, 'destroy'])->name('view.delete');
+	
+	// Route::get('/views', [ViewController::class, 'index'])->name('view.index');
+	Route::post('/views', [ViewController::class, 'store'])->name('view.store');
+	Route::get('/views/{view_code}', [ViewController::class, 'show'])->name('view.show');
+	Route::post('/views/{view_code}', [ViewController::class, 'update'])->name('view.update');
+	Route::delete('/views/{view_code}', [ViewController::class, 'destroy'])->name('view.delete');
 });
 
 require __DIR__ . '/auth.php';

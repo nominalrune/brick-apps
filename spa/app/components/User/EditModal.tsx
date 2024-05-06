@@ -2,13 +2,14 @@ import Form from '~/lib/react-structured-form/src/Form';
 import Modal from '~/components/common/Modal';
 import User from '~/model/User/User';
 import UserWithoutId from '~/model/User/UserWithoutId';
+import UserData from '~/model/User/UserData';
 interface EditModalProps {
 	user: User | UserWithoutId;
 	show: boolean;
 	close: () => void;
 }
 export default function EditModal({ user = User.blank(), show, close }: EditModalProps) {
-	function handleSubmit(values) {
+	function handleSubmit(values:WithoutId<UserData>) {
 		console.log({ values });
 	}
 	return (

@@ -1,23 +1,15 @@
 import User from '../User/User';
+import WithoutMethods from '../common/WithoutMethods';
 import GroupData from './GroupData';
 import GroupWithoutId from './GroupWithoutId';
-import { IGroup } from './IGroup';
 
 export default class Group extends GroupWithoutId {
 	public readonly id: number;
 	public readonly users: User[];
-	constructor(group: IGroup) {
+	constructor(group: WithoutMethods<Group>) {
 		super(group);
 		this.id = group.id;
 		this.users = group.users.map(user=>new User(user));
-	}
-	static fromData(data: GroupData) {
-		return new Group({
-			id: data.id,
-			name: data.name,
-			description: data.description,
-			users: data.users.map(user => User.fromData(user)),
-		});
 	}
 	toJSON() {
 		return {
@@ -27,4 +19,13 @@ export default class Group extends GroupWithoutId {
 			users: this.users.map(user => user.toJSON()),
 		};
 	}
+	static fromData(data: GroupData):Group {
+		return new Group({
+			id: data.id,
+			name: data.name,
+			description: data.description,
+			users: data.users.map(user => User.fromData(user)),
+		});
+	}
 }
+

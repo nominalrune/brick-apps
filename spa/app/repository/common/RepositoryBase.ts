@@ -1,9 +1,8 @@
 import Api from '~/lib/api';
 import config from '~/config';
-import Url from '~/lib/Url/Url';
 
-export default class RepositoryBase<T extends { toJSON: () => unknown; }> {
-	private api: Api;
+export default class RepositoryBase<T extends { toJSON: () => object; id:number|string; }> {
+	protected api: Api;
 	constructor(public readonly subUrl: string | URL) {
 		this.api = new Api(config.baseUrl);
 	}
@@ -17,10 +16,13 @@ export default class RepositoryBase<T extends { toJSON: () => unknown; }> {
 	}
 	async create(model: T) {
 		const data = await this.api.post(this.subUrl, model);
-		return model;
+		return data;
 	}
 	async update(model: T) {
 		const data = await this.api.post(`${this.subUrl}/${model.id}`, model);
 		return data;
+	}
+	async delete(id:number|string){
+		return await this.api.delete(`${this.subUrl}/${id}`);
 	}
 }
