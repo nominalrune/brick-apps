@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use App\Providers\RouteServiceProvider;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\App;
 use App\Models\User;
-
-use App\Http\Requests\Auth\LoginRequest;
 
 class UserController extends Controller
 {
@@ -17,14 +16,14 @@ class UserController extends Controller
 		$users = User::all();
 		return response()->json($users);
 	}
-	public function store(Request $request)
-	{
-		$user = User::create($request->validated());
-		return response()->json($user);
-	}
 	public function show(Request $request, int $id)
 	{
 		$user = User::findOrFail($id);
+		return response()->json($user);
+	}
+	public function store(UserStoreRequest $request)
+	{
+		$user = User::create($request->validated());
 		return response()->json($user);
 	}
 	public function update(Request $request, int $id)

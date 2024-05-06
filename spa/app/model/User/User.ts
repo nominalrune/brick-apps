@@ -3,22 +3,26 @@ import Profile from '../Profile/Profile';
 import WithoutMethods from '../common/WithoutMethods';
 import UserData from './UserData';
 import NewUser from './NewUser';
+import UserBase from './UserBase';
 
-export default class User extends NewUser{
+export default class User extends UserBase {
 	public readonly id: number;
-	// NOTE overwriting type: Profile | null over ProfileWithoutId | null
+	// NOTE overwriting type: Profile | null over ProfileBase | null
 	public readonly profile: Profile | null;
+	public groups: Group[] | null;
 
 	constructor(user: WithoutMethods<User>) {
 		super(user);
 		this.id = user.id;
 		this.profile = user.profile ? new Profile(user.profile) : null;
+		this.groups = user.groups ? user.groups.map(group => new Group(group)) : null;
 	}
-	toJSON() {
+	toJSON(): UserData{
 		return {
 			id: this.id,
 			email: this.email,
-			profile: this.profile?.toJSON(),
+			...(this.profile ? { profile: this.profile?.toJSON() } : {}),
+			...(this.groups ? { groups: this.groups.map(group => group.toJSON()) } : {}),
 		};
 	}
 	static fromData(data: UserData) {

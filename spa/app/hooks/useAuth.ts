@@ -9,6 +9,7 @@ export default function useAuth() {
 	const api = new Api(config.baseUrl);
 	const navigate = useNavigate();
 	const login = async (auth: { email: string, password: string; }, redirect?: string) => {
+		setUser(null);
 		const json = await api.post('auth/login', auth);
 		if (!json) return;
 		setUser(User.fromData(json));
@@ -26,11 +27,12 @@ export default function useAuth() {
 	const check = async () => {
 		const json = await api.get('auth');
 		if (!json) return;
+		if (json.message) return;
 		setUser(User.fromData(json));
-	}
-	useEffect(()=>{
+	};
+	useEffect(() => {
 		check();
-	},[])
+	}, []);
 	return { user, login, logout };
 
 }

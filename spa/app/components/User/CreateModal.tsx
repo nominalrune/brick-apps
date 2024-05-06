@@ -3,7 +3,7 @@ import Modal from '~/components/common/Modal';
 import User from '~/model/User/User';
 import NewUser from '~/model/User/NewUser';
 import UserRepository from '~/repository/User';
-import ProfileWithoutId from '~/model/Profile/ProfileWithoutId';
+import NewProfile from '~/model/Profile/NewProfile';
 interface CreateModalProps {
 	user: User | NewUser;
 	show: boolean;
@@ -12,7 +12,7 @@ interface CreateModalProps {
 export default function CreateModal({ user = NewUser.blank(), show, close }: CreateModalProps) {
 	function handleSubmit(values: Record<"name"|"avatar"|"email"|"password"|"description", string>) {
 		user.email = values.email;
-		user.profile = new ProfileWithoutId({
+		user.profile = new NewProfile({
 			name: values.name,
 			avatar: values.avatar,
 			description: values.description,

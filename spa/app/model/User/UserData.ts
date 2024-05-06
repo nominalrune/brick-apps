@@ -5,5 +5,5 @@ export default interface UserData {
 	id: number;
 	email: string;
 	profile?: ProfileData;
-	groups?: GroupData[]
+	groups?: GroupData[];
 }

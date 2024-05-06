@@ -1,9 +1,10 @@
 import WithoutMethods from '../common/WithoutMethods';
 import ProfileData from './ProfileData';
-import ProfileWithoutId from './ProfileWithoutId';
+import ProfileBase from './ProfileBase';
 
-export default class Profile extends ProfileWithoutId {
+export default class Profile extends ProfileBase {
 	public readonly user_id: number;
+	/** @override */
 	constructor(profile: WithoutMethods<Profile>) {
 		super(profile);
 		this.user_id = profile.user_id;
@@ -19,15 +20,13 @@ export default class Profile extends ProfileWithoutId {
 			archived_at,
 		});
 	}
+	/**
+	 * @override
+	 */
 	toJSON() {
 		return {
 			user_id: this.user_id,
-			name: this.name,
-			description: this.description,
-			avatar: this.avatar,
-			created_at: this.created_at.toISOString(),
-			updated_at: this.updated_at.toISOString(),
-			archived_at: this.archived_at?.toISOString() ?? null,
+			...super.toJSON(),
 		};
 	}
 }

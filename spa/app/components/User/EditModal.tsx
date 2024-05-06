@@ -1,24 +1,37 @@
 import Form from '~/lib/react-structured-form/src/Form';
 import Modal from '~/components/common/Modal';
 import User from '~/model/User/User';
-import NewUser from '~/model/User/NewUser';
+import UserData from '~/model/User/UserData';
+import Profile from '~/model/Profile/Profile';
+import UserRepository from '~/repository/User';
 interface EditModalProps {
-	user: User | NewUser;
+	user: User & { profile: Profile; };
 	show: boolean;
 	close: () => void;
 }
-export default function EditModal({ user = User.blank(), show, close }: EditModalProps) {
-	function handleSubmit(values:WithoutId<UserData>) {
-		console.log({ values });
+export default function EditModal({ user, show, close }: EditModalProps) {
+	async function handleSubmit(values: { name: string, avatar: string, email: string, description: string; }) {
+		user.email = values.email;
+		user.profile = new Profile({
+			...user.profile,
+			user_id: user.id,
+			name: values.name,
+			avatar: values.avatar,
+			description: values.description,
+		});
+		console.log({ values, user });
+		const repository = new UserRepository();
+		const result = await repository.create(user);
+		console.log({result});
+		close();
 	}
-	const properties = ([
-		("id" in user ? { name: 'id', type: 'hidden', defaultValue: (user.id) } as const : null),
+	const properties = [
+		{ name: 'id', type: 'hidden', defaultValue: (user.id) },
 		{ name: 'name', label: 'Name', type: 'text', defaultValue: user.profile?.name },
 		{ name: 'avatar', label: 'Avatar', type: 'url', defaultValue: user.profile?.avatar },
 		{ name: 'email', label: 'Email', type: 'email', defaultValue: user.email },
-		("id" in user ? null : { name: 'password', label: 'Password', type: ("id" in user ? "hidden" : "password"), defaultValue: '' } as const),
 		{ name: 'description', label: 'Description', type: 'textarea', defaultValue: user.profile?.description },
-	] as const).filter((item):item is Exclude<typeof item, null>=>!!item);
+	] as const;
 	return (
 		<Modal show={show} close={close} className='mx-6 p-4 bg-slate-50 rounded'>
 			<Form

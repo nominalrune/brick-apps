@@ -1,11 +1,11 @@
 import User from '../User/User';
 import WithoutMethods from '../common/WithoutMethods';
+import GroupBase from './GroupBase';
 import GroupData from './GroupData';
-import GroupWithoutId from './GroupWithoutId';
 
-export default class Group extends GroupWithoutId {
+export default class Group extends GroupBase {
 	public readonly id: number;
-	public readonly users: User[];
+	public users: User[];
 	constructor(group: WithoutMethods<Group>) {
 		super(group);
 		this.id = group.id;

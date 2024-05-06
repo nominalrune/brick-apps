@@ -25,6 +25,14 @@ export default class Api {
 	private async getCsrfToken() {
 		return await fetch(this.baseUrl.withAppendedPath(this.csrfTokenPath), this.getOptions('GET'));
 	};
+	/**
+	 *
+	 * @param method
+	 * @param urlPath
+	 * @param param optional `{ body, searchParams, signal}` properties.
+	 * @returns promise of json response
+	 * @throws {Response} if its code is greater than or equals to  400
+	 */
 	private async request(method: Method, urlPath: string | URL, { body, searchParams, signal }: { body?: object, searchParams?: object; signal?: AbortSignal | null; } = { body: {}, searchParams: {}, signal: null }) {
 		const url = this.baseUrl.withAppendedPath(urlPath).withQuery(searchParams ?? {});
 		await this.getCsrfToken();
@@ -34,13 +42,11 @@ export default class Api {
 			...this.getOptions(method, signal),
 			body: JSON.stringify(body),
 		});
-		// const json = () => response.then<unknown>(res=>res.json());
-		return await response.json();
-		// 	if (response.ok) {
-		// 		return await response.json();
-		// 	} else {
-		// 		throw response;
-		// 	}
+		if (response.ok) {
+			return await response.json();
+		} else {
+			throw response;
+		}
 		// } finally {
 		// 	controller.abort();
 		// }
