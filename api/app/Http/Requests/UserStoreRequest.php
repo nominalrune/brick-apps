@@ -12,7 +12,7 @@ class UserStoreRequest extends FormRequest
 	 */
 	public function authorize() : bool
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -28,7 +28,9 @@ class UserStoreRequest extends FormRequest
 			'profile' => ['optional', 'array'],
 			'profile.name' => ['required', 'string'],
 			'profile.description' => ['required', 'string'],
-			'group' => ['optional', 'array'],
+			'profile.avatar' => ['required', 'string'],
+			'groups' => ['optional', 'array'],
+			'groups.*' => ['integer', 'exists:groups,id'],
 		];
 	}
 
@@ -37,10 +39,5 @@ class UserStoreRequest extends FormRequest
 		$this->merge([
 			'password' => bcrypt($this->password),
 		]);
-		if($this->has('profile')) {
-			$this->merge([
-				'profile' => Profile::create($this->profile),
-			]);
-		}
 	}
 }

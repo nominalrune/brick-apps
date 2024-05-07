@@ -2,7 +2,7 @@ import NewProfile from '../Profile/NewProfile';
 import WithoutMethods from '../common/WithoutMethods';
 import UserBase from './UserBase';
 
-export default class NewUser extends UserBase{
+export default class NewUser extends UserBase {
 	public password: string;
 	constructor(user: WithoutMethods<NewUser>) {
 		super(user);

@@ -21,7 +21,7 @@ export default function EditModal({ user, show, close }: EditModalProps) {
 		});
 		console.log({ values, user });
 		const repository = new UserRepository();
-		const result = await repository.create(user);
+		const result = await repository.update(user);
 		console.log({result});
 		close();
 	}

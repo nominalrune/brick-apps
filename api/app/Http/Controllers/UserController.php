@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
-use App\Providers\RouteServiceProvider;
-use Auth;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Http\Request;
-use App\Models\App;
 use App\Models\User;
+use App\Models\Group;
 
 class UserController extends Controller
 {
@@ -23,13 +22,39 @@ class UserController extends Controller
 	}
 	public function store(UserStoreRequest $request)
 	{
-		$user = User::create($request->validated());
+		$userParam = $request->only(['email', 'password']);
+		$user = User::create($userParam);
+		if ($request->filled('profile')) {
+			$profileParam = collect($request->only(['profile'])['profile'])->merge(['user_id' => $user->id])->toArray();
+			$user->profile()->create($profileParam);
+		}
+		if($request->filled('groups')){
+			$request->groups->each(function($groupId) use ($user){
+				$user->groups()->attach($groupId);
+			});
+		}
+		$group = Group::create([
+			'code' => "user-{$user->id}",
+			'name' => $request->string('name'),
+			'description' => $request->string('description'),
+		]);
+		$user->groups()->attach($group->id);
 		return response()->json($user);
 	}
-	public function update(Request $request, int $id)
+	public function update(UserUpdateRequest $request, int $id)
 	{
 		$user = User::findOrFail($id);
-		$user->update($request->validated());
+		$userParam = $request->only(['email']);
+		$user = User::create($userParam);
+		if ($request->filled('profile')) {
+			$profileParam = collect($request->only(['profile'])['profile'])->toArray();
+			$user->profile()->update($profileParam);
+		}
+		if($request->filled('groups')){
+			$request->groups->each(function($groupId) use ($user){
+				$user->groups()->attach($groupId);
+			});
+		}
 		return response()->json($user);
 	}
 	public function archive(Request $request, int $id)
