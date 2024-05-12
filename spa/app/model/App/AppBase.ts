@@ -6,7 +6,7 @@ export default class AppBase {
 	public description: string;
 	public code: string;
 	public icon: string;
-	public fields: Field[][];
+	public fields: Field[];
 	public archived_at?: Date | null;
 	constructor(app: WithoutMethods<AppBase>) {
 		this.name = app.name;

@@ -1,5 +1,5 @@
-import AppTable from '../../../app/model/App/AppTable';
-import AppInput from '../../../app/model/App/AppInput';
+import ViewContent from '../../../app/model/App/View/ViewContent';
+import ViewItem from '../../../app/model/App/View/ViewItem';
 
 export default class App {
     constructor(
@@ -8,10 +8,10 @@ export default class App {
         public readonly name: string,
         public readonly description: string,
         public readonly icon: string,
-        public readonly form: AppTable,
+        public readonly form: ViewContent,
     ) { }
     public static fromDTO(data: AppData) {
-        const form = new AppTable(data.form);
+        const form = new ViewContent(data.form);
         return new App(data.id, data.code, data.name, data.description, data.icon, form);
     }
     toDTO():AppData {
@@ -34,5 +34,5 @@ export interface AppData {
     icon: string;
     description: string;
     form_keys: string[];
-    form: AppInput[][];
+    form: ViewItem[][];
 }

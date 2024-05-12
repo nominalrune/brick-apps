@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Casts\App\Fields;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * App\Models\App
  *
  */
 class App extends Model
 {
-	use HasFactory,SoftDeletes;
+	use HasFactory, SoftDeletes;
 	const DELETED_AT = 'archived_at';
 	protected $fillable = [
 		'code',
@@ -21,10 +22,15 @@ class App extends Model
 		'description',
 		'icon',
 		'fields',
+		'default_view',
 	];
 	protected $casts = [
 		'fields' => Fields::class, //TODO implement Fields
 	];
+	public function defaultView()
+	{
+		return $this->hasOne('views', 'code', 'default_view');
+	}
 	public function views(User $user, int $permission = Permission::READ)
 	{
 		$relation = $this->hasMany(View::class);

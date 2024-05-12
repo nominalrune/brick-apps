@@ -8,7 +8,7 @@ import AppForm from '~/components/App/AppForm';
 import { AppData } from '~/Models/App/App';
 import AppEditHeader from '~/components/App/AppEditHeader';
 import useDnDAppEditor from '~/Hooks/useDnDAppEditor';
-import { inputItems } from '~/model/App/InputTypes';
+import { inputItems } from '~/model/App/View/InputTypes';
 import AppInputData from '~/model/App/NewApp';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 import Button from '~/components//common/Button/Button';
@@ -20,7 +20,7 @@ export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
         code: app.code,
         description: app.description,
         icon: app.icon,
-        ...table.toDTO()
+        ...table.toJSON()
     });
     function handleChange(e: ChangeEvent<Named<HTMLInputElement, Exclude<keyof AppData, "id">>>) {
         setData(e.target.name, e.target.value);
@@ -29,7 +29,7 @@ export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
         window.history.back();
     }
     async function handleSubmit(e: ReactMouseEvent<HTMLButtonElement, MouseEvent>) {
-        const form = table.toDTO();
+        const form = table.toJSON();
         console.log(form);
         if (!confirm("アプリを更新しますか？")) { return; }
         transform(data => ({ // TODO ここの更新がうまく行かない

@@ -1,5 +1,5 @@
-import Address from '@/Models/Address';
-import AppInput from '@/Models/App/AppInput';
+import Position from '~/model/Position';
+import AppInput from '~/model/App/AppInput';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Input from '../Input';
 import { BiCog } from '@react-icons/all-files/bi/BiCog';
@@ -7,15 +7,15 @@ import { BiX } from '@react-icons/all-files/bi/BiX';
 import { useState, type ReactNode, type FormEvent } from 'react';
 import InputSettingModal from './InputSettingModal';
 
-type Select = ({ addr, input }: { addr: Address, input: AppInput; }) => void;
+type Select = ({ position, input }: { position: Position, input: AppInput; }) => void;
 interface Param {
     table: AppInput[][],
-    update: ([x, y]: Address, value: AppInput) => void,
-    remove: ([x, y]: Address) => void,
+    update: ([x, y]: Position, value: AppInput) => void,
+    remove: ([x, y]: Position) => void,
 }
 
 export default function AppForm({ table, update, remove }: Param) {
-    const [selectedInput, setSelectedInput] = useState<{ addr: Address, input: AppInput; } | undefined>(undefined);
+    const [selectedInput, setSelectedInput] = useState<{ addr: Position, input: AppInput; } | undefined>(undefined);
 
     function handleConfigChange(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -58,7 +58,7 @@ export default function AppForm({ table, update, remove }: Param) {
         {rows}
     </>;
 }
-function AppFormRow({ row, rowIndex, select, remove }: { row: AppInput[], rowIndex: number, select: Select, remove: ([x, y]: Address) => void; }) {
+function AppFormRow({ row, rowIndex, select, remove }: { row: AppInput[], rowIndex: number, select: Select, remove: ([x, y]: Position) => void; }) {
     return <Droppable droppableId={rowIndex.toString()} direction='horizontal'>
         {provided => (
             <div className='p-1 border-b-2 border-slate-200 h-28 last:flex-grow flex' ref={provided.innerRef} {...provided.droppableProps}>
@@ -66,7 +66,7 @@ function AppFormRow({ row, rowIndex, select, remove }: { row: AppInput[], rowInd
                     index={col}
                     id={item.code}
                     key={item.code}
-                    onConfig={() => { select({ addr: [rowIndex, col], input: item }); }}
+                    onConfig={() => { select({ position: [rowIndex, col], input: item }); }}
                     remove={() => remove([rowIndex, col])}>
                     <Input label={item.label || "(no name)"} disabled type={item.type} name={item.code} value={item.defaultValue} className="opacity-90 text-slate-700" />
                     <div className='text-red-500'>{item.error}</div>

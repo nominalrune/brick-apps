@@ -20,6 +20,10 @@ return new class extends Migration {
 			$table->string('code', 255)->unique();
 			$table->string('name', 255);
 			$table->string('icon', 255)->default('1');
+			$table->string('default_view', 255)->nullable();
+			$table->foreign('default_view')
+				->references('code')->on('views')
+				->onUpdate('cascade')->onDelete('set null');
 			$table->text('description');
 			$table->json('fields');
 		});

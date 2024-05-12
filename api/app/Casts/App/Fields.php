@@ -4,9 +4,12 @@ namespace App\Casts\App;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\App\Field;
 
 class Fields implements CastsAttributes
 {
+	/** @var array<Field> */
+	private array $value;
     /**
      * Cast the given value.
      *
@@ -14,7 +17,7 @@ class Fields implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $value;
+        return $this->value;
     }
 
     /**
@@ -24,6 +27,11 @@ class Fields implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $value;
+		if(is_array($value)){
+			throw new \InvalidArgumentException("\$value must be an array of ['code'=>string,'valueType'=>string]. {${var_dump($value)}} given");
+		}
+		$this->value = array_map(fn($item)=>(Field::fromDTO($value)), $value);
+        return $this->value;
     }
 }
+
