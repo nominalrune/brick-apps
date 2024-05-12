@@ -1,5 +1,5 @@
-import AppTable from './AppTable';
-import AppInput from './AppInput';
+import AppTable from '../../../app/model/App/AppTable';
+import AppInput from '../../../app/model/App/AppInput';
 
 export default class App {
     constructor(

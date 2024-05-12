@@ -1,6 +1,6 @@
 import { DropResult } from "react-beautiful-dnd";
-import useInputsTable from './useInputTable';
-import AppInput from '../Models/App/AppInput';
+import useInputsTable from './useInputTable/useInputTable';
+import AppInput from '../model/App/AppInput';
 import AppInputData from '@/Models/App/AppInputData';
 import { InputTypeOption, defaultValueTypeMap } from '@/Models/App/InputTypes';
 export default function useDnDAppEditor(paletteName:string, paletteItems: readonly InputTypeOption[], initialTable?:AppInputData[][] ) {

@@ -1,17 +1,17 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
+import AuthenticatedLayout from '~/Layouts/AuthenticatedLayout';
+import { PageProps } from '~/types';
 import { Head, useForm } from '@inertiajs/react';
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, ChangeEvent } from 'react';
 import { DragDropContext } from "react-beautiful-dnd";
-import Palette from '@/Components/App/Palette';
-import AppForm from '@/Components/App/AppForm';
-import { AppData } from '@/Models/App/App';
-import AppEditHeader from '@/Components/App/AppEditHeader';
-import useDnDAppEditor from '@/Hooks/useDnDAppEditor';
-import { inputItems } from '@/Models/App/InputTypes';
-import AppInputData from '@/Models/App/AppInputData';
-import { MdDelete } from 'react-icons/md';
-import Button from '@/Components/Button';
+import Palette from '~/components/App/Palette';
+import AppForm from '~/components/App/AppForm';
+import { AppData } from '~/Models/App/App';
+import AppEditHeader from '~/components/App/AppEditHeader';
+import useDnDAppEditor from '~/Hooks/useDnDAppEditor';
+import { inputItems } from '~/model/App/InputTypes';
+import AppInputData from '~/model/App/NewApp';
+import { MdDelete } from '@react-icons/all-files/md/MdDelete';
+import Button from '~/components//common/Button/Button';
 
 export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
     const { table, update, remove, onDragEnd } = useDnDAppEditor("palette", inputItems, app.form);
