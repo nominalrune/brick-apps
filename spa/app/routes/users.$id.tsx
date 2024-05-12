@@ -8,8 +8,8 @@ export async function clientLoader({
 }: ClientLoaderFunctionArgs) {
 	const id = params.id;
 	if(!id) return;
-	const userData = await new UserRepository().find(id);
-	return User.fromData(userData);
+	const user = await new UserRepository().find(id);
+	return user;
 }
 export default function Component() {
 	const [modalShow, setModalShow] = useState(false);
@@ -27,7 +27,7 @@ export default function Component() {
 				description:
 				<textarea disabled value={user.profile?.description} />
 				<button onClick={()=>{setModalShow(true)}}>Edit</button>
-				<EditModal user={user.toJSON()} show={modalShow} close={()=>{setModalShow(false)}} />
+				<EditModal user={user} show={modalShow} close={()=>{setModalShow(false)}} />
 			</div>
 		</div>
 	</div>;

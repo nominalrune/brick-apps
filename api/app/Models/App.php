@@ -23,7 +23,7 @@ class App extends Model
 		'fields',
 	];
 	protected $casts = [
-		'fields' => Fields::class,
+		'fields' => Fields::class, //TODO implement Fields
 	];
 	public function views(User $user, int $permission = Permission::READ)
 	{
