@@ -2,7 +2,8 @@ import Address from '@/Models/Address';
 import AppInput from '@/Models/App/AppInput';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Input from '../Input';
-import { BiCog, BiX } from 'react-icons/bi';
+import { BiCog } from '@react-icons/all-files/bi/BiCog';
+import { BiX } from '@react-icons/all-files/bi/BiX';
 import { useState, type ReactNode, type FormEvent } from 'react';
 import InputSettingModal from './InputSettingModal';
 
