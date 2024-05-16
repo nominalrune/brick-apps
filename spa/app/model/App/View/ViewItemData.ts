@@ -3,13 +3,13 @@ import { InputTypeOption, ReferringAppCode } from './InputTypes';
 import JsValueType from '../JsValueType';
 import ValueTypeOption from '../ValueTypeOption';
 
-export default interface ViewItemData<T extends InputTypeOption = InputTypeOption, U extends ValueTypeOption = ValueTypeOption>{
+export default interface ViewItemData<U extends any = any>{
     code: string;
-    type: T;
+    type: InputTypeOption;
     label?: string;
     prefix?: string;
     suffix?: string;
-    defaultValue: JsValueType<U>|undefined;
+    defaultValue: U|undefined;
     referringAppCode?: ReferringAppCode;
     rules?: {
         required?: boolean,

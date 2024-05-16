@@ -1,38 +1,39 @@
 import Position from '~/model/Position';
-import AppInput from '~/model/App/AppInput';
+import ViewItem from '~/model/App/View/ViewItem';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import Input from '../Input';
+import Input from '../common/Input/Input';
 import { BiCog } from '@react-icons/all-files/bi/BiCog';
 import { BiX } from '@react-icons/all-files/bi/BiX';
 import { useState, type ReactNode, type FormEvent } from 'react';
 import InputSettingModal from './InputSettingModal';
 
-type Select = ({ position, input }: { position: Position, input: AppInput; }) => void;
+type Select = ({ position, input }: { position: Position, input: ViewItem; }) => void;
 interface Param {
-    table: AppInput[][],
-    update: ([x, y]: Position, value: AppInput) => void,
+    table: ViewItem[][],
+    update: ([x, y]: Position, value: ViewItem) => void,
     remove: ([x, y]: Position) => void,
 }
 
 export default function AppForm({ table, update, remove }: Param) {
-    const [selectedInput, setSelectedInput] = useState<{ addr: Position, input: AppInput; } | undefined>(undefined);
+    const [selectedInput, setSelectedInput] = useState<{ position: Position, input: ViewItem; } | undefined>(undefined);
 
     function handleConfigChange(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!selectedInput) { return; }
         const form = e.currentTarget;
         if (!(form instanceof HTMLFormElement)) { return; }
-        const { code, label,type, valueType, defaultValue, prefix, suffix } = Object.fromEntries((new FormData(form)).entries());
-        const newInput = selectedInput.input
-            .update("type", type)
-            .update("valueType",valueType)
-            .update("code", code)
-            .update("label", label)
-            .update("defaultValue", defaultValue)
-            .update("prefix", prefix)
-            .update("suffix", suffix);
+        const { code, label,type, defaultValue, prefix, suffix } = Object.fromEntries((new FormData(form)).entries());
+        const newInput = new ViewItem({
+			...selectedInput.input.toJSON(),
+            type,
+            code,
+            label,
+            defaultValue,
+             prefix,
+            suffix,
+		});
         console.log({ newInput })
-        update(selectedInput.addr, newInput);
+        update(selectedInput.position, newInput);
         setSelectedInput(undefined);
     }
     const extraRow = <AppFormRow
@@ -58,7 +59,7 @@ export default function AppForm({ table, update, remove }: Param) {
         {rows}
     </>;
 }
-function AppFormRow({ row, rowIndex, select, remove }: { row: AppInput[], rowIndex: number, select: Select, remove: ([x, y]: Position) => void; }) {
+function AppFormRow({ row, rowIndex, select, remove }: { row: ViewItem[], rowIndex: number, select: Select, remove: ([x, y]: Position) => void; }) {
     return <Droppable droppableId={rowIndex.toString()} direction='horizontal'>
         {provided => (
             <div className='p-1 border-b-2 border-slate-200 h-28 last:flex-grow flex' ref={provided.innerRef} {...provided.droppableProps}>

@@ -1,45 +1,51 @@
+// import { ViewItemData } from '~/model/App/View/ViewItemData';
 import { ReactNode } from 'react';
 import ViewItemData from './ViewItemData';
 import { InputTypeOption, } from './InputTypes';
 import JsValueType from '../JsValueType';
 import ValueTypeOption from '../ValueTypeOption';
-export default class ViewItem<T extends InputTypeOption = InputTypeOption, U extends ValueTypeOption = ValueTypeOption> {
+import WithoutMethods from '~/model/common/WithoutMethods';
+export default class ViewItem<U extends any=any> implements ViewItemData<U>{
 	private _error = "";
 	get error() { return this._error; }
-	public defaultValue: JsValueType<U> | undefined;
+	public defaultValue: U | undefined;
 	public readonly referringAppCode?: string;
-	constructor(
-		public readonly type: T,
-		public readonly code: string,
-		defaultValue?: JsValueType<U>,
-		public readonly label = "",
-		public readonly prefix = "",
-		public readonly suffix = "",
-		public readonly rules: {
-			required?: boolean,
-			min?: number,
-			max?: number,
-			pattern?: string,
-			customValidator?: (value: string) => { validity: boolean, errorMessage: string; };
-			options?: ([value: any] | [value: any, label: ReactNode])[];
-		} = {},
-		referringAppCode?: string,
-	) {
-		this.defaultValue = defaultValue;
+	public readonly type: InputTypeOption;
+	public readonly code: string;
+	public readonly label: string|undefined;
+	public readonly prefix: string|undefined;
+	public readonly suffix: string|undefined;
+	public readonly rules: {
+		required?: boolean,
+		min?: number,
+		max?: number,
+		pattern?: string,
+		customValidator?: (value: string) => { validity: boolean, errorMessage: string; };
+		options?: ([value: any] | [value: any, label: ReactNode])[];
+	}|undefined;
+	constructor(data: ViewItemData<U>) {
+		this.type = data.type;
+		this.code = data.code;
+		this.label = data.label;
+		this.prefix = data.prefix;
+		this.suffix = data.suffix;
+		this.rules = data.rules;
+
+		this.defaultValue = data.defaultValue;
 		if (this.type === "reference") {
-			this.referringAppCode = referringAppCode;
+			this.referringAppCode = data.referringAppCode;
 		}
 	}
-	updateValue(value: JsValueType<U>) {
-		return new ViewItem(this.type, this.code, value, this.label, this.prefix, this.suffix, this.rules, this.referringAppCode);
+	withValue(value: U) {
+		return new ViewItem({ ...this, defaultValue: value });
 	}
-	update(key: keyof ViewItem, value: unknown) {
-		return ViewItem.fromData({ ...this.toJSON(), [key]: value });
+	with(key: keyof ViewItem, value: unknown) {
+		return new ViewItem({ ...this, [key]: value });
 	}
 	clone() {
-		return new ViewItem(this.type, this.code, this.defaultValue, this.label, this.prefix, this.suffix, this.rules, this.referringAppCode);
+		return new ViewItem(this);
 	}
-	toJSON(): ViewItemData<T, U> {
+	toJSON(): ViewItemData<U> {
 		return {
 			type: this.type,
 			code: this.code,
@@ -52,7 +58,7 @@ export default class ViewItem<T extends InputTypeOption = InputTypeOption, U ext
 		};
 	}
 	static fromData(data: ViewItemData) {
-		return new ViewItem(data.type, data.code, data.defaultValue, data.label, data.prefix, data.suffix, data.rules, data.referringAppCode);
+		return new ViewItem(data);
 	}
 	// toJSON() {
 	//     return JSON.stringify(this.toDTO());
