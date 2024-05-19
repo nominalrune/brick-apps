@@ -1,7 +1,7 @@
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { FiMoreVertical } from 'react-icons/fi';
-import Input from '../Input';
-import { InputTypeOption } from '@/Models/App/InputTypes';
+import { FiMoreVertical } from '@react-icons/all-files/fi/FiMoreVertical';
+import Input from '../common/Input';
+import { InputTypeOption } from '~/model/App/View/InputTypes';
 export default Palette;
 
 function Palette({ items, name }: { items: readonly InputTypeOption[],name:string, }) {

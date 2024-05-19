@@ -25,7 +25,7 @@ class App extends Model
 		'default_view',
 	];
 	protected $casts = [
-		'fields' => Fields::class, //TODO implement Fields
+		'fields' => "array",//Fields::class,
 	];
 	public function defaultView()
 	{

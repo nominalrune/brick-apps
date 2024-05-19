@@ -1,26 +1,25 @@
 import { ChangeEvent, FormEventHandler, useReducer } from 'react';
-import Modal from '../Modal';
-import Input from '../Input';
-import AppInput from '@/Models/App/AppInput';
-import AppInputData from '@/Models/App/AppInputData';
-import Button from '../Button';
-import PrimaryButton from '../PrimaryButton';
-import { inputItems, valueTypeItems } from '@/Models/App/InputTypes';
-export default function InputSettingModal({ inputData, onClose, onSubmit }: { inputData: AppInput | undefined, onClose: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
+import Modal from '../common/Modal';
+import Input from '../common/Input';
+import ViewItem from '~/model/App/View/ViewItem';
+import ViewItemData from '~/model/App/View/ViewItemData';
+import Button from '../common/Button/Button';
+import { inputItems, valueTypeItems } from '~/model/App/View/InputTypes';
+export default function InputSettingModal({ inputData, onClose, onSubmit }: { inputData: ViewItem | undefined, onClose: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
     if (!inputData) { return <></>; }
     return <Modal show={!!inputData} onClose={onClose}>
         <InputSettingForm inputData={inputData} close={onClose} onSubmit={onSubmit} />
     </Modal>;
 }
-function InputSettingForm({ inputData, close, onSubmit }: { inputData: AppInput, close: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
-    const [state, reducer] = useReducer((state: AppInput, action: { key: DotKeyOf<AppInputData>, value: any; }) => {
+function InputSettingForm({ inputData, close, onSubmit }: { inputData: ViewItem, close: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
+    const [state, reducer] = useReducer((state: ViewItem, action: { key: DotKeyOf<ViewItemData>, value: any; }) => {
         if (!state) { return inputData; }
         const newData = state.update(action.key, action.value);
         console.log("update", newData);
         return newData;
     }, inputData?.clone());
 
-    function handleChange(e: ChangeEvent<Named<HTMLInputElement, DotKeyOf<AppInputData>>>) {
+    function handleChange(e: ChangeEvent<Named<HTMLInputElement, DotKeyOf<ViewItemData>>>) {
         const element = e.target;
         const value = element.type === 'checkbox' ? element.checked : element.value;
         reducer({ key: element.name, value });
@@ -28,7 +27,6 @@ function InputSettingForm({ inputData, close, onSubmit }: { inputData: AppInput,
 
     return <form onSubmit={onSubmit} className='p-4 flex flex-col justify-start gap-4'>
         <Input prefix="入力タイプ: " name="type" type="select" value={state.type} onChange={handleChange} options={inputItems.map(i => [i])} />
-        <Input prefix="DBカラム: " name="valueType" type="select" value={state.valueType} onChange={handleChange} options={valueTypeItems.map(i => [i])} />
         <Input prefix="表示名: " name={"label"} type='text' onChange={handleChange} value={state.label} />
         <Input prefix='名前: ' name={"code"} type='text' onChange={handleChange} value={state.code} />
         <div className="flex gap-4">
@@ -42,7 +40,7 @@ function InputSettingForm({ inputData, close, onSubmit }: { inputData: AppInput,
         </div>
         <input name="oldName" type="hidden" value={inputData.code} />
         <div className="flex gap-4">
-            <PrimaryButton type='submit'>ok</PrimaryButton>
+            <utton type='submit'>ok</utton>
             <Button type='button' onClick={close}>cancel</Button>
         </div>
     </form>;

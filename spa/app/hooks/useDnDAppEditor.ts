@@ -1,9 +1,8 @@
 import { DropResult } from "react-beautiful-dnd";
 import useInputsTable from './useInputTable/useInputTable';
 import ViewItem from '../model/App/View/ViewItem';
-import AppInputData from '@/Models/App/AppInputData';
-import { InputTypeOption, defaultValueTypeMap } from '@/Models/App/InputTypes';
-export default function useDnDAppEditor(paletteName:string, paletteItems: readonly InputTypeOption[], initialTable?:AppInputData[][] ) {
+import { InputTypeOption, defaultValueTypeMap } from '~/model/App/View/InputTypes';
+export default function useDnDAppEditor(paletteName:string, paletteItems: readonly InputTypeOption[], initialTable?:ViewItem[][] ) {
     const { table, get, insert, move, update, remove } = useInputsTable(initialTable);
     function onDragEnd({ draggableId, destination, source }: DropResult) {
         console.log({ draggableId, destination, source });

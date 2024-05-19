@@ -28,10 +28,10 @@ return new class extends Migration {
 			$table->json('content');
 		});
 		Schema::table('apps', function (Blueprint $table) {
-			$table->foreignId('default_form_id')
-				->constrained('views')
-				->onUpdate('cascade')
-				->onDelete('restrict');
+			$table->string('default_view', 255)->nullable();
+			$table->foreign('default_view')
+				->references('code')->on('views')
+				->onUpdate('cascade')->onDelete('set null');
 		});
 	}
 
@@ -41,8 +41,8 @@ return new class extends Migration {
 	public function down() : void
 	{
 		Schema::table('apps', function (Blueprint $table) {
-			$table->dropForeign(['default_form_id']);
-			$table->dropColumn('default_form_id');
+			$table->dropForeign(['default_view']);
+			$table->dropColumn('default_view');
 		});
 		Schema::dropIfExists('views');
 	}

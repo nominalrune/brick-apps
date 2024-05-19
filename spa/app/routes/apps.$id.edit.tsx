@@ -1,19 +1,30 @@
-import AuthenticatedLayout from '~/Layouts/AuthenticatedLayout';
-import { PageProps } from '~/types';
-import { Head, useForm } from '@inertiajs/react';
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, ChangeEvent } from 'react';
 import { DragDropContext } from "react-beautiful-dnd";
 import Palette from '~/components/App/Palette';
 import AppForm from '~/components/App/AppForm';
-import { AppData } from '~/Models/App/App';
+// import { AppData } from '~/Models/App/App';
 import AppEditHeader from '~/components/App/AppEditHeader';
-import useDnDAppEditor from '~/Hooks/useDnDAppEditor';
+import useDnDAppEditor from '~/hooks/useDnDAppEditor';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppInputData from '~/model/App/NewApp';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
-import Button from '~/components//common/Button/Button';
+import Button from '~/components/common/Button/Button';
+import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
+import AppRepository from '~/repository/App';
+async function getClientData(request: Request) {
+	const repository = new AppRepository();
+	return await repository.find(request.param.id);
+}
 
-export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
+export async function clientLoader({
+	request,
+}: ClientLoaderFunctionArgs) {
+	const clientData = await getClientData(request);
+	return clientData;
+}
+
+export default function Edit() {
+	const app = useLoaderData();
     const { table, update, remove, onDragEnd } = useDnDAppEditor("palette", inputItems, app.form);
     const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
         name: app.name,
@@ -43,21 +54,7 @@ export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
         if (!confirm("本当に削除しますか？")) { return; }
         destroy(`/app/${app.code}`);
     }
-    return <AuthenticatedLayout
-        user={auth.user}
-        header={<>
-            <AppEditHeader
-                submitLabel={"更新"}
-                data={data}
-                onChange={handleChange}
-                onCancel={handleCancel}
-                onSubmit={handleSubmit}
-                onDelete={handleDelete} />
-                </>
-        }
-    >
-        <Head title={"edit app: " + data.name} />
-        <DragDropContext onDragEnd={onDragEnd}>
+    return <DragDropContext onDragEnd={onDragEnd}>
             <div className="grid grid-cols-4 h-screen">
                 <div className='col-span-1 bg-white'>
                     <Palette items={inputItems} name="palette" />
@@ -67,5 +64,4 @@ export default function Edit({ auth, app }: PageProps & { app: AppData; }) {
                 </div>
             </div>
         </DragDropContext>
-    </AuthenticatedLayout>;
 }

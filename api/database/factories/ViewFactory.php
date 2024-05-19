@@ -19,7 +19,7 @@ class ViewFactory extends Factory
 	public function definition() : array
 	{
 		return [
-			'view_code' => $this->faker->domainWord(),
+			'code' => $this->faker->domainWord(),
 			'app_code' => App::factory(),
 			'name' => $this->faker->name(),
 			'description' => $this->faker->text(),

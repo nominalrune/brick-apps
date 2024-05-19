@@ -48,13 +48,14 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::get('/apps/{app_code}/archive', [AppController::class, 'archive'])->name('app.archive');
 	Route::delete('/apps/{app_code}', [AppController::class, 'destroy'])->name('app.delete');
 
-	Route::get('/app-{app_code}/{view_code}', [RecordController::class, 'index'])->name('record.index');
-	Route::post('/app-{app_code}/{view_code}', [RecordController::class, 'store'])->name('record.store');
-	Route::get('/app-{app_code}/{view_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
-	Route::post('/app-{app_code}/{view_code}/{record_id}', [RecordController::class, 'update'])->name('record.update');
-	Route::delete('/app-{app_code}/{view_code}/{record_id}', [RecordController::class, 'destroy'])->name('record.delete');
+	Route::get('/app/{app_code}', [RecordController::class, 'index'])->name('record.index');
+	Route::get('/app/{app_code}/{view_code}', [RecordController::class, 'index'])->name('record.index');
+	Route::post('/app/{app_code}/{view_code}', [RecordController::class, 'store'])->name('record.store');
+	Route::get('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
+	Route::post('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'update'])->name('record.update');
+	Route::delete('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'destroy'])->name('record.delete');
 
-	
+
 	// Route::get('/views', [ViewController::class, 'index'])->name('view.index');
 	Route::post('/views', [ViewController::class, 'store'])->name('view.store');
 	Route::get('/views/{view_code}', [ViewController::class, 'show'])->name('view.show');

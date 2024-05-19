@@ -3,9 +3,9 @@ type MethodKeys<T> = {
 }[keyof T];
 
 type WithoutMethodsOfPropModel<T> = {
-	[K in keyof T]: T[K] extends {toJson:()=>object}[]
+	[K in keyof T]: T[K] extends {toJSON:()=>object}[]
 	? WithoutMethods<T[K][number]>[]
-	: (T[K] extends {toJson:()=>object} | null
+	: (T[K] extends {toJSON:()=>object} | null
 		? WithoutMethods<Exclude<T[K], null>> | null
 		: T[K]);
 };

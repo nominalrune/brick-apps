@@ -6,6 +6,9 @@ export default class RepositoryBase<T extends { toJSON: () => unknown; }, U exte
 	constructor(public readonly subUrl: string | URL) {
 		this.api = new Api(config.baseUrl);
 	}
+	async request(method: "get"|"post", urlPath: string | URL, { body, searchParams, signal }: { body?: object, searchParams?: object; signal?: AbortSignal | null; } = { body: {}, searchParams: {}, signal: null }) {
+		return await this.api[method](urlPath, { body, searchParams, signal });
+	}
 	async find(id: number | string) {
 		const data = await this.api.get(`${this.subUrl}/${id}`);
 		return data;
