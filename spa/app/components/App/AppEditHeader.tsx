@@ -7,7 +7,7 @@ import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 
 export default function AppEditHeader({ data, submitLabel, onChange, onCancel, onSubmit, onDelete }: { data: AppData, submitLabel:string, onChange: ChangeEventHandler, onCancel: MouseEventHandler, onSubmit: FormEventHandler, onDelete: MouseEventHandler }) {
     return <div className='flex gap-4 items-end'>
-        <AppIconSelect value={data.icon} name="icon" className='max-w-6' onChange={onChange} />
+        <AppIconSelect value={data.icon} name="icon" label="アイコン" onChange={onChange} />
         <Input label="アプリ名" type="text" name="name" className='text-3xl' id={"name"} value={data.name} onChange={onChange} />
         <Input label="アプリコード" required type="text" name="code" id='code' value={data.code} onChange={onChange} />
         <div className='flex-grow flex gap-4 justify-end'>

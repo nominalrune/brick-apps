@@ -14,7 +14,10 @@ class AppController extends Controller
 {
     public function index(Request $request)
     {
+		Log::info('app index');
+		// $apps = App::withCount("records")->get();
 		$apps = App::all();
+		Log::info('app index', ['apps' => $apps]);
         return response()->json($apps);
     }
 

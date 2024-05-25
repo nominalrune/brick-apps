@@ -24,14 +24,16 @@ export default function useAuth() {
 			navigate(redirect);
 		} else { navigate('auth/login'); }
 	};
-	const check = async () => {
-		const json = await api.get('auth');
+	const check = async (signal?:AbortSignal) => {
+		const json = await api.get('auth', undefined, signal);
 		if (!json) return;
 		if (json.message) return;
 		setUser(User.fromData(json));
 	};
 	useEffect(() => {
+		const controller = new AbortController();
 		check();
+		// return () => controller.abort();
 	}, []);
 	return { user, login, logout };
 

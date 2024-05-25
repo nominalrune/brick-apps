@@ -7,10 +7,12 @@ import RecordList from '~/components/Record/RecordList';
 // import { a } from '@inertiajs/react';
 import { MdSettings } from "@react-icons/all-files/md/MdSettings";
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
-import AppRepository from '~/repository/App';
+import RecordRepository from '~/repository/App/RecordRepository';
+import FloatingAddButton from '~/components/common/Button/FloatingAddButton';
 async function getClientData(code:string) {
-	const repository = new AppRepository();
-	const app = await repository.findByCode(code);
+	const repository = new RecordRepository(code);
+	const {records, app} = await repository.index();
+	return {app, records};
 }
 
 export async function clientLoader({
@@ -36,6 +38,10 @@ export default function Index() {
             <RecordList records={records} app={app} />
         </div>
     </div>
+    <div>
+        aaaaa
+    </div>
+    <FloatingAddButton onClick={()=>{}} />
 	</>
     // return <AuthenticatedLayout
     //     user={auth.user}

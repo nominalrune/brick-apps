@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Repository\App;
 
 use App\Models\App;

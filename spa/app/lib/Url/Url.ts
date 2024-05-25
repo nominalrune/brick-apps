@@ -13,9 +13,9 @@ export default class Url extends URL {
 	constructor(url: string | URL, base?: string | URL) {
 		super(url, base);
 	}
-	withAppendedPath(path: string|URL): Url {
-		const newUrl = new Url(this)
-		const _path = path.toString().replace(/^\//,"");
+	withAppendedPath(path: string | URL): Url {
+		const newUrl = new Url(this);
+		const _path = path.toString().replace(/^\//, "");
 		newUrl.pathname = newUrl.pathname + _path;
 		return newUrl;
 	}
@@ -34,6 +34,8 @@ export default class Url extends URL {
 		Object.entries(query).forEach(([key, value]) => {
 			if (Array.isArray(value)) {
 				newUrl.appendArrayToQuery(key, value);
+			} else if (value === null || value === undefined) {
+				// skip
 			} else {
 				newUrl.searchParams.append(key, value.toString());
 			}

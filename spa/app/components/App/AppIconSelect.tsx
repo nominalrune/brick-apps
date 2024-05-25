@@ -1,10 +1,10 @@
 import { ChangeEventHandler, ReactNode } from 'react';
 import Input from '../common/Input';
 const icons = [
-	"calendar.svg",
-	"diagnosis.svg",
-	"record.svg",
-	"shopping.svg",
+	"public/icons/calendar.svg",
+	"public/icons/diagnosis.svg",
+	"public/icons/record.svg",
+	"public/icons/shopping.svg",
 ];
 export default function AppIconSelect({ value, name, label, onChange, className }: { name: string, value: string, onChange: ChangeEventHandler, label?: string, className?: string; }) {
 	return <Input
@@ -15,6 +15,6 @@ export default function AppIconSelect({ value, name, label, onChange, className 
 		className={className}
 		value={value}
 		onChange={onChange}
-		options={icons.map((url) => ([url.split(".")[0], <><div>{url}</div><img src={url} className="w-6 h-6" /></>] as const))}
+		options={icons.map((url) => ([<><img src={url} className="w-6 h-6" /></>, url] as const))}
 	/>;
 }

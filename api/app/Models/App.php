@@ -27,6 +27,12 @@ class App extends Model
 	protected $casts = [
 		'fields' => "array",//Fields::class,
 	];
+	// public function records()
+	// {
+	// 	$query = $this->hasMany(Record::class);
+	// 	$query->setQuery($query->getQuery()->from("app-{$this->code}")->getQuery());
+	// 	return $query;
+	// }
 	public function defaultView()
 	{
 		return $this->hasOne('views', 'code', 'default_view');
@@ -111,7 +117,7 @@ class App extends Model
 	}
 	public function records()
 	{
-		$classFiler = new \Repository\App\UserDefinedModelClassRepository($this);
+		$classFiler = new \App\Repository\App\UserDefinedModelClassRepository($this);
 		$classFiler->require();
 		return $this->hasMany($this->classFullName);
 		// return $this->newEloquentBuilder(Db::table($this->code, $this->classFullName));

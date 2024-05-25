@@ -11,7 +11,7 @@ export default class AppRepository extends RepositoryBase<NewApp, App> {
 		return App.fromData(data);
 	}
 	async findByCode(code:string){
-		const data = await this.request("get",`${this.subUrl}/?code=${code}`)
+		const data = await this.request("get",`${this.subUrl}?code=${code}`)
 		return App.fromData(data);
 
 	}

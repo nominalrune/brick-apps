@@ -1,4 +1,5 @@
 import { useId, useRef, useState } from 'react';
+import Select from 'react-select';
 import { twMerge } from 'tailwind-merge';
 type LabelProps = {
 	label: string;
@@ -55,7 +56,7 @@ function BaseInput(props: (InputProps | SelectProps | TextareaProps)) {
 	const listId = useId();
 	switch (props.type) {
 		case "select":
-			return <Select props={props} />;
+			return <_Select props={props} />;
 		case "textarea":
 			return <Textarea props={props} />;
 		default:
@@ -94,16 +95,15 @@ function Textarea({ props }: { props: Omit<TextareaProps, "type" | "options">; }
 	</>;
 }
 
-function Select({ props }: { props: Omit<SelectProps, "type">; }) {
-	return <select
+function _Select({ props }: { props: Omit<SelectProps, "type">; }) {
+	return <Select
 		className={props.className}
 		value={props.value}
 		onChange={props.onChange}
-		disabled={props.disabled}
+		isDisabled={props.disabled}
 		name={props.name}
 		id={props.id}
-		title={props.value}
-	>{
-			props.options.map(([label, value]) => <option key={label} value={value ?? label}>{label}</option>)
-		}</select>;
+		// title={props.value}
+		options={props.options?.map(([label, value]) => ({ label, value: value ?? label }))}
+	/>;
 }
