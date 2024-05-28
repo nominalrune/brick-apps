@@ -22,7 +22,7 @@ export default class App {
             name: this.name,
             description: this.description,
             icon: this.icon,
-            form: this.form.form,
+            form: this.form.content,
             form_keys: this.form.formKeys
         };
     }

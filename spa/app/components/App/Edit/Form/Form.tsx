@@ -46,11 +46,11 @@ export default function AppForm({ table, update, remove }: Param) {
 		remove={remove}
 	/>).concat(extraRow);
 	return <>
-		<WidgetSettingModal
-			inputData={selectedInput?.input}
+		{selectedInput?.input && <WidgetSettingModal
+			inputData={selectedInput.input}
 			onClose={() => setSelectedInput(undefined)}
 			onSubmit={handleConfigChange}
-		/>
+		/>}
 		{rows}
 	</>;
 }

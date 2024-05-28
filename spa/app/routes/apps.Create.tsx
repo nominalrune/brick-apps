@@ -1,6 +1,6 @@
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, ChangeEvent } from 'react';
 import AppInput from '~/model/App/AppInput';
-import AppForm from '~/components/App/Edit/Form/Form';
+import AppForm from '~/components/App/Edit';
 import useDnDAppEditor from '~/hooks/useDnDAppEditor';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppEditHeader from '~/components/App/Edit/AppEditHeader';
@@ -10,13 +10,14 @@ import AppRepository from '~/repository/App';
 import NewApp from '~/model/App/NewApp';
 import Named from '~/lib/react-structured-form/src/types/Named';
 import NewView from '~/model/App/View/NewView';
-import AppLayout from '~/components/App/Edit/Form';
+import AppLayout from '~/components/App/Edit';
+import ViewItem from '~/model/App/View/ViewItem';
 
 export default function Create({ auth }: any) {
 	// return <></>
 	const layoutState = useDnDAppEditor([
-		{code:"名前",valueType:"text",},
-		{code:"都道府県",valueType:"text",}
+		{valueType:"text",...new ViewItem({code:"名前",label:"名前",type:"text",defaultValue:"",prefix:"",suffix:""})},
+		{valueType:"text", ...new ViewItem({code:"都道府県",label:"都道府県",type:"text",defaultValue:"",prefix:"",suffix:""})},
 	],[]);
 	const [newApp, setNewApp] = useState(NewApp.blank());
 	const [newView, setNewView] = useState(NewView.blank());

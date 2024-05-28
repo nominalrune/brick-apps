@@ -1,5 +1,5 @@
 import { DropResult } from "react-beautiful-dnd";
-import useInputsTable from './useInputTable/useInputTable';
+import useInputsTable from './useInputsTable/useInputsTable';
 import ViewItem from '../model/App/View/ViewItem';
 import Field from '~/model/App/Field';
 import { useState } from 'react';
@@ -24,7 +24,7 @@ export default function useDnDAppEditor(initialFields: Field[], initialTable?: V
 
 		// if (source.droppableId === "palette") {
 			const field = fields[source.index];
-			const code = field.code + "-" + (1 + Math.max(0, ...table.form.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite)));
+			const code = field.code + "-" + (1 + Math.max(0, ...table.content.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite)));
 			// setFields(fields => [...fields, { ...field, code, }]);
 			const newItem = new ViewItem({ type: "text", code, label: field.code, defaultValue: "", });
 			console.log({ newItem, fields });

@@ -1,7 +1,7 @@
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, ChangeEvent } from 'react';
 import { DragDropContext } from "react-beautiful-dnd";
 import Palette from '~/components/App/Edit/Form/Palette';
-import AppForm from '~/components/App/Edit/Form/Form';
+import AppForm from '~/components/App/Edit';
 // import { AppData } from '~/Models/App/App';
 import AppEditHeader from '~/components/App/Edit/AppEditHeader';
 import useDnDAppEditor from '~/hooks/useDnDAppEditor';
@@ -60,7 +60,7 @@ export default function Edit() {
                     <Palette items={inputItems} name="palette" />
                 </div>
                 <div className='col-span-3 flex flex-col'>
-                    <AppForm table={table.form} update={update} remove={remove} />
+                    <AppForm table={table.content} update={update} remove={remove} />
                 </div>
             </div>
         </DragDropContext>

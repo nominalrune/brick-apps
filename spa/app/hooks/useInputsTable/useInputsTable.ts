@@ -10,10 +10,10 @@ export default function useInputsTable(initialTable?: ViewItemData[][]) {
 	}
 
 	function insert([x, y]: Position, inputData: ViewItem) {
-		setTable(table.insert([x, y], inputData));
+		setTable(table.insert([x, y], new ViewItem(inputData)));
 	}
 	function update([x, y]: Position, value: ViewItem) {
-		setTable(table => table.update([x, y], value));
+		setTable(table => table.update([x, y], new ViewItem(value)));
 	}
 
 	function move(from: Position, to: Position) {

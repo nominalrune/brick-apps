@@ -3,25 +3,22 @@ import Position from '~/model/Position';
 import ViewItemData from './ViewItemData';
 
 export default class ViewContent {
-	public readonly form: ViewItem[][];
-	public get formKeys(): string[] {
-		return this.form.flat().map(item => item.code);
-	};
-	constructor(_form: ViewItem[][]) {
-		this.form = _form.filter(row => row.length !== 0);
+	public readonly content: ViewItem[][];
+	constructor(_content: ViewItem[][]) {
+		this.content = _content.filter(row => row.length !== 0);
 	}
 	map<T>(callbackfn: (inputs: ViewItem[], i?: number, arr?: ViewItem[][]) => T) {
-		return this.form.map(callbackfn);
+		return this.content.map(callbackfn);
 	}
 	at(row: number) {
-		return this.form[row] ?? [];
+		return this.content[row] ?? [];
 	}
 	get([row, col]: Position) {
-		return this.form[row]?.[col];
+		return this.content[row]?.[col];
 	}
 	insert([x, y]: Position, inputData: ViewItem) {
-		if (!this.form[x]) {
-			this.form[x] = [];
+		if (!this.content[x]) {
+			this.content[x] = [];
 		}
 		const newInputs = this.at(x).toSpliced(y, 0, inputData);
 		return new ViewContent(this
@@ -41,26 +38,26 @@ export default class ViewContent {
 			const clone = Array.from(this.at(fromRow));
 			const [removed] = clone.splice(fromCol, 1);
 			clone.splice(toCol, 0, removed);
-			return new ViewContent(this.form
+			return new ViewContent(this.content
 				.map((row, i) => i === fromRow ? clone : row)
 				.filter((row) => (row && row.length !== 0))
 			);
 		}
 		const item = this.get([fromRow, fromCol]);
 		if (!item) { return this; }
-		return new ViewContent(this.form
+		return new ViewContent(this.content
 			.map((row, i) => i === fromRow ? row.toSpliced(fromCol, 1) : i === toRow ? row.toSpliced(toCol, 0, item) : row)
 			.filter((row) => (row && row.length !== 0))
 		);
 	}
 	remove([x, y]: Position) {
-		return new ViewContent(this.form
+		return new ViewContent(this.content
 			.map((row, i) => i === x ? row.toSpliced(y, 1) : row)
 			.filter((row) => (row && row.length !== 0))
 		);
 	}
 	toJSON() {
-		return this.form.map(row => row.map(col => col.toJSON()));
+		return this.content.map(row => row.map(col => col.toJSON()));
 	}
 	// static parse(json: string) {
 	// 	if (json.length < 2) {

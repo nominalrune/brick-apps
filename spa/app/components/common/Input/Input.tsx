@@ -97,9 +97,9 @@ function Textarea({ props }: { props: Omit<TextareaProps, "type" | "options">; }
 
 function _Select({ props }: { props: Omit<SelectProps, "type">; }) {
 	return <Select
-		className={props.className}
+		// className={props.className}
 		value={props.value}
-		onChange={props.onChange}
+		onChange={(val)=>props.onChange({target:{name:props.name, value:val, type:"select"} as any})}
 		isDisabled={props.disabled}
 		name={props.name}
 		id={props.id}

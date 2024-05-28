@@ -60,6 +60,9 @@ export default class ViewItem<U extends any=any> implements ViewItemData<U>{
 	static fromData(data: ViewItemData) {
 		return new ViewItem(data);
 	}
+	static blank() {
+		return new ViewItem({ code: "", type: "text", defaultValue: "" });
+	}
 	// toJSON() {
 	//     return JSON.stringify(this.toDTO());
 	// }
