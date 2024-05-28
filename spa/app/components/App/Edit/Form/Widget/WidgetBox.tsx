@@ -3,7 +3,7 @@ import { BiCog } from '@react-icons/all-files/bi/BiCog';
 import { BiX } from '@react-icons/all-files/bi/BiX';
 import { useState, type ReactNode, type FormEvent, useEffect } from 'react';
 
-export default function AppFormItem({ index, id, children, onConfig, remove }: { index: number, id: string, children: ReactNode, onConfig: () => void, remove: () => void; }) {
+export default function WidgetBox({ index, id, children, onConfig, remove }: { index: number, id: string, children: ReactNode, onConfig: () => void, remove: () => void; }) {
 	return <Draggable draggableId={id} index={index}>{
 		provided => (
 			<div className='border border-sky-400 border-dashed h-24 p-1 m-1 flex'

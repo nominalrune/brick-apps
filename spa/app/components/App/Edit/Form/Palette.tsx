@@ -30,10 +30,6 @@ function Palette({ items, name }: { items: readonly Field[], name: string, }) {
 										className="max-w-[9rem]"
 										onChange={() => { }}
 									/>
-									<details>
-
-									{JSON.stringify(provided)}
-									</details>
 								</div>
 							)}</Draggable>
 					))

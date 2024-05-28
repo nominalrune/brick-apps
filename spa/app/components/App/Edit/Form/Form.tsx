@@ -1,7 +1,7 @@
 import Position from '~/model/Position';
 import ViewItem from '~/model/App/View/ViewItem';
 import { useState, type FormEvent } from 'react';
-import InputSettingModal from './InputSettingModal';
+import WidgetSettingModal from './Widget/WidgetSettingModal';
 import AppFormRow from './Row';
 interface Param {
 	table: ViewItem[][],
@@ -46,7 +46,7 @@ export default function AppForm({ table, update, remove }: Param) {
 		remove={remove}
 	/>).concat(extraRow);
 	return <>
-		<InputSettingModal
+		<WidgetSettingModal
 			inputData={selectedInput?.input}
 			onClose={() => setSelectedInput(undefined)}
 			onSubmit={handleConfigChange}

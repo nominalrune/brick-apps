@@ -1,11 +1,12 @@
 import { ChangeEvent, FormEventHandler, useReducer } from 'react';
-import Modal from '../../../common/Modal';
-import Input from '../../../common/Input';
+import Modal from '~/components/common/Modal';
+import Input from '~/components/common/Input';
 import ViewItem from '~/model/App/View/ViewItem';
 import ViewItemData from '~/model/App/View/ViewItemData';
-import Button from '../../../common/Button/Button';
+import Button from '~/components/common/Button/Button';
 import { inputItems } from '~/model/App/View/InputTypes';
-export default function InputSettingModal({ inputData, onClose, onSubmit }: { inputData: ViewItem | undefined, onClose: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
+import DotKeyOf from '~/types/DotKeyOf';
+export default function WidgetSettingModal({ inputData, onClose, onSubmit }: { inputData: ViewItem | undefined, onClose: () => void, onSubmit: FormEventHandler<HTMLFormElement>; }) {
 	const [state, reducer] = useReducer((state: ViewItem, action: { key: DotKeyOf<ViewItemData>, value: any; }) => {
 		if (!state) { return inputData; }
 		const newData = state.with(action.key, action.value);
