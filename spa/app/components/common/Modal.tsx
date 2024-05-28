@@ -6,10 +6,9 @@ interface ModalProps {
 	children: React.ReactNode;
 	show: boolean;
 	close: () => void;
-	className?: string;
 }
 
-export default function Modal({ children, show, close, className }: ModalProps) {
+export default function Modal({ children, show, close}: ModalProps) {
 	return (
 		<Transition show={show} as={Fragment}>
 			<Dialog onClose={close}>
@@ -34,9 +33,7 @@ export default function Modal({ children, show, close, className }: ModalProps) 
 					leaveTo="opacity-0 scale-95"
 				>
 					<Dialog.Panel>
-						<div className={twMerge("relative", className)}>
 							{children}
-						</div>
 					</Dialog.Panel>
 				</Transition.Child>
 			</Dialog>

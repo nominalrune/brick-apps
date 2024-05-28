@@ -1,8 +1,8 @@
-import { useId, useRef, useState } from 'react';
+import { ReactNode, useId, useRef, useState } from 'react';
 import Select from 'react-select';
 import { twMerge } from 'tailwind-merge';
 type LabelProps = {
-	label: string;
+	label?: ReactNode;
 	prefix?: string;
 	suffix?: string;
 };

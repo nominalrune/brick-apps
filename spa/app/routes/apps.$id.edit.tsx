@@ -1,9 +1,9 @@
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, ChangeEvent } from 'react';
 import { DragDropContext } from "react-beautiful-dnd";
-import Palette from '~/components/App/Palette';
-import AppForm from '~/components/App/AppForm';
+import Palette from '~/components/App/Edit/Form/Palette';
+import AppForm from '~/components/App/Edit/Form/Form';
 // import { AppData } from '~/Models/App/App';
-import AppEditHeader from '~/components/App/AppEditHeader';
+import AppEditHeader from '~/components/App/Edit/AppEditHeader';
 import useDnDAppEditor from '~/hooks/useDnDAppEditor';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppInputData from '~/model/App/NewApp';
