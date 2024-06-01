@@ -4,16 +4,18 @@ import Palette from '~/components/App/Edit/Form/Palette';
 import AppForm from '~/components/App/Edit';
 // import { AppData } from '~/Models/App/App';
 import AppEditHeader from '~/components/App/Edit/AppEditHeader';
-import useDnDAppEditor from '~/hooks/useDnDAppEditor';
+import useDnDAppEditor from '~/hooks/App/useDnDAppEditor';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppInputData from '~/model/App/NewApp';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 import Button from '~/components/common/Button/Button';
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
+
 import AppRepository from '~/repository/App';
 async function getClientData(request: Request) {
 	const repository = new AppRepository();
-	return await repository.find(request.param.id);
+	const app = await repository.find(request.param.id);
+	return app;
 }
 
 export async function clientLoader({
@@ -24,8 +26,8 @@ export async function clientLoader({
 }
 
 export default function Edit() {
-	const app = useLoaderData();
-    const { table, update, remove, onDragEnd } = useDnDAppEditor("palette", inputItems, app.form);
+	const app = useLoaderData<typeof clientLoader>();
+    const { table, update, remove, onDragEnd } = useDnDAppEditor(app, app.);
     const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
         name: app.name,
         code: app.code,

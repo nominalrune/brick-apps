@@ -34,21 +34,30 @@ export default class ViewContent {
 		return newInstance;
 	}
 	move([fromRow, fromCol]: Position, [toRow, toCol]: Position) {
+		// console.log("before move", JSON.stringify(this.content));
+		const item = this.get([fromRow, fromCol]);
+		if (!item) { return this; }
+
 		if (fromRow === toRow) {
 			const clone = Array.from(this.at(fromRow));
 			const [removed] = clone.splice(fromCol, 1);
 			clone.splice(toCol, 0, removed);
-			return new ViewContent(this.content
+			const result = new ViewContent(this.content
 				.map((row, i) => i === fromRow ? clone : row)
 				.filter((row) => (row && row.length !== 0))
 			);
+			// console.log("after move", JSON.stringify(result.content));
+			return result;
 		}
-		const item = this.get([fromRow, fromCol]);
-		if (!item) { return this; }
-		return new ViewContent(this.content
+		while (this.content.length <= toRow) {
+			this.content.push([]);
+		}
+		const result = new ViewContent(this.content
 			.map((row, i) => i === fromRow ? row.toSpliced(fromCol, 1) : i === toRow ? row.toSpliced(toCol, 0, item) : row)
 			.filter((row) => (row && row.length !== 0))
 		);
+		// console.log("after move", JSON.stringify(result.content));
+		return result;
 	}
 	remove([x, y]: Position) {
 		return new ViewContent(this.content

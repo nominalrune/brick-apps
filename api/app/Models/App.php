@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Casts\App\Fields;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * App\Models\App
@@ -33,6 +34,7 @@ class App extends Model
 	// 	$query->setQuery($query->getQuery()->from("app-{$this->code}")->getQuery());
 	// 	return $query;
 	// }
+
 	public function defaultView()
 	{
 		return $this->hasOne('views', 'code', 'default_view');
@@ -111,16 +113,20 @@ class App extends Model
 	}
 	public function classFullName() : Attribute
 	{
-		return new Attribute(function () {
-			return '\\App\\Models\\UserDefined\\' . $this->className();
-		});
+		return new Attribute(
+			get: function () {
+				return '\\App\\Models\\UserDefined\\' . $this->className;
+			}
+		);
 	}
 	public function records()
 	{
 		$classFiler = new \App\Repository\App\UserDefinedModelClassRepository($this);
+		// the class will not be autoloaded so manually require it
 		$classFiler->require();
-		return $this->hasMany($this->classFullName);
-		// return $this->newEloquentBuilder(Db::table($this->code, $this->classFullName));
+		$hasMany = $this->hasMany($this->classFullName);
+		$hasMany->setQuery(DB::query()->from($this->code));
+		return $hasMany;
 	}
 	public static function findByCode(string $appCode) : App
 	{

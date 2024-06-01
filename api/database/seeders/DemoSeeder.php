@@ -46,11 +46,20 @@ class DemoSeeder extends Seeder
 			'group_id' => $group->id,
 		]);
 		$appService = new CreateAppService();
-		$app = $appService->createApp('test', 'Test App', 'Test App Description', '/icons/record.svg', [
-			['code' => 'name', 'valueType' => 'text'],
-		], [
-			// TODO
-		],
+		$app = $appService->createApp(
+			'test',
+			'Test App',
+			'Test App Description',
+			'/icons/record.svg',
+			[["code"=>"name",'valueType'=>'varchar'],["code"=>"email",'valueType'=>'varchar']],
+			[
+				'code' => 'test-default', 'name' => 'default',
+				'description' => 'default view',
+				'content' => [[
+					["code"=>"name","type"=>"text","label"=>"name","rules"=>null,"prefix"=>"","suffix"=>"","defaultValue"=>""],
+					["code"=>"email","type"=>"text","label"=>"email","rules"=>null,"prefix"=>"","suffix"=>"","defaultValue"=>""],
+				]],
+			],
 			$user
 		);
 		// $app = App::factory()

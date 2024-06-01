@@ -9,16 +9,17 @@ export default Palette;
 function Palette({ items, name }: { items: readonly Field[], name: string, }) {
 	return <Droppable droppableId={name} >
 		{provided => (
-			<div ref={provided.innerRef} {...provided.droppableProps}>
+			<div ref={provided.innerRef} {...provided.droppableProps} className='flex flex-col'>
 				{
 					items.map((item, i) => (
 						<Draggable draggableId={item.code + "-" + (i - items.length)} index={i} key={item.code + "-" + (i - items.length).toString()}>{
 							provided => (
-								<div className="m-1 p-1 py-2 border-[1px] border-slate-100 rounded bg-slate-50 cursor-grab flex flex-shrink items-center"
+								<div className="relative m-1 p-1 py-2 border border-sky-400 border-dashed rounded bg-slate-50 cursor-grab inline-flex items-center"
 									ref={provided.innerRef}
 									{...provided.draggableProps}
 									{...provided.dragHandleProps}
 								>
+									<div className="absolute inset-0 w-full h-full"></div>
 									<FiMoreVertical className="p-1 text-2xl text-slate-500" />
 									<Input
 										id={item.code + "-" + (i).toString()}

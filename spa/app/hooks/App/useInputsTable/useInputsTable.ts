@@ -13,6 +13,7 @@ export default function useInputsTable(initialTable?: ViewItemData[][]) {
 		setTable(table.insert([x, y], new ViewItem(inputData)));
 	}
 	function update([x, y]: Position, value: ViewItem) {
+		console.log({ x, y, value })
 		setTable(table => table.update([x, y], new ViewItem(value)));
 	}
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\App;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
-class AppShowRequest extends Request
+class ShowRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.

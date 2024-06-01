@@ -8,7 +8,7 @@ use Inertia\Inertia;
 use App\Services\App\CreateAppService;
 use Illuminate\Support\Facades\Log;
 use App\Models\App;
-use App\Http\Requests\AppUpdateRequest;
+use App\Http\Requests\UpdateRequest;
 
 class AppController extends Controller
 {
@@ -30,7 +30,7 @@ class AppController extends Controller
         // https://qiita.com/luccafort/items/76d85742e35bfc8d8d05
         return response()->json(["sql" => "CREATE ..."], 200);
     }
-    public function store(AppUpdateRequest $request)
+    public function store(UpdateRequest $request)
     {
         $service = new CreateAppService();
         $app = $service->createApp($request->code, $request->name, $request->description ?? "", $request->icon, $request->form, $request->form_keys);
@@ -45,7 +45,7 @@ class AppController extends Controller
             "app" => $app,
         ]);
     }
-    public function update(AppUpdateRequest $request, string $app_code)
+    public function update(UpdateRequest $request, string $app_code)
     {
         // dd(["req"=>$request->all()]);
         $service = new UpdateAppService();

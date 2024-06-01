@@ -13,13 +13,11 @@ export default function AppFormRow({ row, rowIndex, select, remove }: { row: Vie
 			<div className='p-1 border-b-2 border-slate-200 h-28 last:flex-grow flex' ref={provided.innerRef} {...provided.droppableProps}>
 				{row.map((item, col) => <WidgetBox
 					index={col}
-					id={item.code}
+					item={item}
 					key={item.code}
 					onConfig={() => { select({ position: [rowIndex, col], input: item }); }}
-					remove={() => remove([rowIndex, col])}>
-					<Input label={item.label || "(no name)"} disabled type={item.type} name={item.code} value={item.defaultValue} className="opacity-90 text-slate-700" />
-					<div className='text-red-500'>{item.error}</div>
-				</WidgetBox>)}
+					remove={() => remove([rowIndex, col])}
+					/>)}
 				{provided.placeholder}
 			</div>
 		)}

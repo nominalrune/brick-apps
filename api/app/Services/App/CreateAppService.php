@@ -28,6 +28,7 @@ class CreateAppService
 		User $creator
 	) {
 		$app = $this->createAppRecord($code, $name, $description, $icon, $fields, $creator);
+		Log::info('app', ['app' => $app]);
 		$this->createAppTable($code, $fields);
 		$this->createView($app, $view);
 		$this->createUserDefinedModelClassFile($app);
@@ -54,7 +55,9 @@ class CreateAppService
 		$view = View::create([
 			'app_code' => $app->code,
 			'name' => $view['name'],
-			'fields' => $view['fields'],
+			'code' => $view['code'],
+			'description' => $view['description'],
+			'content' => $view['content'],
 			'created_by' => $app->created_by,
 			'updated_by' => $app->created_by,
 		]);
@@ -72,16 +75,14 @@ class CreateAppService
 			$table->timestamps();
 			$table->foreignId('created_by')->nullable()->constrained('users')->onUpdate('restrict')->onDelete('set null');
 			$table->foreignId('updated_by')->nullable()->constrained('users')->onUpdate('restrict')->onDelete('set null');
-			foreach ($fields as $inputs) {
-				foreach ($inputs as $input) {
-					$code = $input['code'];
-					$valueType = $input['valueType'];
-					if ($valueType === 'reference') {
-						$table->foreignId($code)->nullable()->constrained($input['referringAppName'])->onUpdate('restrict')->onDelete('set null');
-						continue;
-					}
-					$this->declareColumn($table, $code, $valueType);
+			foreach ($fields as $input) {
+				$code = $input['code'];
+				$valueType = $input['valueType'];
+				if ($valueType === 'reference') {
+					$table->foreignId($code)->nullable()->constrained($input['referringAppName'])->onUpdate('restrict')->onDelete('set null');
+					continue;
 				}
+				$this->declareColumn($table, $code, $valueType);
 			}
 		});
 	}

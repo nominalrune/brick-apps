@@ -57,10 +57,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 	// Route::get('/views', [ViewController::class, 'index'])->name('view.index');
-	Route::post('/views', [ViewController::class, 'store'])->name('view.store');
-	Route::get('/views/{view_code}', [ViewController::class, 'show'])->name('view.show');
-	Route::post('/views/{view_code}', [ViewController::class, 'update'])->name('view.update');
-	Route::delete('/views/{view_code}', [ViewController::class, 'destroy'])->name('view.delete');
+	Route::post('/views/{app_code}', [ViewController::class, 'store'])->name('view.store');
+	Route::get('/views/{app_code}/{view_code}', [ViewController::class, 'show'])->name('view.show');
+	Route::post('/views/{app_code}/{view_code}', [ViewController::class, 'update'])->name('view.update');
+	Route::delete('/views/{app_code}/{view_code}', [ViewController::class, 'destroy'])->name('view.delete');
 });
 
 require __DIR__ . '/auth.php';

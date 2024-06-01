@@ -7,17 +7,12 @@ export default class RecordRepository extends RepositoryBase<NewRecord, Record> 
 	constructor(app_code: string) {
 		super(`app/${app_code}`);
 	}
-	async index() {
-		const data = await this.request("get", this.subUrl);
-		return data;
+	async get(urlParams?: object) {
+		return await super.get(urlParams);
 	}
 	async find(id: number) {
 		const data = await super.find(id);
 		return data;
-	}
-	async getByApp(app: App) {
-		const data = await this.request("get", `${this.subUrl}/?app=${app.id}`);
-		return data.map((record: any) =>record);
 	}
 	async create(record: NewRecord) {
 		const data = await super.create(record);

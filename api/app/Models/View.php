@@ -12,6 +12,7 @@ class View extends Model
 {
 	use HasFactory;
 	protected $fillable = [
+		'app_code',
 		'code',
 		'name',
 		'description',
