@@ -1,13 +1,13 @@
-import ViewItem from '~/model/App/View/ViewItem';
+import Widget from '~/model/App/View/Widget';
 import Position from '~/model/Position';
 import ViewItemData from './ViewItemData';
 
 export default class ViewContent {
-	public readonly content: ViewItem[][];
-	constructor(_content: ViewItem[][]) {
+	public readonly content: Widget[][];
+	constructor(_content: Widget[][]) {
 		this.content = _content.filter(row => row.length !== 0);
 	}
-	map<T>(callbackfn: (inputs: ViewItem[], i?: number, arr?: ViewItem[][]) => T) {
+	map<T>(callbackfn: (inputs: Widget[], i?: number, arr?: Widget[][]) => T) {
 		return this.content.map(callbackfn);
 	}
 	at(row: number) {
@@ -16,7 +16,7 @@ export default class ViewContent {
 	get([row, col]: Position) {
 		return this.content[row]?.[col];
 	}
-	insert([x, y]: Position, inputData: ViewItem) {
+	insert([x, y]: Position, inputData: Widget) {
 		if (!this.content[x]) {
 			this.content[x] = [];
 		}
@@ -25,7 +25,7 @@ export default class ViewContent {
 			.map((row, i) => i === x ? newInputs : row)
 			.filter((row) => (row && row.length !== 0)));
 	}
-	update([x, y]: Position, value: ViewItem) {
+	update([x, y]: Position, value: Widget) {
 		const updatedRow = this.at(x).toSpliced(y, 1, value);
 		const newInstance = new ViewContent(this
 			.map((row, i) => i === x ? updatedRow : row)

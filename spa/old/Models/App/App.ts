@@ -1,5 +1,5 @@
 import ViewContent from '../../../app/model/App/View/ViewContent';
-import ViewItem from '../../../app/model/App/View/ViewItem';
+import Widget from '../../../app/model/App/View/Widget';
 
 export default class App {
     constructor(
@@ -34,5 +34,5 @@ export interface AppData {
     icon: string;
     description: string;
     form_keys: string[];
-    form: ViewItem[][];
+    form: Widget[][];
 }

@@ -1,3 +1,4 @@
+import Fields from './FIelds';
 import Field from './Field';
 
 export default interface AppData {
@@ -6,7 +7,7 @@ export default interface AppData {
 	description: string;
 	code: string;
 	icon: string;
-	fields: Field[];
+	fields: Fields;
 	defaultViewCode: string;
 	created_at: string;
 	updated_at: string;

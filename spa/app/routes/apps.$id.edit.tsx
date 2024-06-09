@@ -1,10 +1,10 @@
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, ChangeEvent } from 'react';
 import { DragDropContext } from "react-beautiful-dnd";
 import Palette from '~/components/App/Edit/Form/Palette';
-import AppForm from '~/components/App/Edit';
+import AppForm from '~/components/App/Edit/AppLayoutEdit';
 // import { AppData } from '~/Models/App/App';
 import AppEditHeader from '~/components/App/Edit/AppEditHeader';
-import useDnDAppEditor from '~/hooks/App/useDnDAppEditor';
+import useAppEditor from '~/hooks/App/useAppEditor';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppInputData from '~/model/App/NewApp';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
@@ -27,7 +27,7 @@ export async function clientLoader({
 
 export default function Edit() {
 	const app = useLoaderData<typeof clientLoader>();
-    const { table, update, remove, onDragEnd } = useDnDAppEditor(app, app.);
+    const { table, update, remove, onDragEnd } = useAppEditor(app, app.);
     const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
         name: app.name,
         code: app.code,

@@ -2,19 +2,22 @@
 import { ReactNode } from 'react';
 import ViewItemData from './ViewItemData';
 import { InputTypeOption, } from './InputTypes';
-import JsValueType from '../JsValueType';
-import ValueTypeOption from '../ValueTypeOption';
 import WithoutMethods from '~/model/common/WithoutMethods';
-export default class ViewItem<U extends any=any> implements ViewItemData<U>{
+import Field from '../Field';
+import Fields from '../FIelds';
+export default class Widget<U extends any = any> implements ViewItemData<U> {
 	private _error = "";
 	get error() { return this._error; }
 	public defaultValue: U | undefined;
 	public readonly referringAppCode?: string;
 	public readonly type: InputTypeOption;
-	public readonly code: string;
-	public readonly label: string|undefined;
-	public readonly prefix: string|undefined;
-	public readonly suffix: string|undefined;
+	get code() {
+		return this.field.code;
+	}
+	public readonly field: Field;
+	public readonly label: string;
+	public readonly prefix: string;
+	public readonly suffix: string;
 	public readonly rules: {
 		required?: boolean,
 		min?: number,
@@ -22,10 +25,10 @@ export default class ViewItem<U extends any=any> implements ViewItemData<U>{
 		pattern?: string,
 		customValidator?: (value: string) => { validity: boolean, errorMessage: string; };
 		options?: ([value: any] | [value: any, label: ReactNode])[];
-	}|undefined;
-	constructor(data: ViewItemData<U>) {
+	} | undefined;
+	constructor(data: Omit<Widget<U>, "toJSON" | "with" | "withValue" | "clone" | "error" | "_error">) {
 		this.type = data.type;
-		this.code = data.code;
+		this.field = data.field;
 		this.label = data.label;
 		this.prefix = data.prefix;
 		this.suffix = data.suffix;
@@ -37,13 +40,13 @@ export default class ViewItem<U extends any=any> implements ViewItemData<U>{
 		}
 	}
 	withValue(value: U) {
-		return new ViewItem({ ...this, defaultValue: value });
+		return new Widget({ ...this, defaultValue: value });
 	}
-	with(key: keyof ViewItem, value: unknown) {
-		return new ViewItem({ ...this, [key]: value });
+	with(key: keyof Widget, value: unknown) {
+		return new Widget({ ...this, [key]: value });
 	}
 	clone() {
-		return new ViewItem(this);
+		return new Widget(this);
 	}
 	toJSON(): ViewItemData<U> {
 		return {
@@ -57,11 +60,11 @@ export default class ViewItem<U extends any=any> implements ViewItemData<U>{
 			referringAppCode: this.referringAppCode,
 		};
 	}
-	static fromData(data: ViewItemData) {
-		return new ViewItem(data);
-	}
-	static blank() {
-		return new ViewItem({ code: "", type: "text", defaultValue: "" });
+	static fromData(data: ViewItemData, fields: Fields) {
+		const field = fields.filter((i): i is Field=>!!i).find((field) => field.code === data.code);
+		if (!field) { throw new Error(`Field not found error. There is no field with code "${data.code}".`); }
+		const { prefix = "", suffix = "", rules } = data;
+		return new Widget({ ...data, prefix, suffix, rules, field });
 	}
 	// toJSON() {
 	//     return JSON.stringify(this.toDTO());

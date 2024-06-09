@@ -6,29 +6,34 @@ import NewApp from '~/model/App/NewApp';
 import Named from '~/lib/react-structured-form/src/types/Named';
 import NewView from '~/model/App/View/NewView';
 import AppLayoutEdit from '~/components/App/Edit/AppLayoutEdit';
-import Widget from '~/model/App/View/Widget';
+import useViewLayout from '~/hooks/App/useViewLayout';
+import View from '~/model/App/View/View';
+import App from '~/model/App/App';
+import Field from '~/model/App/Field';
 
-export default function Create() {
-	// return <></>
-	const layoutState = useAppEditor(
-		new NewApp({...NewApp.blank(), fields:[]}),
-		[]);
+export default function AppEdit({ app: _app, view }: { app: App | NewApp | null; view: View | NewView | null; }) {
+
+	const { app, update } = useAppEditor(
+		_app ?? new NewApp({ ...NewApp.blank(), fields: [] }));
+	const { table, onFieldsUpdated } = useViewLayout(app.fields, view?.content);
+	function updateFields(fields: Field[]) {
+		update("fields", fields);
+		onFieldsUpdated(fields);
+	}
 	const repo = new AppRepository();
 	function handleAppChange(e: ChangeEvent<Named<HTMLInputElement, keyof NewApp>>) {
 		const name = e.target.name;
 		if (name !== "name" && name !== "description" && name !== "icon" && name !== 'code') return;
-		layoutState.updateApp(name, e.target.value);
-		// setNewApp(new NewApp({ ...newApp, [e.target.name]: e.target.value }));
-		// setNewView(new NewView({ ...newView, [e.target.name]: e.target.value }));
+		update(name, e.target.value);
 	}
 	async function handleSubmit(e: ReactMouseEvent<HTMLButtonElement, MouseEvent>) {
 		if (!confirm("アプリを作成しますか？")) { return; }
-		const res = await repo.createWithView(layoutState.app, new NewView({
-			code:`${layoutState.app.code}-default`,
-			app_code: layoutState.app.code,
-			name:"default",
-			description:"default view",
-			content: layoutState.table,
+		const res = await repo.createWithView(app, new NewView({
+			code: `${app.code}-default`,
+			app_code: app.code,
+			name: "default",
+			description: "default view",
+			content: table,
 		}));
 
 	}
@@ -38,7 +43,7 @@ export default function Create() {
 	return <>
 		<AppEditHeader
 			submitLabel={"作成"}
-			data={layoutState.app}
+			data={app}
 			onChange={handleAppChange}
 			onCancel={handleCancel}
 			onSubmit={handleSubmit}

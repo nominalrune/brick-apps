@@ -1,18 +1,18 @@
 import Position from '~/model/Position';
-import ViewItem from '~/model/App/View/ViewItem';
+import Widget from '~/model/App/View/Widget';
 import { useState, type FormEvent } from 'react';
 import WidgetSettingModal from './Widget/WidgetSettingModal';
 import AppFormRow from './Row';
 interface Param {
-	table: ViewItem[][],
-	update: ([x, y]: Position, value: ViewItem) => void,
+	table: Widget[][],
+	update: ([x, y]: Position, value: Widget) => void,
 	remove: ([x, y]: Position) => void,
 }
 
 export default function AppForm({ table, update, remove }: Param) {
-	const [selectedInput, setSelectedInput] = useState<{ position: Position, input: ViewItem; } | undefined>(undefined);
+	const [selectedInput, setSelectedInput] = useState<{ position: Position, input: Widget; } | undefined>(undefined);
 
-	function handleConfigChange(setting: ViewItem) {
+	function handleConfigChange(setting: Widget) {
 		if (!selectedInput || !setting) { return; }
 		console.log({ setting });
 		update(selectedInput.position, setting);

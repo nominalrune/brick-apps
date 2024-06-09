@@ -1,10 +1,6 @@
 import AppIcon from '~/components/App/AppIcon';
 import Button from '~/components/common/Button/Button';
 import RecordList from '~/components/Record/RecordList';
-// import { AppData } from '@/Models/App/App';
-// import { RecordData } from '@/Models/Record/Record';
-// import { PageProps } from '@/types';
-// import { a } from '@inertiajs/react';
 import { MdSettings } from "@react-icons/all-files/md/MdSettings";
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
 import RecordRepository from '~/repository/App/RecordRepository';

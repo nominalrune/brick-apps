@@ -4,15 +4,16 @@ import Input from '../../../common/Input';
 import { InputTypeOption } from '~/model/App/View/InputTypes';
 import { useEffect, useState } from 'react';
 import Field from '~/model/App/Field';
+import Fields from '~/model/App/FIelds';
 export default Palette;
 
-function Palette({ items, name }: { items: readonly Field[], name: string, }) {
+function Palette({ items, name }: { items: Fields, name: string, }) {
 	return <Droppable droppableId={name} >
 		{provided => (
 			<div ref={provided.innerRef} {...provided.droppableProps} className='flex flex-col'>
 				{
-					items.map((item, i) => (
-						<Draggable draggableId={item.code + "-" + (i - items.length)} index={i} key={item.code + "-" + (i - items.length).toString()}>{
+					items.filter((i):i is Field=>!!i).map((item, i) => (
+						<Draggable draggableId={item.code} index={i} key={item.code + "-" + (i - items.length).toString()}>{
 							provided => (
 								<div className="relative m-1 p-1 py-2 border border-sky-400 border-dashed rounded bg-slate-50 cursor-grab inline-flex items-center"
 									ref={provided.innerRef}

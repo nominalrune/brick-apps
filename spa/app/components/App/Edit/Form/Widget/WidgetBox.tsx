@@ -2,10 +2,10 @@ import { Draggable } from '~/components/common/Dnd';
 import { BiCog } from '@react-icons/all-files/bi/BiCog';
 import { BiX } from '@react-icons/all-files/bi/BiX';
 import { useState, type ReactNode, type FormEvent, useEffect } from 'react';
-import ViewItem from '~/model/App/View/ViewItem';
+import Widget from '~/model/App/View/Widget';
 import Input from '~/components/common/Input/Input';
 
-export default function WidgetBox({ item, index, onConfig, remove }: { item: ViewItem, index: number, onConfig: () => void, remove: () => void; }) {
+export default function WidgetBox({ item, index, onConfig, remove }: { item: Widget, index: number, onConfig: () => void, remove: () => void; }) {
 	const inputType = "reference" === item.type ? "number" : item.type;//["reference"].includes(item.type)?"number":item.type;
 	return <Draggable draggableId={item.code} index={index}>{
 		provided => (
