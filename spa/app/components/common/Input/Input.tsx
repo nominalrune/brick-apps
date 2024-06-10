@@ -12,7 +12,7 @@ type InputProps = {
 	id: string;
 	value: any;
 	disabled?: boolean;
-	options?: [label: string, value?: any][];
+	options?: [label: Exclude<ReactNode, null | undefined>, value: any][];
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['input'], "value" | "onChange">;
@@ -22,8 +22,8 @@ type SelectProps = {
 	id: string;
 	value: any;
 	disabled?: boolean;
-	options: [label: string, value?: any][];
-	onChange: ({value, label}:{value:any, label:string}) => void;
+	options: [label: Exclude<ReactNode, null | undefined>, value: any][];
+	onChange: ({ value, label }: { value: any, label: string; }) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['select'], "value" | "onChange">;
 type TextareaProps = {
@@ -67,7 +67,7 @@ function BaseInput(props: (InputProps | SelectProps | TextareaProps)) {
 					{...props}
 				/>
 				{props.options && <datalist id={listId}>{
-					props.options.map(([label, value]) => <option key={label} value={value ?? label}>{label}</option>)
+					props.options.map(([label, value]) => <option key={JSON.stringify(label)} value={value}>{label}</option>)
 				}</datalist>}
 			</>;
 	}
@@ -97,13 +97,11 @@ function Textarea({ props }: { props: Omit<TextareaProps, "type" | "options">; }
 
 function _Select({ props }: { props: Omit<SelectProps, "type">; }) {
 	return <Select
-		// className={props.className}
-		value={props.options.find(([l,v])=>(v===props.value))?.reduce((l,v)=>({label:l, value:v}))}
+		value={props.options.find(([l, v]) => (v === props.value))?.reduce((l, v) => ({ label: l, value: v }))}
 		onChange={props.onChange}
 		isDisabled={props.disabled}
 		name={props.name}
 		id={props.id}
-		// title={props.value}
 		options={props.options?.map(([label, value]) => ({ label, value: value ?? label }))}
 	/>;
 }

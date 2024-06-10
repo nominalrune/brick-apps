@@ -1,5 +1,6 @@
 import WithoutMethods from '../common/WithoutMethods';
 import Columns from './Columns';
+import ViewBase from './View/ViewBase';
 
 export default class AppBase {
 	public name: string;

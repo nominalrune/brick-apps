@@ -1,6 +1,6 @@
 import Palette from '~/components/App/Edit/Form/Palette';
 import AppForm from '~/components/App/Edit/Form/Form';
-import useAppEditor from '~/hooks/App/useAppEditor';
+import useApp from '~/hooks/App/useApp';
 import { DragDropContext } from '~/components/common/Dnd';
 import ViewContent from '~/model/App/View/ViewContent';
 import { ReactNode } from 'react';
@@ -16,11 +16,11 @@ interface Props {
 	removeWidget: (position:Position) => void,
 	onDragEnd: (e:DropResult) => void,
 }
-export default function AppLayoutEdit({ columnsEditForm, ...props }: Props) {
+export default function AppLayoutEdit(props: Props) {
 	return <DragDropContext onDragEnd={props.onDragEnd}>
 		<div className="flex h-screen">
 			<div className='border-r border-slate-400 bg-sky-50'>
-				{columnsEditForm}
+				{props.columnsEditForm}
 				<Palette items={props.columns} name="palette" />
 			</div>
 

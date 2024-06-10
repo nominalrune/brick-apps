@@ -1,12 +1,13 @@
 import WithoutMethods from '../common/WithoutMethods';
 import AppBase from './AppBase';
 import AppData from './AppData';
-// import View from './View/View';
+import View from './View/View';
 export default class App extends AppBase {
 	public readonly id: number;
 	public created_at: Date;
 	public updated_at: Date;
 	public defaultViewCode: string;
+	public defaultView?: View;
 	constructor(app: WithoutMethods<App>) {
 		super(app);
 		this.created_at = new Date(app.created_at);

@@ -6,8 +6,11 @@ import CircleButton from '~/components/common/Button/CircleButton';
 import Input from '~/components/common/Input/Input';
 import Modal from '~/components/common/Modal';
 import Columns from '~/model/App/Columns';
-
-export default function EditColumns({ columns, update }: { columns: Columns; update: (columns: Columns) => void; }) {
+interface Props {
+	columns: Columns;
+	update: (columns: Columns) => void;
+}
+export default function EditColumns({ columns, update }: Props) {
 	const [show, setShow] = useState(false);
 	return <div className='grid'>
 		<Button onClick={() => setShow(!show)} className='m-1 rounded border-2 border-emerald-400 bg-slate-300 hover:bg-slate-400'>{show ? "閉じる" : "カラムの変更"}</Button>

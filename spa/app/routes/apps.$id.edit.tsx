@@ -4,7 +4,7 @@ import Palette from '~/components/App/Edit/Form/Palette';
 import AppForm from '~/components/App/Edit/AppLayoutEdit';
 // import { AppData } from '~/Models/App/App';
 import AppEditHeader from '~/components/App/Edit/AppEditHeader';
-import useAppEditor from '~/hooks/App/useAppEditor';
+import useApp from '~/hooks/App/useApp';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppInputData from '~/model/App/NewApp';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
@@ -27,7 +27,7 @@ export async function clientLoader({
 
 export default function Edit() {
 	const _app = useLoaderData<typeof clientLoader>();
-    const { app, update, } = useAppEditor(_app);
+    const { app, update, } = useApp(_app);
     // const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
     //     name: app.name,
     //     code: app.code,

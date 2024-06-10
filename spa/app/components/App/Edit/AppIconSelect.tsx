@@ -1,4 +1,4 @@
-import { ChangeEventHandler, Fragment } from 'react';
+import { Fragment } from 'react';
 import Input from '../../common/Input';
 const icons = [
 	"/icons/calendar.svg",
@@ -6,7 +6,15 @@ const icons = [
 	"/icons/record.svg",
 	"/icons/shopping.svg",
 ];
-export default function AppIconSelect({ value, name, label, onChange, className }: { name: string, value: string, onChange: ChangeEventHandler, label?: string, className?: string; }) {
+interface Props{
+	value: string;
+	name: string;
+	label?: string;
+	onChange: ({ value, label }: { value: any, label: string; }) => void;
+	className?: string;
+
+}
+export default function AppIconSelect({ value, name, label, onChange, className }: Props) {
 	return <Input
 		label={label ?? ""}
 		id='icon'

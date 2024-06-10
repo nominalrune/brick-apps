@@ -14,9 +14,9 @@ import ColumnCode from '~/model/App/ColumnCode';
  * ViewContentのitemsはcolumnsに依存
  * columnが変更になると、持ってるcolumnsも変わる。
  */
-export default function useViewLayout(columns: Columns, initialTable?: ViewContent) {
+export default function useViewContent(columns: Columns, initialLayout?: ViewContent) {
 	const [prevColumns, setPrev] = useState(columns);
-	const [table, setTable] = useState<ViewContent>(initialTable ?? new ViewContent([]));
+	const [content, setContent] = useState<ViewContent>(initialLayout ?? new ViewContent([]));
 	useEffect(() => {
 		onColumnsUpdated(columns);
 		setPrev(prev => columns);
@@ -44,7 +44,7 @@ export default function useViewLayout(columns: Columns, initialTable?: ViewConte
 				return;
 			}
 		});
-		setTable(table => new ViewContent(table.map(row =>
+		setContent(table => new ViewContent(table.map(row =>
 			row.map(widget => {
 				if (removed.includes(widget.code)) return null;
 				const changedColumn = changed.find(({ old, new: newC }) => old === widget.code);
@@ -57,16 +57,16 @@ export default function useViewLayout(columns: Columns, initialTable?: ViewConte
 		setPrev(newColumns);
 	}
 	function insert([x, y]: Position, inputData: Widget) {
-		setTable(table.insert([x, y], new Widget(inputData)));
+		setContent(content.insert([x, y], new Widget(inputData)));
 	}
 	function move(from: Position, to: Position) {
-		setTable(table => table.move(from, to));
+		setContent(table => table.move(from, to));
 	}
 	function updateWidget([x, y]: Position, widget: Widget) {
-		setTable(table => table.update([x, y], widget));
+		setContent(table => table.update([x, y], widget));
 	}
 	function removeWidget([x, y]: Position) {
-		setTable(table => table.remove([x, y]));
+		setContent(table => table.remove([x, y]));
 	}
 	function onDragEnd({ draggableId, destination, source }: DropResult) {
 		if (!destination || (destination.droppableId === "palette")) {
@@ -94,7 +94,7 @@ export default function useViewLayout(columns: Columns, initialTable?: ViewConte
 		move([sourceRow, sourceCol], [destRow, destCol]);
 	}
 	return {
-		table,
+		content,
 		updateWidget,
 		removeWidget,
 		onColumnsUpdated,

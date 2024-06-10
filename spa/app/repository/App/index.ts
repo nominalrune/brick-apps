@@ -2,6 +2,7 @@ import App from '~/model/App/App';
 import RepositoryBase from '../common/RepositoryBase';
 import NewApp from '~/model/App/NewApp';
 import NewView from '~/model/App/View/NewView';
+import View from '~/model/App/View/View';
 
 interface getOptions {
 	with?: {
@@ -13,7 +14,7 @@ interface getOptions {
 	};
 }
 
-export default class AppRepository extends RepositoryBase<NewApp & { view: NewView; }, App> {
+export default class AppRepository extends RepositoryBase<NewApp, App> {
 	constructor() {
 		super('apps');
 	}
@@ -31,15 +32,16 @@ export default class AppRepository extends RepositoryBase<NewApp & { view: NewVi
 		return App.fromData(data);
 	}
 	async createWithView(app: NewApp, view: NewView) {
-		const data = await super.create({
-			...app, view, toJSON: () => ({
-				...app.toJSON(),
-				view: view.toJSON(),
-			})
-		});
+		app.defaultView = view;
+		const data = await super.create(app);
 		return App.fromData(data);
 	}
 	async update(app: App) {
+		const data = await super.update(app);
+		return App.fromData(data);
+	}
+	async updateWithView(app: App, view: View) {
+		app.defaultView = view;
 		const data = await super.update(app);
 		return App.fromData(data);
 	}

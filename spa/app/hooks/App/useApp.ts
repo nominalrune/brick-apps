@@ -10,7 +10,7 @@ const _App = (app: WithoutMethods<AppBase>) => isApp(app) ? new App(app) : new N
 /**
  * App編集にて、Model/Appの編集を担う
  */
-export default function useAppEditor<T extends AppBase = App | NewApp>(initialAppState: App | NewApp) {
+export default function useApp<T extends AppBase = App | NewApp>(initialAppState: App | NewApp) {
 	const [app, setApp] = useState<App | NewApp>(initialAppState);
 	type keyName = 'name' | "description" | 'code' | 'icon' | 'columns';
 	function update<K extends keyName>(key: K, value: T[K]) {

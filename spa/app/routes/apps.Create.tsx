@@ -1,12 +1,12 @@
 import { type MouseEvent as ReactMouseEvent, type FormEvent, useRef, useState, ChangeEvent } from 'react';
-import useAppEditor from '~/hooks/App/useAppEditor';
+import useApp from '~/hooks/App/useApp';
 import AppEditHeader from '~/components/App/Edit/AppEditHeader';
 import AppRepository from '~/repository/App';
 import NewApp from '~/model/App/NewApp';
 import NewView from '~/model/App/View/NewView';
 import AppLayoutEdit from '~/components/App/Edit/AppLayoutEdit';
 import Widget from '~/model/App/View/Widget';
-import useViewLayout from '~/hooks/App/useViewLayout';
+import useViewContent from '~/hooks/App/useViewContent';
 import Button from '~/components/common/Button/Button';
 import Input from '~/components/common/Input/Input';
 import Columns from '~/model/App/Columns';
@@ -17,8 +17,8 @@ import { FiX } from '@react-icons/all-files/fi/FiX';
 import EditColumns from '~/components/App/Edit/EditColumns';
 
 export default function Create() {
-	const { app, update } = useAppEditor(new NewApp({ ...NewApp.blank(), columns: [] }));
-	const { table, onDragEnd, updateWidget, removeWidget } = useViewLayout(app.columns);
+	const { app, update } = useApp(new NewApp({ ...NewApp.blank(), columns: [] }));
+	const { table, onDragEnd, updateWidget, removeWidget } = useViewContent(app.columns);
 	const repo = new AppRepository();
 	function handleAppChange(e: ChangeEvent<Named<HTMLInputElement, keyof NewApp>>) {
 		const name = e.target.name;
