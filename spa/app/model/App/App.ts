@@ -21,7 +21,7 @@ export default class App extends AppBase {
 			description: data.description,
 			code: data.code,
 			icon: data.icon,
-			fields: data.fields,
+			columns: data.columns,
 			// defaultView: View.fromData(data.defaultView),
 			defaultViewCode: data.defaultViewCode,
 			created_at: new Date(data.created_at),

@@ -8,7 +8,7 @@ export default class NewApp extends AppBase{
 			description: '',
 			code: '',
 			icon: '',
-			fields: [],
+			columns: [],
 			archived_at: null,
 		});
 	}

@@ -1,5 +1,5 @@
-import Fields from './FIelds';
-import Field from './Field';
+import Columns from './Columns';
+import Column from './Column';
 
 export default interface AppData {
 	id: number;
@@ -7,7 +7,7 @@ export default interface AppData {
 	description: string;
 	code: string;
 	icon: string;
-	fields: Fields;
+	columns: Columns;
 	defaultViewCode: string;
 	created_at: string;
 	updated_at: string;

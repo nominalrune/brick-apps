@@ -34,14 +34,14 @@ class CreateAppService
 	 * insert app data to `apps` table
 	 * TODO : move to repository
 	 */
-	private function createAppMetadata(string $code, string $name, string $description, string $icon, array $fields)
+	private function createAppMetadata(string $code, string $name, string $description, string $icon, array $columns)
 	{
 		$app = App::create([
 			'code' => $code,
 			'name' => $name,
 			'description' => $description,
 			'icon' => $icon,
-			'fields' => $fields,
+			'columns' => $columns,
 		]);
 		return $app;
 	}

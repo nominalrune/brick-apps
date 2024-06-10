@@ -1,4 +1,4 @@
-import Field from '~/model/App/Field';
+import Column from '~/model/App/Column';
 import { useState } from 'react';
 import NewApp from '~/model/App/NewApp';
 import App from '~/model/App/App';
@@ -12,7 +12,7 @@ const _App = (app: WithoutMethods<AppBase>) => isApp(app) ? new App(app) : new N
  */
 export default function useAppEditor<T extends AppBase = App | NewApp>(initialAppState: App | NewApp) {
 	const [app, setApp] = useState<App | NewApp>(initialAppState);
-	type keyName = 'name' | "description" | 'code' | 'icon' | 'fields';
+	type keyName = 'name' | "description" | 'code' | 'icon' | 'columns';
 	function update<K extends keyName>(key: K, value: T[K]) {
 		setApp(app => _App({ ...app, [key]: value }));
 	}

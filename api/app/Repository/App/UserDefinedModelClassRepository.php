@@ -79,7 +79,7 @@ class UserDefinedModelClassRepository
 	}
 	private function generateContent()
 	{
-		$fillables = implode(',' . PHP_EOL . '        ', array_map(fn ($field) => ("'{$field['code']}'"), $this->app->fields));
+		$fillables = implode(',' . PHP_EOL . '        ', array_map(fn ($column) => ("'{$column['code']}'"), $this->app->columns));
 		$content = <<<EOL
 <?php
 declare(strict_types=1);

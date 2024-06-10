@@ -3,43 +3,43 @@ import ViewContent from '~/model/App/View/ViewContent';
 import Position from '~/model/Position';
 import Widget from '~/model/App/View/Widget';
 import { DropResult } from 'react-beautiful-dnd';
-import Field from '~/model/App/Field';
-import Fields from '~/model/App/FIelds';
-import FieldCode from '~/model/App/FieldCode';
+import Column from '~/model/App/Column';
+import Columns from '~/model/App/Columns';
+import ColumnCode from '~/model/App/ColumnCode';
 
 /**
  * App編集の時、View Contentの編集を担う。
  * 1. レイアウトの管理
  * 2. 個々のWidgetのconfig管理
- * ViewContentのitemsはfieldsに依存
- * fieldが変更になると、持ってるfieldsも変わる。
+ * ViewContentのitemsはcolumnsに依存
+ * columnが変更になると、持ってるcolumnsも変わる。
  */
-export default function useViewLayout(fields: Fields, initialTable?: ViewContent) {
-	const [prevFields, setPrev] = useState(fields);
+export default function useViewLayout(columns: Columns, initialTable?: ViewContent) {
+	const [prevColumns, setPrev] = useState(columns);
 	const [table, setTable] = useState<ViewContent>(initialTable ?? new ViewContent([]));
 	useEffect(() => {
-		onFieldsUpdated(fields);
-		setPrev(prev => fields);
-	}, [fields]);
+		onColumnsUpdated(columns);
+		setPrev(prev => columns);
+	}, [columns]);
 	/**
-	 * appのfieldsが変更になった場合、こちらのviewItemのcodeも変更する必要があるため、更新。
+	 * appのcolumnsが変更になった場合、こちらのviewItemのcodeも変更する必要があるため、更新。
 	 * 何かもっといい方法ないかしら。
 	 *
 	 */
-	function onFieldsUpdated(newFields: Fields) {
-		const changed: { old: FieldCode, new: Field; }[] = [];
-		const removed: FieldCode[] = [];
-		prevFields.forEach((oldF, i) => {
-			if (oldF === null) { return; }
-			const newF = newFields[i];
-			if (newF === null) {
-				removed.push(oldF.code);
+	function onColumnsUpdated(newColumns: Columns) {
+		const changed: { old: ColumnCode, new: Column; }[] = [];
+		const removed: ColumnCode[] = [];
+		prevColumns.forEach((oldC, i) => {
+			if (oldC === null) { return; }
+			const newC = newColumns[i];
+			if (newC === null) {
+				removed.push(oldC.code);
 				return;
 			}
-			if (JSON.stringify(oldF) !== JSON.stringify(newF)) {
+			if (JSON.stringify(oldC) !== JSON.stringify(newC)) {
 				changed.push({
-					old: oldF.code,
-					new: newF,
+					old: oldC.code,
+					new: newC,
 				});
 				return;
 			}
@@ -47,14 +47,14 @@ export default function useViewLayout(fields: Fields, initialTable?: ViewContent
 		setTable(table => new ViewContent(table.map(row =>
 			row.map(widget => {
 				if (removed.includes(widget.code)) return null;
-				const changedField = changed.find(({ old, new: newF }) => old === widget.code);
-				if (!!changedField) {
-					return widget.with("field", changedField.new);
+				const changedColumn = changed.find(({ old, new: newC }) => old === widget.code);
+				if (!!changedColumn) {
+					return widget.with("column", changedColumn.new);
 				}
 				return widget;
 			}).filter((i): i is Widget => !!i)
 		)));
-		setPrev(newFields);
+		setPrev(newColumns);
 	}
 	function insert([x, y]: Position, inputData: Widget) {
 		setTable(table.insert([x, y], new Widget(inputData)));
@@ -77,10 +77,10 @@ export default function useViewLayout(fields: Fields, initialTable?: ViewContent
 		const destCol = destination.index;
 
 		if (source.droppableId === "palette") {
-			const field = fields[source.index];
-			if (!field || !field.code) { return; }
-			const code = field.code;
-			const newItem = new Widget({ type: "text", code, label: field.code, field, defaultValue: "", prefix: "", suffix: "", rules: undefined, });
+			const column = columns[source.index];
+			if (!column || !column.code) { return; }
+			const code = column.code;
+			const newItem = new Widget({ type: "text", code, label: column.code, column, defaultValue: "", prefix: "", suffix: "", rules: undefined, });
 			insert([destRow, destCol], newItem);
 			return;
 		}
@@ -97,7 +97,7 @@ export default function useViewLayout(fields: Fields, initialTable?: ViewContent
 		table,
 		updateWidget,
 		removeWidget,
-		onFieldsUpdated,
+		onColumnsUpdated,
 		onDragEnd
 	};
 }

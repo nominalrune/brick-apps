@@ -5,13 +5,13 @@ import { Link } from '@remix-run/react';
 
 interface Prop<T extends AppData> {
     app:T,
-    records: Record<T["fields"]>[];
+    records: Record<T["columns"]>[];
 }
 export default function RecordList<T extends AppData>({ records, app }: Prop<T>) {
     if (records.length === 0) {
         return <>まだレコードがありません</>;
     }
-    const columns = app.fields as T["fields"];
+    const columns = app.columns as T["columns"];
     return <>
         <table className="rounded border-separate border-spacing-0">
             <thead className="bg-sky-600 text-white">

@@ -4,9 +4,9 @@ import { FormEventHandler, Fragment } from 'react';
 import Input from '~/components/common/Input';
 import { useState } from 'react';
 import NewRecord from '~/model/App/Record/RecordBase';
-import Field from '~/model/App/Field';
+import Column from '~/model/App/Column';
 
-export default function RecordForm<T extends Field[]>({ id, content, onSubmit }: { id: string, content: ViewData["content"], onSubmit: (record: NewRecord<T>)=>void }) {
+export default function RecordForm<T extends Column[]>({ id, content, onSubmit }: { id: string, content: ViewData["content"], onSubmit: (record: NewRecord<T>)=>void }) {
 	const [record, setRecord] = useState<NewRecord<T>>({} as NewRecord<T>);
 	return <form id={id} className='m-4 flex flex-col gap-6' onSubmit={(e)=>{e.preventDefault();onSubmit(record)}}>{
 		content.map((inputs, i) => <div key={i} className='flex gap-4'>{

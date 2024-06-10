@@ -1,10 +1,10 @@
-import { ChangeEventHandler, Fragment, ReactNode } from 'react';
+import { ChangeEventHandler, Fragment } from 'react';
 import Input from '../../common/Input';
 const icons = [
-	"/public/icons/calendar.svg",
-	"/public/icons/diagnosis.svg",
-	"/public/icons/record.svg",
-	"/public/icons/shopping.svg",
+	"/icons/calendar.svg",
+	"/icons/diagnosis.svg",
+	"/icons/record.svg",
+	"/icons/shopping.svg",
 ];
 export default function AppIconSelect({ value, name, label, onChange, className }: { name: string, value: string, onChange: ChangeEventHandler, label?: string, className?: string; }) {
 	return <Input

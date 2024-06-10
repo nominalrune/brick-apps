@@ -23,27 +23,27 @@ class CreateAppService
 		string $name,
 		string $description,
 		string $icon,
-		array $fields,
+		array $columns,
 		array $view,
 		User $creator
 	) {
-		$app = $this->createAppRecord($code, $name, $description, $icon, $fields, $creator);
+		$app = $this->createAppRecord($code, $name, $description, $icon, $columns, $creator);
 		Log::info('app', ['app' => $app]);
-		$this->createAppTable($code, $fields);
+		$this->createAppTable($code, $columns);
 		$this->createView($app, $view);
 		$this->createUserDefinedModelClassFile($app);
 		Log::info('app created', ['app' => $app]);
 
 		return $app;
 	}
-	private function createAppRecord(string $code, string $name, string $description, string $icon, array $fields, User $creator)
+	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, User $creator)
 	{
 		$app = App::create([
 			'code' => $code,
 			'name' => $name,
 			'description' => $description,
 			'icon' => $icon,
-			'fields' => $fields,
+			'columns' => $columns,
 			'default_view' => null,
 			'created_by' => $creator->id,
 			'updated_by' => $creator->id,
@@ -64,22 +64,22 @@ class CreateAppService
 		$app->update(['default_view' => $view->code]);
 		return $view;
 	}
-	private function createAppTable(string $code, array $fields)
+	private function createAppTable(string $code, array $columns)
 	{
 		$connection = DB::connection(env('DB_CONNECTION'));
 		if ($connection->getSchemaBuilder()->hasTable($code)) {
 			throw new \Exception('table already exists' . "name:{$code}");
 		}
-		$connection->getSchemaBuilder()->create($code, function (Blueprint $table) use ($fields) {
+		$connection->getSchemaBuilder()->create($code, function (Blueprint $table) use ($columns) {
 			$table->id();
 			$table->timestamps();
 			$table->foreignId('created_by')->nullable()->constrained('users')->onUpdate('restrict')->onDelete('set null');
 			$table->foreignId('updated_by')->nullable()->constrained('users')->onUpdate('restrict')->onDelete('set null');
-			foreach ($fields as $input) {
-				$code = $input['code'];
-				$valueType = $input['valueType'];
+			foreach ($columns as $column) {
+				$code = $column['code'];
+				$valueType = $column['valueType'];
 				if ($valueType === 'reference') {
-					$table->foreignId($code)->nullable()->constrained($input['referringAppName'])->onUpdate('restrict')->onDelete('set null');
+					$table->foreignId($code)->nullable()->constrained($column['referringAppName'])->onUpdate('restrict')->onDelete('set null');
 					continue;
 				}
 				$this->declareColumn($table, $code, $valueType);

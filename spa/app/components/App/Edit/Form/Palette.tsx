@@ -3,16 +3,16 @@ import { FiMoreVertical } from '@react-icons/all-files/fi/FiMoreVertical';
 import Input from '../../../common/Input';
 import { InputTypeOption } from '~/model/App/View/InputTypes';
 import { useEffect, useState } from 'react';
-import Field from '~/model/App/Field';
-import Fields from '~/model/App/FIelds';
+import Column from '~/model/App/Column';
+import Columns from '~/model/App/Columns';
 export default Palette;
 
-function Palette({ items, name }: { items: Fields, name: string, }) {
+function Palette({ items, name }: { items: Columns, name: string, }) {
 	return <Droppable droppableId={name} >
 		{provided => (
 			<div ref={provided.innerRef} {...provided.droppableProps} className='flex flex-col'>
 				{
-					items.filter((i):i is Field=>!!i).map((item, i) => (
+					items.filter((i):i is Column=>!!i).map((item, i) => (
 						<Draggable draggableId={item.code} index={i} key={item.code + "-" + (i - items.length).toString()}>{
 							provided => (
 								<div className="relative m-1 p-1 py-2 border border-sky-400 border-dashed rounded bg-slate-50 cursor-grab inline-flex items-center"

@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 import ViewItemData from './ViewItemData';
 import { InputTypeOption, } from './InputTypes';
 import WithoutMethods from '~/model/common/WithoutMethods';
-import Field from '../Field';
-import Fields from '../FIelds';
+import Column from '../Column';
+import Columns from '../Columns';
 export default class Widget<U extends any = any> implements ViewItemData<U> {
 	private _error = "";
 	get error() { return this._error; }
@@ -12,9 +12,9 @@ export default class Widget<U extends any = any> implements ViewItemData<U> {
 	public readonly referringAppCode?: string;
 	public readonly type: InputTypeOption;
 	get code() {
-		return this.field.code;
+		return this.column.code;
 	}
-	public readonly field: Field;
+	public readonly column: Column;
 	public readonly label: string;
 	public readonly prefix: string;
 	public readonly suffix: string;
@@ -28,7 +28,7 @@ export default class Widget<U extends any = any> implements ViewItemData<U> {
 	} | undefined;
 	constructor(data: Omit<Widget<U>, "toJSON" | "with" | "withValue" | "clone" | "error" | "_error">) {
 		this.type = data.type;
-		this.field = data.field;
+		this.column = data.column;
 		this.label = data.label;
 		this.prefix = data.prefix;
 		this.suffix = data.suffix;
@@ -60,11 +60,11 @@ export default class Widget<U extends any = any> implements ViewItemData<U> {
 			referringAppCode: this.referringAppCode,
 		};
 	}
-	static fromData(data: ViewItemData, fields: Fields) {
-		const field = fields.filter((i): i is Field=>!!i).find((field) => field.code === data.code);
-		if (!field) { throw new Error(`Field not found error. There is no field with code "${data.code}".`); }
+	static fromData(data: ViewItemData, columns: Columns) {
+		const column = columns.filter((i): i is Column=>!!i).find((column) => column.code === data.code);
+		if (!column) { throw new Error(`Column not found error. There is no column with code "${data.code}".`); }
 		const { prefix = "", suffix = "", rules } = data;
-		return new Widget({ ...data, prefix, suffix, rules, field });
+		return new Widget({ ...data, prefix, suffix, rules, column });
 	}
 	// toJSON() {
 	//     return JSON.stringify(this.toDTO());

@@ -4,11 +4,11 @@ namespace App\Casts\App;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\App\Field;
+use App\Models\App\Column;
 
-class Fields implements CastsAttributes
+class Columns implements CastsAttributes
 {
-	/** @var array<Field> */
+	/** @var array<Column> */
 	private array $value;
 	/**
 	 * Cast the given value.
@@ -31,7 +31,7 @@ class Fields implements CastsAttributes
 		if (!is_array($_value)) {
 			throw new \InvalidArgumentException("value must be an array of ['code'=>string,'valueType'=>string]. " . print_r($_value, true) . " given");
 		}
-		$this->value = array_map(fn ($item) => (Field::fromDTO($item)), $_value);
+		$this->value = array_map(fn ($item) => (Column::fromDTO($item)), $_value);
 		return $this->value;
 	}
 }

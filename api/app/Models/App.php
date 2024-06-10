@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Casts\App\Fields;
+use App\Casts\App\Columns;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -22,11 +22,11 @@ class App extends Model
 		'name',
 		'description',
 		'icon',
-		'fields',
+		'columns',
 		'default_view',
 	];
 	protected $casts = [
-		'fields' => "array",//Fields::class,
+		'columns' => "array",//Columns::class,
 	];
 	// public function records()
 	// {

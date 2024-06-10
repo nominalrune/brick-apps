@@ -13,7 +13,7 @@ class App{
 	public string $name;
 	public string $description;
 	public string $icon;
-	public array $fields;
+	public array $columns;
 
 	public function __construct(AppModel $app){
 		$this->model = $app;

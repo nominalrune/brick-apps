@@ -37,7 +37,7 @@ class AppController extends Controller
 			$request->name,
 			$request->description ?? "",
 			$request->icon,
-			$request->fields,
+			$request->columns,
 			$request->view,
 			$request->user()
 		);
@@ -55,7 +55,7 @@ class AppController extends Controller
 			$request->name,
 			$request->description ?? "",
 			$request->icon,
-			$request->form
+			$request->columns
 		);
 		return to_route("record.index", [
 			"app_code" => $app->code

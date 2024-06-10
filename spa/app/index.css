@@ -2,3 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+.primary {
+	@apply text-slate-900;
+	@apply bg-indigo-300;
+}
+.primary-clickable {
+	@apply .primary;
+	@apply hover:bg-indigo-400;
+	@apply active:bg-indigo-200;
+}
+
+.positive {
+	@apply text-slate-900;
+	@apply bg-emerald-300;
+}
+.positive-clickable{
+	@apply .positive;
+	@apply hover:bg-emerald-400;
+	@apply active:bg-emerald-200;
+}
+
+.danger{
+	@apply text-white;
+	@apply bg-red-600;
+}
+.danger-clickable{
+	@apply .danger;
+	@apply hover:bg-red-700;
+	@apply active:bg-red-500;
+}

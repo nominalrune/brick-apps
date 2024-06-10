@@ -20,9 +20,9 @@ return new class extends Migration {
 				->constrained('users')->onUpdate('cascade')->onDelete('set null');
 			$table->string('code', 255)->unique();
 			$table->string('name', 255);
-			$table->string('icon', 255)->default('1');
+			$table->string('icon', 255);
 			$table->text('description');
-			$table->json('fields');
+			$table->json('colunms');
 		});
 	}
 

@@ -2,7 +2,7 @@
 
 namespace App\Models\App;
 
-class Field
+class Column
 {
 	public function __construct(
 		public string $code,
@@ -21,7 +21,7 @@ class Field
 		];
 	}
 	static function fromDTO(array $value){
-		return new Field(
+		return new Column(
 			$value['code'],
 			$value['valueType'],
 		);

@@ -72,7 +72,7 @@ class DemoSeeder extends Seeder
 		// 		'name' => 'Test App',
 		// 		'code' => 'test',
 		// 		'icon' => '/icons/record.svg',
-		// 		'fields' => '[{"code":"name","valueType":"text"}]',
+		// 		'columns' => '[{"code":"name","valueType":"text"}]',
 		// 		'default_view' => null,
 		// 		'created_by' => $user->id,
 		// 		'updated_by' => $user->id,

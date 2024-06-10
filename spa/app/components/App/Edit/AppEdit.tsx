@@ -9,16 +9,16 @@ import AppLayoutEdit from '~/components/App/Edit/AppLayoutEdit';
 import useViewLayout from '~/hooks/App/useViewLayout';
 import View from '~/model/App/View/View';
 import App from '~/model/App/App';
-import Field from '~/model/App/Field';
+import Column from '~/model/App/Column';
 
 export default function AppEdit({ app: _app, view }: { app: App | NewApp | null; view: View | NewView | null; }) {
 
 	const { app, update } = useAppEditor(
-		_app ?? new NewApp({ ...NewApp.blank(), fields: [] }));
-	const { table, onFieldsUpdated } = useViewLayout(app.fields, view?.content);
-	function updateFields(fields: Field[]) {
-		update("fields", fields);
-		onFieldsUpdated(fields);
+		_app ?? new NewApp({ ...NewApp.blank(), columns: [] }));
+	const { table, onColumnsUpdated } = useViewLayout(app.columns, view?.content);
+	function updateColumns(columns: Column[]) {
+		update("columns", columns);
+		onColumnsUpdated(columns);
 	}
 	const repo = new AppRepository();
 	function handleAppChange(e: ChangeEvent<Named<HTMLInputElement, keyof NewApp>>) {

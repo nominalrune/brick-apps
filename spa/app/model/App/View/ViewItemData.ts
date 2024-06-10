@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { InputTypeOption, ReferringAppCode } from './InputTypes';
 import JsValueType from '../JsValueType';
 import ValueTypeOption from '../ValueTypeOption';
-import Field from '../Field';
+import Column from '../Column';
 
 export default interface ViewItemData<U extends any = any> {
 	code: string;
