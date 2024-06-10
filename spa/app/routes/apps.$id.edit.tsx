@@ -26,15 +26,15 @@ export async function clientLoader({
 }
 
 export default function Edit() {
-	const app = useLoaderData<typeof clientLoader>();
-    const { table, update, remove, onDragEnd } = useAppEditor(app, app.);
-    const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
-        name: app.name,
-        code: app.code,
-        description: app.description,
-        icon: app.icon,
-        ...table.toJSON()
-    });
+	const _app = useLoaderData<typeof clientLoader>();
+    const { app, update, } = useAppEditor(_app);
+    // const { data, setData, transform, delete:destroy, errors, post, processing } = useForm({
+    //     name: app.name,
+    //     code: app.code,
+    //     description: app.description,
+    //     icon: app.icon,
+    //     ...table.toJSON()
+    // });
     function handleChange(e: ChangeEvent<Named<HTMLInputElement, Exclude<keyof AppData, "id">>>) {
         setData(e.target.name, e.target.value);
     }

@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 interface CircleButtonProps {
 	children: React.ReactNode;
 	onClick: () => void;
-	className: string;
+	className?: string;
 }
 
 export default function CircleButton({ children, onClick, className = "size-5", ...props }: CircleButtonProps) {

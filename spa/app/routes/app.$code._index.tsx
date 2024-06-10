@@ -7,7 +7,7 @@ import RecordRepository from '~/repository/App/RecordRepository';
 import FloatingAddButton from '~/components/common/Button/FloatingAddButton';
 async function getClientData(code:string) {
 	const repository = new RecordRepository(code);
-	const {records, app} = await repository.index();
+	const {records, app} = await repository.get();
 	return {app, records};
 }
 

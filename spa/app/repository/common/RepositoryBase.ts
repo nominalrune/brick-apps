@@ -1,7 +1,7 @@
 import Api from '~/lib/api';
 import config from '~/config';
 
-export default class RepositoryBase<T extends { toJSON: () => unknown; }, U extends { id: number | string; toJSON: () => unknown; }> {
+export default class RepositoryBase<T extends object, U extends { id: number | string; }> {
 	protected api: Api;
 	constructor(public readonly subUrl: string | URL) {
 		this.api = new Api(config.baseUrl);

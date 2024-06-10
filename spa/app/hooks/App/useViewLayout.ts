@@ -62,6 +62,12 @@ export default function useViewLayout(fields: Fields, initialTable?: ViewContent
 	function move(from: Position, to: Position) {
 		setTable(table => table.move(from, to));
 	}
+	function updateWidget([x, y]: Position, widget: Widget) {
+		setTable(table => table.update([x, y], widget));
+	}
+	function removeWidget([x, y]: Position) {
+		setTable(table => table.remove([x, y]));
+	}
 	function onDragEnd({ draggableId, destination, source }: DropResult) {
 		if (!destination || (destination.droppableId === "palette")) {
 			return;
@@ -87,5 +93,11 @@ export default function useViewLayout(fields: Fields, initialTable?: ViewContent
 		}
 		move([sourceRow, sourceCol], [destRow, destCol]);
 	}
-	return { table, onFieldsUpdated, onDragEnd };
+	return {
+		table,
+		updateWidget,
+		removeWidget,
+		onFieldsUpdated,
+		onDragEnd
+	};
 }

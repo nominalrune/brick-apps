@@ -23,7 +23,7 @@ type SelectProps = {
 	value: any;
 	disabled?: boolean;
 	options: [label: string, value?: any][];
-	onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+	onChange: ({value, label}:{value:any, label:string}) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['select'], "value" | "onChange">;
 type TextareaProps = {
@@ -99,7 +99,7 @@ function _Select({ props }: { props: Omit<SelectProps, "type">; }) {
 	return <Select
 		// className={props.className}
 		value={props.options.find(([l,v])=>(v===props.value))?.reduce((l,v)=>({label:l, value:v}))}
-		onChange={(val)=>props.onChange({target:{...props, value:val.value, type:"select"} as any})}
+		onChange={props.onChange}
 		isDisabled={props.disabled}
 		name={props.name}
 		id={props.id}
