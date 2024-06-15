@@ -8,27 +8,29 @@ use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
-     */
-    public function rules() : array
-    {
-        return [
-			'code' => ['required', 'string', 'max:255'],
+	/**
+	 * Get the validation rules that apply to the request.
+	 *
+	 * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+	 */
+	public function rules() : array
+	{
+		return [
+			'id' => ['required', 'integer', 'exists:apps,id'],
+			'code' => ['required', 'string', 'max:255', 'unique:apps,code'],
 			'name' => ['required', 'string', 'max:255'],
 			'description' => ['nullable', 'string'],
 			'icon' => ['required', 'string', 'max:255'],
 			'columns' => ['required', 'array', 'min:1'],
 			'columns.*.code' => ['required', 'string', 'min:1'],
 			'columns.*.valueType' => ['required', 'string', 'min:1'],
-			'defaultView' => ['required', 'array'],
-			'defaultView.code' => ['required', 'string', 'max:255'],
-			'defaultView.name' => ['required', 'string', 'max:255'],
-			'defaultView.description' => ['required', 'string', 'max:255'],
-			'defaultView.content' => ['required', 'array'],
-			'defaultView.content.*' => ['required', 'array'],
+			'layout' => ['required', 'array'],
+			'layout.*' => ['required', 'array'],
+			'layout.*.*' => ['required', 'array'],
+			'layout.*.*.code' => ['required', 'string', 'max:255'],
+			'layout.*.*.type' => ['required', 'string', 'max:255'],
+			'layout.*.*.suffix' => ['nullable', 'integer'],
+			'layout.*.*.prefix' => ['nullable', 'integer'],
 		];
-    }
+	}
 }

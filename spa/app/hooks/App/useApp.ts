@@ -12,6 +12,7 @@ import Columns from '~/model/App/Columns';
 import ColumnCode from '~/model/App/ColumnCode';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import { inputItems } from '~/model/App/View/InputTypes';
 
 const isApp = (app: WithoutMethods<App | NewApp>): app is App => app instanceof App;
 const _App = (app: WithoutMethods<AppBase>) => isApp(app) ? new App(app) : new NewApp(app);
@@ -24,47 +25,9 @@ export default function useApp<T extends AppBase = App | NewApp>(initialAppState
 	function updateApp<K extends keyName>(key: K, value: T[K]) {
 		setApp(app => _App({ ...app, [key]: value }));
 	}
-	const prevColumns= useRef(app.columns);
+	const prevColumns = useRef(app.columns);
 	function setLayout(newLayout: AppDetailsLayout) {
 		setApp(app => _App({ ...app, layout: newLayout }));
-	}
-	useEffect(() => {
-		onColumnsUpdated(app.columns);
-	}, [app.columns]);
-	/**
-	 * appのcolumnsが変更になった場合、こちらのviewItemのcodeも変更する必要があるため、更新。
-	 * 何かもっといい方法ないかしら。
-	 *
-	 */
-	function onColumnsUpdated(newColumns: Columns) {
-		const changed: { old: ColumnCode, new: Column; }[] = [];
-		const removed: ColumnCode[] = [];
-		prevColumns.current.forEach((oldC, i) => {
-			if (oldC === null) { return; }
-			const newC = newColumns[i];
-			if (newC === null) {
-				removed.push(oldC.code);
-				return;
-			}
-			if (JSON.stringify(oldC) !== JSON.stringify(newC)) {
-				changed.push({
-					old: oldC.code,
-					new: newC,
-				});
-				return;
-			}
-		});
-		setLayout(new AppDetailsLayout(app.layout.content.map(row =>
-			row.map(widget => {
-				if (removed.includes(widget.code)) return null;
-				const changedColumn = changed.find(({ old, new: newC }) => old === widget.code);
-				if (!!changedColumn) {
-					return widget.with("column", changedColumn.new);
-				}
-				return widget;
-			}).filter((i): i is Widget => !!i)
-		)));
-		prevColumns.current = newColumns;
 	}
 	function insert([x, y]: Position, inputData: Widget) {
 		setLayout(app.layout.insert([x, y], new Widget(inputData)));
@@ -79,6 +42,7 @@ export default function useApp<T extends AppBase = App | NewApp>(initialAppState
 		setLayout(app.layout.remove([x, y]));
 	}
 	function onDragEnd({ draggableId, destination, source }: DropResult) {
+		console.log({ draggableId, destination, source });
 		if (!destination || (destination.droppableId === "palette")) {
 			return;
 		}
@@ -87,11 +51,18 @@ export default function useApp<T extends AppBase = App | NewApp>(initialAppState
 		const destCol = destination.index;
 
 		if (source.droppableId === "palette") {
-			const column = app.columns[source.index];
-			if (!column || !column.code) { return; }
-			const code = column.code;
-			const newItem = new Widget({ type: "text", code, label: column.code, column, defaultValue: "", prefix: "", suffix: "", rules: undefined, });
-			insert([destRow, destCol], newItem);
+			const type = inputItems[source.index];
+			const code = type + "-" + (1 + Math.max(0, ...app.layout.content.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite)));
+			insert([destRow, destCol], new Widget({
+				type: "text",
+				code,
+				label: "",
+				column: { code: "", valueType: "varchar" },
+				defaultValue: "",
+				prefix: "",
+				suffix: "",
+				rules: undefined,
+			}));
 			return;
 		}
 

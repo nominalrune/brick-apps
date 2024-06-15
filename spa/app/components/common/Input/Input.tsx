@@ -97,7 +97,7 @@ function Textarea({ props }: { props: Omit<TextareaProps, "type" | "options">; }
 
 function _Select({ props }: { props: Omit<SelectProps, "type">; }) {
 	return <Select
-		value={props.options.find(([l, v]) => (v === props.value))?.reduce((l, v) => ({ label: l, value: v }))}
+		value={props.options?.find(([l, v]) => (v === props.value))?.reduce((l, v) => ({ label: l, value: v }))}
 		onChange={props.onChange}
 		isDisabled={props.disabled}
 		name={props.name}

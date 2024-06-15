@@ -28,8 +28,8 @@ class StoreRequest extends FormRequest
 			'layout.*.*' => ['required', 'array'],
 			'layout.*.*.code' => ['required', 'string', 'max:255'],
 			'layout.*.*.type' => ['required', 'string', 'max:255'],
-			'layout.*.*.suffix' => ['optional', 'integer'],
-			'layout.*.*.prefix' => ['optional', 'integer'],
+			'layout.*.*.suffix' => ['nullable', 'integer'],
+			'layout.*.*.prefix' => ['nullable', 'integer'],
 		];
 	}
 }

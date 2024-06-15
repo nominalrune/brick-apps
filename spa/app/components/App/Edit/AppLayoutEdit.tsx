@@ -12,23 +12,24 @@ import App from '~/model/App/App';
 import NewApp from '~/model/App/NewApp';
 interface Props {
 	app: App | NewApp,
-	columnsEditForm: ReactNode,
 	updateWidget: (position: Position, widget: Widget) => void,
 	removeWidget: (position: Position) => void,
 	onDragEnd: (e: DropResult) => void,
 }
 export default function AppLayoutEdit(props: Props) {
-	const inputItems = ["text", "textarea", "number", "select", "radio", "checkbox", "datetime-local", "year", "month", "date", "time", "reference", "file"]
+	const inputItems = ["text", "textarea", "number", "select", "radio", "checkbox", "datetime-local", "month", "date", "time", "reference", "file"] as const;
 	return <DragDropContext onDragEnd={props.onDragEnd}>
 		<div className="flex h-screen">
 			<div className='border-r border-slate-400 bg-sky-50'>
-				{props.columnsEditForm}
-				<Palette items={inputItems} name="palette" />
+				<details open>
+					<summary className='m-1 border rounded w-60 bg-sky-300'>general brick</summary>
+					<Palette items={inputItems} name="palette" />
+				</details>
 			</div>
 
 			<div className='col-span-3 flex flex-col'>
 				<AppForm
-					table={props.viewContent.content}
+					table={props.app.layout.content}
 					update={props.updateWidget}
 					remove={props.removeWidget}
 				/>

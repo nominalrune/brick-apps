@@ -70,7 +70,6 @@ export default function AppEdit({ app: _app, view }: Prop) {
 		/>
 		<AppLayoutEdit
 			app={app}
-			columnsEditForm={<EditColumns columns={app.columns} update={updateColumns} />}
 			updateWidget={updateWidget}
 			removeWidget={removeWidget}
 			onDragEnd={onDragEnd}
