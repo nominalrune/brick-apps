@@ -9,21 +9,24 @@ import { MdSettings } from "@react-icons/all-files/md/MdSettings";
 import { type ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
 import RecordRepository from '~/repository/App/RecordRepository';
 import FloatingAddButton from '~/components/common/Button/FloatingAddButton';
-async function getClientData(code:string) {
-	// const repository = new RecordRepository(code);
-	// const {records, app} = await repository.index();
-	// return {app, records};
-}
+// async function getClientData(code:string) {
+// 	// const repository = new RecordRepository(code);
+// 	// const {records, app} = await repository.index();
+// 	// return {app, records};
+// 	return;
+// }
 
-export async function clientLoader({
-	request,
-	params
-}: ClientLoaderFunctionArgs) {
-	// const clientData = await getClientData(params.code);
-	// return clientData;
-}
+// export async function clientLoader({
+// 	request,
+// 	params
+// }: ClientLoaderFunctionArgs) {
+// 	// const clientData = await getClientData(params.code);
+// 	// return clientData;
+
+// 	return;
+// }
 export default function Create({ app }: { app: AppData; }) {
-    const { data, setData, reset, transform,errors, post, processing } = useForm();
+    // const { data, setData, reset, transform,errors, post, processing } = useForm();
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!confirm("新規レコードを作成しますか？")) { return; }

@@ -16,10 +16,10 @@ class View extends Model
 		'code',
 		'name',
 		'description',
-		'content'
+		'layout'
 	];
 	protected $casts = [
-		'content' => 'array',
+		'layout' => 'array',
 	];
 	public function app()
 	{

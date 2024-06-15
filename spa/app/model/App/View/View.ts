@@ -1,7 +1,7 @@
 import WithoutMethods from '~/model/common/WithoutMethods';
 import ViewBase from './ViewBase';
 import ViewData from './ViewData';
-import ViewContent from './ViewContent';
+import AppDetailsLayout from '../AppDetailsLayout';
 import Widget from './Widget';
 import Columns from '../Columns';
 export default class View extends ViewBase {
@@ -29,7 +29,7 @@ export default class View extends ViewBase {
 			app_code: data.app_code,
 			name: data.name,
 			description: data.description,
-			content: new ViewContent(data.content.map(row => row.map(item => Widget.fromData(item, columns)))),
+			content: new AppDetailsLayout(data.content.map(row => row.map(item => Widget.fromData(item, columns)))),
 			created_at: new Date(data.created_at),
 			updated_at: new Date(data.updated_at),
 		});

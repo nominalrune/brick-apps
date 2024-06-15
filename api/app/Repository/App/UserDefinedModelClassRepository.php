@@ -35,9 +35,7 @@ class UserDefinedModelClassRepository
 	}
 	public function update()
 	{
-		if (! $this->exists()) {
-			throw new \Exception("class file not found:{$this->className}");
-		}
+		$this->delete();
 		$content = $this->generateContent();
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {

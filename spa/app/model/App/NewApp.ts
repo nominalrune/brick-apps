@@ -1,8 +1,19 @@
+import WithoutMethods from '../common/WithoutMethods';
 import AppBase from './AppBase';
 import NewView from './View/NewView';
 
 export default class NewApp extends AppBase{
 	public defaultView?: NewView;
+	constructor(app: WithoutMethods<NewApp>){
+		super(app);
+		this.defaultView = app.defaultView;
+	}
+	toJSON(){
+		return {
+			...super.toJSON(),
+			defaultView: this.defaultView?.toJSON(),
+		};
+	}
 	static blank(){
 		return new NewApp({
 			name: '',
@@ -10,6 +21,7 @@ export default class NewApp extends AppBase{
 			code: '',
 			icon: '',
 			columns: [],
+			layout: null,
 			archived_at: null,
 		});
 	}

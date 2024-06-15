@@ -33,7 +33,7 @@ export default function EditColumns({ columns, update }: Props) {
 							name={i + "valueType"}
 							onChange={({ value, label }) => { update(columns.map((f, j) => (f && i === j) ? { ...f, valueType: value } : f)); }}
 							type={"select"}
-							options={[["varchar", "varchar"], ["int", "int"], ["text", "text"], ["date", "date"], ["datetime", "datetime"], ["time", "time"], ["boolean", "boolean"]]}
+							options={[["varchar", "varchar"], ["integer", "integer"], ["text", "text"], ["date", "date"], ["datetime", "datetime"], ["time", "time"], ["boolean", "boolean"]]}
 						/>
 						<CircleButton onClick={() => { update(columns.map((f, j) => (f && i === j) ? null : f)); }}><FiX /></CircleButton>
 					</div> : <></>)}

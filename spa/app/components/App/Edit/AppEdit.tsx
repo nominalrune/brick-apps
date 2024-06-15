@@ -12,6 +12,8 @@ import Column from '~/model/App/Column';
 import EditColumns from './EditColumns';
 import Columns from '~/model/App/Columns';
 import ViewRepository from '~/repository/App/ViewRepository';
+import { useNavigate } from '@remix-run/react';
+import Widget from '~/model/App/View/Widget';
 
 type Prop = {
 	app: NewApp | null;
@@ -21,33 +23,36 @@ type Prop = {
 	view: View;
 };
 export default function AppEdit({ app: _app, view }: Prop) {
-	const { app, update } = useApp(
+	const {
+		app,
+		updateApp,
+		updateWidget,
+		removeWidget,
+		onDragEnd
+	} = useApp(
 		_app ?? new NewApp({ ...NewApp.blank(), columns: [] }));
-	const { content, onColumnsUpdated, updateWidget, removeWidget, onDragEnd } = useViewContent(app.columns, view?.content);
+	const navigate = useNavigate();
 	function updateColumns(columns: Columns) {
-		update("columns", columns);
+		updateApp("columns", columns);
 		// onColumnsUpdated(columns);
 	}
-	function handleAppChange(e: ChangeEvent<Named<HTMLInputElement, keyof NewApp>>) {
-		const name = e.target.name;
+	function handleAppChange(name: string, value: string) {
 		if (name !== "name" && name !== "description" && name !== "icon" && name !== 'code') return;
-		update(name, e.target.value);
+		updateApp(name, value);
 	}
 	async function handleSubmit(e: ReactMouseEvent<HTMLButtonElement, MouseEvent>) {
 		if (app instanceof NewApp) {
 			if (!confirm(`アプリを作成しますか？`)) { return; }
 			const repo = new AppRepository();
-			const res = await repo.createWithView(app, new NewView({
-				code: `${app.code}-default`,
-				app_code: app.code,
-				name: "default",
-				description: "default view",
-				content: content,
-			}));
+			const res = await repo.create(
+				new NewApp(app)
+			);
+			navigate(`/app/${res.code}`);
 		} else if (app instanceof App && view instanceof View) {
 			if (!confirm(`アプリを更新しますか？`)) { return; }
 			const appRepo = new AppRepository();
-			const res = await appRepo.updateWithView(app, new View({...view, content}));
+			const res = await appRepo.update(app);
+			navigate(`/app/${res.code}`);
 		}
 
 	}
@@ -58,15 +63,14 @@ export default function AppEdit({ app: _app, view }: Prop) {
 		<AppEditHeader
 			submitLabel={"作成"}
 			data={app}
-			onChange={handleAppChange}
+			update={handleAppChange}
 			onCancel={handleCancel}
 			onSubmit={handleSubmit}
 			onDelete={() => { }}
 		/>
 		<AppLayoutEdit
-			columns={app.columns}
+			app={app}
 			columnsEditForm={<EditColumns columns={app.columns} update={updateColumns} />}
-			table={content}
 			updateWidget={updateWidget}
 			removeWidget={removeWidget}
 			onDragEnd={onDragEnd}

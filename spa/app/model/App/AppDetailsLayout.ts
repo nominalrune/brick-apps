@@ -1,10 +1,10 @@
 import Widget from '~/model/App/View/Widget';
 import Position from '~/model/Position';
-import ViewItemData from './ViewItemData';
 
-export default class ViewContent {
+export default class AppDetailsLayout {
 	public readonly content: Widget[][];
 	constructor(_content: Widget[][]) {
+		if(!Array.isArray(_content)) throw new Error("Invalid argument. Given argument is not an array.");
 		this.content = _content.filter(row => row.length !== 0);
 	}
 	map<T>(callbackfn: (inputs: Widget[], i?: number, arr?: Widget[][]) => T) {
@@ -21,13 +21,13 @@ export default class ViewContent {
 			this.content[x] = [];
 		}
 		const newInputs = this.at(x).toSpliced(y, 0, inputData);
-		return new ViewContent(this
+		return new AppDetailsLayout(this
 			.map((row, i) => i === x ? newInputs : row)
 			.filter((row) => (row && row.length !== 0)));
 	}
 	update([x, y]: Position, value: Widget) {
 		const updatedRow = this.at(x).toSpliced(y, 1, value);
-		const newInstance = new ViewContent(this
+		const newInstance = new AppDetailsLayout(this
 			.map((row, i) => i === x ? updatedRow : row)
 			.filter((row) => (row && row.length !== 0))
 		);
@@ -42,7 +42,7 @@ export default class ViewContent {
 			const clone = Array.from(this.at(fromRow));
 			const [removed] = clone.splice(fromCol, 1);
 			clone.splice(toCol, 0, removed);
-			const result = new ViewContent(this.content
+			const result = new AppDetailsLayout(this.content
 				.map((row, i) => i === fromRow ? clone : row)
 				.filter((row) => (row && row.length !== 0))
 			);
@@ -52,7 +52,7 @@ export default class ViewContent {
 		while (this.content.length <= toRow) {
 			this.content.push([]);
 		}
-		const result = new ViewContent(this.content
+		const result = new AppDetailsLayout(this.content
 			.map((row, i) => i === fromRow ? row.toSpliced(fromCol, 1) : i === toRow ? row.toSpliced(toCol, 0, item) : row)
 			.filter((row) => (row && row.length !== 0))
 		);
@@ -60,7 +60,7 @@ export default class ViewContent {
 		return result;
 	}
 	remove([x, y]: Position) {
-		return new ViewContent(this.content
+		return new AppDetailsLayout(this.content
 			.map((row, i) => i === x ? row.toSpliced(y, 1) : row)
 			.filter((row) => (row && row.length !== 0))
 		);

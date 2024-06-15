@@ -38,13 +38,10 @@ class AppController extends Controller
 			$request->description ?? "",
 			$request->icon,
 			$request->columns,
-			$request->view,
+			$request->defaultView,
 			$request->user()
 		);
-		return to_route("record.index", [
-			"app_code" => $app->code,
-			"view_code" => $app->view->code
-		]);
+		return response()->json($app);
 	}
 	public function update(UpdateRequest $request, string $app_code)
 	{
@@ -55,11 +52,10 @@ class AppController extends Controller
 			$request->name,
 			$request->description ?? "",
 			$request->icon,
-			$request->columns
+			$request->columns,
+			$request->defaultView,
 		);
-		return to_route("record.index", [
-			"app_code" => $app->code
-		]);
+		return response()->json($app);
 	}
 
 	public function destroy(Request $request, string $app_code)

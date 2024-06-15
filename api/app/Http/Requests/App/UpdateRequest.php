@@ -23,12 +23,12 @@ class UpdateRequest extends FormRequest
 			'columns' => ['required', 'array', 'min:1'],
 			'columns.*.code' => ['required', 'string', 'min:1'],
 			'columns.*.valueType' => ['required', 'string', 'min:1'],
-			'view' => ['required', 'array'],
-			'view.code' => ['required', 'string', 'max:255'],
-			'view.name' => ['required', 'string', 'max:255'],
-			'view.description' => ['required', 'string', 'max:255'],
-			'view.content' => ['required', 'array'],
-			'view.content.*' => ['required', 'array'],
+			'defaultView' => ['required', 'array'],
+			'defaultView.code' => ['required', 'string', 'max:255'],
+			'defaultView.name' => ['required', 'string', 'max:255'],
+			'defaultView.description' => ['required', 'string', 'max:255'],
+			'defaultView.content' => ['required', 'array'],
+			'defaultView.content.*' => ['required', 'array'],
 		];
     }
 }

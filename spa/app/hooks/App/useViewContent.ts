@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ViewContent from '~/model/App/View/ViewContent';
+import AppDetailsLayout from '~/model/App/AppDetailsLayout';
 import Position from '~/model/Position';
 import Widget from '~/model/App/View/Widget';
 import { DropResult } from 'react-beautiful-dnd';
@@ -14,9 +14,9 @@ import ColumnCode from '~/model/App/ColumnCode';
  * ViewContentのitemsはcolumnsに依存
  * columnが変更になると、持ってるcolumnsも変わる。
  */
-export default function useViewContent(columns: Columns, initialLayout?: ViewContent) {
+export default function useViewContent(columns: Columns, initialLayout?: AppDetailsLayout) {
 	const [prevColumns, setPrev] = useState(columns);
-	const [content, setContent] = useState<ViewContent>(initialLayout ?? new ViewContent([]));
+	const [content, setContent] = useState<AppDetailsLayout>(initialLayout ?? new AppDetailsLayout([]));
 	useEffect(() => {
 		onColumnsUpdated(columns);
 		setPrev(prev => columns);
@@ -44,7 +44,7 @@ export default function useViewContent(columns: Columns, initialLayout?: ViewCon
 				return;
 			}
 		});
-		setContent(table => new ViewContent(table.map(row =>
+		setContent(content => new AppDetailsLayout(content.map(row =>
 			row.map(widget => {
 				if (removed.includes(widget.code)) return null;
 				const changedColumn = changed.find(({ old, new: newC }) => old === widget.code);

@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Log;
 
 class RecordController extends Controller
 {
-	public function index(Request $request, string $app_code)
+	public function index(Request $request, string $app_code, ?string $view_code = null)
 	{
-		$app = App::findByCode($app_code);
+		$app = App::findByCode($app_code)->withView($view_code);
 		Log::info('records index', ['app' => $app]);
 		// $repository = new RecordRepository($app);
 		$records = $app->records;
@@ -21,7 +21,7 @@ class RecordController extends Controller
 			"records" => $records,
 		]);
 	}
-	public function show(Request $request, string $app_code, int $record_id)
+	public function show(Request $request, string $app_code, string $view_code, int $record_id)
 	{
 		$app = App::findByCode($app_code);
 		$repository = new RecordRepository($app_code);

@@ -26,7 +26,7 @@ export default function Index() {
             <a href={`/web/${app.code}`} className='text-xl '>{app.name}</a>
             <div className='flex-grow flex gap-4 justify-end items-center'>
                 <a href={`/app/${app.code}/create`} ><Button>新規作成</Button></a>
-                <a href={`/app/${app.code}/edit`} ><MdSettings className="text-3xl text-slate-600 hover:text-slate-800 hover:drop-shadow transition-colors" /></a>
+                <a href={`/apps/${app.code}/edit`} ><MdSettings className="text-3xl text-slate-600 hover:text-slate-800 hover:drop-shadow transition-colors" /></a>
             </div>
         </div>
     <div className="py-12">

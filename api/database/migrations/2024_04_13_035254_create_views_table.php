@@ -25,7 +25,7 @@ return new class extends Migration {
 				->onDelete('cascade');
 			$table->string('name');
 			$table->text('description');
-			$table->json('content');
+			$table->json('layout');
 		});
 		Schema::table('apps', function (Blueprint $table) {
 			$table->string('default_view', 255)->nullable();

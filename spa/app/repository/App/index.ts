@@ -32,8 +32,7 @@ export default class AppRepository extends RepositoryBase<NewApp, App> {
 		return App.fromData(data);
 	}
 	async createWithView(app: NewApp, view: NewView) {
-		app.defaultView = view;
-		const data = await super.create(app);
+		const data = await super.create(new NewApp({...app, defaultView: view}));
 		return App.fromData(data);
 	}
 	async update(app: App) {
@@ -41,8 +40,7 @@ export default class AppRepository extends RepositoryBase<NewApp, App> {
 		return App.fromData(data);
 	}
 	async updateWithView(app: App, view: View) {
-		app.defaultView = view;
-		const data = await super.update(app);
+		const data = await super.update(new App({...app, defaultView: view}));
 		return App.fromData(data);
 	}
 	async archive(id: number) {

@@ -24,19 +24,20 @@ class CreateAppService
 		string $description,
 		string $icon,
 		array $columns,
-		array $view,
+		array $contents,
+		array $defaultView,
 		User $creator
 	) {
 		$app = $this->createAppRecord($code, $name, $description, $icon, $columns, $creator);
 		Log::info('app', ['app' => $app]);
-		$this->createAppTable($code, $columns);
-		$this->createView($app, $view);
+		$this->createAppTable($code, $columns, $contents);
+		$this->createView($app, $defaultView);
 		$this->createUserDefinedModelClassFile($app);
 		Log::info('app created', ['app' => $app]);
 
 		return $app;
 	}
-	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, User $creator)
+	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, array $contents, User $creator)
 	{
 		$app = App::create([
 			'code' => $code,
@@ -44,6 +45,7 @@ class CreateAppService
 			'description' => $description,
 			'icon' => $icon,
 			'columns' => $columns,
+			'contents' => $contents,
 			'default_view' => null,
 			'created_by' => $creator->id,
 			'updated_by' => $creator->id,
@@ -57,7 +59,7 @@ class CreateAppService
 			'name' => $view['name'],
 			'code' => $view['code'],
 			'description' => $view['description'],
-			'content' => $view['content'],
+			'layout' => $view['layout'],
 			'created_by' => $app->created_by,
 			'updated_by' => $app->created_by,
 		]);

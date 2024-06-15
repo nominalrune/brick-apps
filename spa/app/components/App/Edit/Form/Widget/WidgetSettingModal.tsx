@@ -30,6 +30,9 @@ export default function WidgetSettingModal({ inputData, onClose, onSubmit }: Pro
 		const value = (element instanceof HTMLInputElement && element.type === 'checkbox') ? element.checked : element.value;
 		setSetting(setting => { const v = setting?.with(name, value); console.log(v?.prefix); return v; });
 	}
+	function handleTypeChange({label, value}: {label: string, value: string}) {
+		setSetting(setting => setting?.with('type', value));
+	}
 	function handleClose() {
 		onClose();
 	}
@@ -40,7 +43,7 @@ export default function WidgetSettingModal({ inputData, onClose, onSubmit }: Pro
 				prefix="入力タイプ: "
 				type="select"
 				value={setting.type}
-				onChange={handleChange}
+				onChange={handleTypeChange}
 				options={inputItems.map(i => [i, i])}
 			/>
 			<Input id='label' prefix="表示名: " name={"label"} type='text' onChange={handleChange} value={setting.label} />

@@ -23,6 +23,7 @@ class App extends Model
 		'description',
 		'icon',
 		'columns',
+		'contents',
 		'default_view',
 	];
 	protected $casts = [
@@ -34,10 +35,27 @@ class App extends Model
 	// 	$query->setQuery($query->getQuery()->from("app-{$this->code}")->getQuery());
 	// 	return $query;
 	// }
-
+	public View $_view;
+	public function view() : Attribute
+	{
+		return Attribute::make(
+			get: function () {
+				return $this->_view;
+			},
+		);
+	}
+	public function withView(?string $view_code)
+	{
+		if (! is_null($view_code)) {
+			$this->_view = View::where('code', $view_code)->first();
+		} else {
+			$this->_view = $this->defaultView;
+		}
+		return $this->setAppends(['view']);
+	}
 	public function defaultView()
 	{
-		return $this->hasOne('views', 'code', 'default_view');
+		return $this->hasOne(View::class, 'code', 'default_view');
 	}
 	public function views(User $user, int $permission = Permission::READ)
 	{
@@ -142,7 +160,7 @@ class App extends Model
 	 */
 	private function snakeCaseToCamelCase(string $target)
 	{
-		$words = explode('_', $target);
+		$words = preg_split("/[\-_\=\+]+/", $target);
 		foreach ($words as $key => $word) {
 			$words[$key] = ucfirst($word);
 		}
