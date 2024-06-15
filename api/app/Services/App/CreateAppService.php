@@ -24,20 +24,32 @@ class CreateAppService
 		string $description,
 		string $icon,
 		array $columns,
-		array $contents,
-		array $defaultView,
+		array $layout,
 		User $creator
 	) {
-		$app = $this->createAppRecord($code, $name, $description, $icon, $columns, $creator);
+		$app = $this->createAppRecord($code, $name, $description, $icon, $columns, $layout, $creator);
 		Log::info('app', ['app' => $app]);
-		$this->createAppTable($code, $columns, $contents);
-		$this->createView($app, $defaultView);
+		$this->createAppTable($code, $columns);
+		$this->createDefaultView($app, [
+			'name' => '(all)',
+			'code' => "$app->code-all",
+			'description' => 'default view(all records)',
+			'layout' => [[
+					'code' => "$app->code-all",
+					'type' => 'table',
+					'suffix' => null,
+					'prefix' => null,
+				collect($columns)->map(function ($column) {
+				return [
+				];
+			})->toArray()]],
+		]);
 		$this->createUserDefinedModelClassFile($app);
 		Log::info('app created', ['app' => $app]);
 
 		return $app;
 	}
-	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, array $contents, User $creator)
+	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, array $layout, User $creator)
 	{
 		$app = App::create([
 			'code' => $code,
@@ -45,14 +57,14 @@ class CreateAppService
 			'description' => $description,
 			'icon' => $icon,
 			'columns' => $columns,
-			'contents' => $contents,
+			'layout' => $layout,
 			'default_view' => null,
 			'created_by' => $creator->id,
 			'updated_by' => $creator->id,
 		]);
 		return $app;
 	}
-	private function createView(App $app, array $view)
+	private function createDefaultView(App $app, array $view)
 	{
 		$view = View::create([
 			'app_code' => $app->code,

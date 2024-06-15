@@ -30,12 +30,6 @@ class StoreRequest extends FormRequest
 			'layout.*.*.type' => ['required', 'string', 'max:255'],
 			'layout.*.*.suffix' => ['optional', 'integer'],
 			'layout.*.*.prefix' => ['optional', 'integer'],
-			'defaultView' => ['required', 'array'],
-			'defaultView.code' => ['required', 'string', 'max:255'],
-			'defaultView.name' => ['required', 'string', 'max:255'],
-			'defaultView.description' => ['required', 'string', 'max:255'],
-			'defaultView.layout' => ['required', 'array'],
-			'defaultView.layout.*' => ['required', 'array'],
 		];
 	}
 }
