@@ -2,7 +2,7 @@ import Palette from '~/components/App/Edit/Form/Palette';
 import AppForm from '~/components/App/Edit/Form/Form';
 import useApp from '~/hooks/App/useApp';
 import { DragDropContext } from '~/components/common/Dnd';
-import AppDetailsLayout from '~/model/App/AppDetailsLayout';
+import DetailLayout from '~/model/App/View/DetailLayout';
 import { ReactNode } from 'react';
 import Columns from '~/model/App/Columns';
 import Position from '~/model/Position';

@@ -1,4 +1,4 @@
-import AppDetailsLayout from '../../../app/model/App/AppDetailsLayout';
+import DetailLayout from '../../../app/model/App/View/DetailLayout';
 import Widget from '../../../app/model/App/View/Widget';
 
 export default class App {
@@ -8,10 +8,10 @@ export default class App {
         public readonly name: string,
         public readonly description: string,
         public readonly icon: string,
-        public readonly form: AppDetailsLayout,
+        public readonly form: DetailLayout,
     ) { }
     public static fromDTO(data: AppData) {
-        const form = new AppDetailsLayout(data.form);
+        const form = new DetailLayout(data.form);
         return new App(data.id, data.code, data.name, data.description, data.icon, form);
     }
     toDTO():AppData {

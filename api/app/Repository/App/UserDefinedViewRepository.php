@@ -5,19 +5,18 @@ use App\Models\App;
 use App\Models\View;
 use Illuminate\Support\Facades\Log;
 
-class UserDefinedModelClassRepository
+class UserDefinedViewRepository
 {
 	private string $dir;
 	private string $path;
-	private App $app;
+	private View $view;
 	private string $className;
-	public function __construct(App $app, View $view)
+	public function __construct(View $view)
 	{
-		$this->app = $app;
-		$this->dir = app_path('Models/UserDefined');
-		$this->className = $app->className;
-		$this->path = $this->dir . '/' . $app->className . '.php';
-		$this->className = $app->className;
+		$this->view = $view;
+		$this->dir = app_path("Models/UserDefined/{$view->app->className}/views");
+		$this->className = $view->code;
+		$this->path = $this->dir . '/' . $view->code . '.json';
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
@@ -26,19 +25,19 @@ class UserDefinedModelClassRepository
 	public function create()
 	{
 		if ($this->exists()) {
-			throw new \Exception("class file already exists:{$this->className}");
+			throw new \Exception("class file already exists: {$this->className}");
 		}
-		$content = $this->generateModel();
+		$content = $this->generateJson();
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
-			throw new \Exception("failed to create class file:{$this->path}");
+			throw new \Exception("failed to create class file: {$this->path}");
 		}
 		return $this->path;
 	}
 	public function update()
 	{
 		$this->delete();
-		$content = $this->generateModel();
+		$content = $this->generateJson();
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
 			throw new \Exception("failed to update class file:{$this->path}");
@@ -75,38 +74,11 @@ class UserDefinedModelClassRepository
 	{
 		$list = $this->listFiles();
 		Log::info("", ["files" => $list]);
-		return in_array($this->className . ".php", $list);
+		return in_array($this->className . ".json", $list);
 	}
-	private function generateJson(){
-	}
-	private function generateModel()
+	private function generateJson()
 	{
-		$fillables = implode(',' . PHP_EOL . '        ', array_map(fn ($column) => ("'{$column['code']}'"), $this->app->columns));
-		$content = <<<EOL
-<?php
-declare(strict_types=1);
-
-namespace App\Models\UserDefined;
-
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
-
-class {$this->className} extends Model
-{
-    protected \$fillable = [
-        $fillables
-    ];
-    protected \$table = "{$this->app->code}";
-    public function createdBy()
-    {
-        return \$this->belongsTo(User::class);
-    }
-    public function updatedBy()
-    {
-        return \$this->belongsTo(User::class);
-    }
-}
-EOL;
+		$content = json_encode($this->view->toArray());
 		return $content;
 	}
 }

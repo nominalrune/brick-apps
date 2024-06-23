@@ -35,7 +35,7 @@ class CreateAppService
 			'code' => "$app->code-all",
 			'description' => 'default view(all records)',
 			'layout' => [[
-					'code' => "$app->code-all",
+					'code' => "{$app->code}-all",
 					'type' => 'table',
 					'suffix' => null,
 					'prefix' => null,

@@ -14,6 +14,9 @@ import Columns from '~/model/App/Columns';
 import ViewRepository from '~/repository/App/ViewRepository';
 import { useNavigate } from '@remix-run/react';
 import Widget from '~/model/App/View/Widget';
+import handleCancel from './actions/handleCancel';
+import handleSubmit from './actions/handleSubmit';
+import getHandleAppChange from './actions/getHandleAppChange';
 
 type Prop = {
 	app: NewApp | null;
@@ -22,7 +25,7 @@ type Prop = {
 	app: App;
 	view: View;
 };
-export default function AppEdit({ app: _app, view }: Prop) {
+export default function AppEdit({ app: _app }: Prop) {
 	const {
 		app,
 		updateApp,
@@ -49,7 +52,7 @@ export default function AppEdit({ app: _app, view }: Prop) {
 			data={app}
 			update={handleAppChange}
 			onCancel={handleCancel}
-			onSubmit={handleSubmit}
+			onSubmit={() => handleSubmit(app)}
 			onDelete={() => { }}
 		/>
 		<AppLayoutEdit
@@ -60,3 +63,4 @@ export default function AppEdit({ app: _app, view }: Prop) {
 		/>
 	</>;
 }
+

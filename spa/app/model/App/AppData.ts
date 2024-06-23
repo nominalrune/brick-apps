@@ -9,7 +9,6 @@ export default interface AppData {
 	code: string;
 	icon: string;
 	columns: Columns;
-	layout: Widget[][];
 	defaultViewCode: string;
 	created_at: string;
 	updated_at: string;

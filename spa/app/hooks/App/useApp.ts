@@ -7,7 +7,7 @@ import WithoutMethods from '~/model/common/WithoutMethods';
 import Widget from '~/model/App/View/Widget';
 import Position from '~/model/Position';
 import { DropResult } from 'react-beautiful-dnd';
-import AppDetailsLayout from '~/model/App/AppDetailsLayout';
+import DetailLayout from '~/model/App/View/DetailLayout';
 import Columns from '~/model/App/Columns';
 import ColumnCode from '~/model/App/ColumnCode';
 import { useEffect } from 'react';

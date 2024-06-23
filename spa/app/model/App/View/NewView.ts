@@ -1,5 +1,7 @@
 import ViewBase from './ViewBase';
-import AppDetailsLayout from '../AppDetailsLayout';
+import DetailLayout from './DetailLayout';
+import ListLayout from './ListLayout';
+import Table from './ListLayouts/Table';
 
 export default class NewView extends ViewBase {
 	static blank(initialValue?: Partial<NewView>) {
@@ -8,7 +10,8 @@ export default class NewView extends ViewBase {
 			name: '',
 			description: '',
 			app_code: '',
-			content: new AppDetailsLayout([]),
+			list: new ListLayout(new Table([])),
+			detail: new DetailLayout([]),
 			...initialValue
 		});
 	}

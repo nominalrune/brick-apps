@@ -6,7 +6,8 @@ export default interface ViewData{
 	app_code:string;
 	name:string;
 	description:string;
-	content:ViewItemData[][];
+	list:{listType:string, content:unknown[]}
+	detail:ViewItemData[][];
 	created_at:string;
 	updated_at:string;
 	archived_at:string | null;

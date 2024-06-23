@@ -2,7 +2,7 @@ import WithoutMethods from '../common/WithoutMethods';
 import AppBase from './AppBase';
 import AppData from './AppData';
 import View from './View/View';
-import AppDetailsLayout from './AppDetailsLayout';
+import DetailLayout from './View/DetailLayout';
 export default class App extends AppBase {
 	public readonly id: number;
 	public created_at: Date;
@@ -34,7 +34,6 @@ export default class App extends AppBase {
 			code: data.code,
 			icon: data.icon,
 			columns: data.columns,
-			layout: new AppDetailsLayout(data.layout),
 			// defaultView: View.fromData(data.defaultView),
 			defaultViewCode: data.defaultViewCode,
 			created_at: new Date(data.created_at),

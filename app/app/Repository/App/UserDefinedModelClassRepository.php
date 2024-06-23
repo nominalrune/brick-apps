@@ -20,7 +20,7 @@ class UserDefinedModelClassRepository
         if ($this->exists()) {
             throw new \Exception("class file already exists:{$this->className}");
         }
-        $content = $this->generateContent();
+        $content = $this->generateModel();
         $result = file_put_contents($this->path, $content);
         if ($result === false) {
             throw new \Exception("failed to create class file:{$this->path}");
@@ -32,7 +32,7 @@ class UserDefinedModelClassRepository
         if (! $this->exists()) {
             throw new \Exception("class file not found:{$this->className}");
         }
-        $content = $this->generateContent();
+        $content = $this->generateModel();
         $result = file_put_contents($this->path, $content);
         if ($result === false) {
             throw new \Exception("failed to update class file:{$this->path}");
@@ -70,7 +70,7 @@ class UserDefinedModelClassRepository
         $list = $this->listFiles();
         return in_array($this->path, $list);
     }
-    private function generateContent()
+    private function generateModel()
     {
         $fillables = implode(',\n        ', $this->app->form_keys);
         $content = <<<EOL

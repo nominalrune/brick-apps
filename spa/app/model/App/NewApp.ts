@@ -21,7 +21,6 @@ export default class NewApp extends AppBase{
 			code: '',
 			icon: '',
 			columns: [],
-			layout: null,
 			archived_at: null,
 		});
 	}
