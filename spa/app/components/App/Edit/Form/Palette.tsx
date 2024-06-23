@@ -22,6 +22,8 @@ function Palette({ items, name }: { items: readonly InputTypeOption[], name: str
 								>
 									<div className="absolute inset-0 w-full h-full"></div>
 									<FiMoreVertical className="p-1 text-2xl text-slate-500" />
+
+									{/* @ts-expect-error typeがおかしいってさ */}
 									<Input
 										id={item + "-" + (i).toString()}
 										name={item + "-" + (i).toString()}

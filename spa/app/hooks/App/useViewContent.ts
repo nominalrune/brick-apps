@@ -47,10 +47,10 @@ export default function useViewContent(columns: Columns, initialLayout?: AppDeta
 		setContent(content => new AppDetailsLayout(content.map(row =>
 			row.map(widget => {
 				if (removed.includes(widget.code)) return null;
-				const changedColumn = changed.find(({ old, new: newC }) => old === widget.code);
-				if (!!changedColumn) {
-					return widget.with("column", changedColumn.new);
-				}
+				// const changedColumn = changed.find(({ old, new: newC }) => old === widget.code);
+				// if (!!changedColumn) {
+				// 	return widget.with("column", changedColumn.new);
+				// }
 				return widget;
 			}).filter((i): i is Widget => !!i)
 		)));
@@ -58,6 +58,7 @@ export default function useViewContent(columns: Columns, initialLayout?: AppDeta
 	}
 	function insert([x, y]: Position, inputData: Widget) {
 		setContent(content.insert([x, y], new Widget(inputData)));
+		
 	}
 	function move(from: Position, to: Position) {
 		setContent(table => table.move(from, to));

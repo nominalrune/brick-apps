@@ -28,32 +28,16 @@ export default function AppEdit({ app: _app, view }: Prop) {
 		updateApp,
 		updateWidget,
 		removeWidget,
-		onDragEnd
+		onDragEnd,
+		save
 	} = useApp(
 		_app ?? new NewApp({ ...NewApp.blank(), columns: [] }));
-	const navigate = useNavigate();
-	function updateColumns(columns: Columns) {
-		updateApp("columns", columns);
-		// onColumnsUpdated(columns);
-	}
 	function handleAppChange(name: string, value: string) {
 		if (name !== "name" && name !== "description" && name !== "icon" && name !== 'code') return;
 		updateApp(name, value);
 	}
 	async function handleSubmit(e: ReactMouseEvent<HTMLButtonElement, MouseEvent>) {
-		if (app instanceof NewApp) {
-			if (!confirm(`アプリを作成しますか？`)) { return; }
-			const repo = new AppRepository();
-			const res = await repo.create(
-				new NewApp(app)
-			);
-			navigate(`/app/${res.code}`);
-		} else if (app instanceof App && view instanceof View) {
-			if (!confirm(`アプリを更新しますか？`)) { return; }
-			const appRepo = new AppRepository();
-			const res = await appRepo.update(app);
-			navigate(`/app/${res.code}`);
-		}
+		save();
 
 	}
 	function handleCancel() {

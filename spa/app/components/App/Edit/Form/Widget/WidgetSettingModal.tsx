@@ -28,9 +28,13 @@ export default function WidgetSettingModal({ inputData, onClose, onSubmit }: Pro
 		const element = e.target;
 		const name = element.name as keyof Widget<any>;
 		const value = (element instanceof HTMLInputElement && element.type === 'checkbox') ? element.checked : element.value;
-		setSetting(setting => { const v = setting?.with(name, value); console.log(v?.prefix); return v; });
+		if(["valueType","code"].includes(name)){
+			setSetting(setting => setting?.with("column", { ...setting?.column, [name]: value }));
+			return;
+		}
+		setSetting(setting => setting?.with(name, value));
 	}
-	function handleTypeChange({label, value}: {label: string, value: string}) {
+	function handleTypeChange({ label, value }: { label: string, value: string; }) {
 		setSetting(setting => setting?.with('type', value));
 	}
 	function handleClose() {
@@ -39,6 +43,7 @@ export default function WidgetSettingModal({ inputData, onClose, onSubmit }: Pro
 
 	return <Modal show={!!inputData} close={handleClose}>
 		{setting && <div className='bg-white rounded-lg my-0 mx-auto  p-4 flex flex-col justify-start gap-4'>
+		<div className="flex gap-4">
 			<Input id='type'
 				prefix="入力タイプ: "
 				type="select"
@@ -46,11 +51,23 @@ export default function WidgetSettingModal({ inputData, onClose, onSubmit }: Pro
 				onChange={handleTypeChange}
 				options={inputItems.map(i => [i, i])}
 			/>
+			<Input id='valueType'
+			name="valueType"
+				prefix="DBタイプ: "
+				type="select"
+				value={setting.column?.valueType || "varchar"}
+				onChange={handleTypeChange}
+				options={["varchar","text"].map(i => [i, i])}
+			/>
+
+			</div>
 			<Input id='label' prefix="表示名: " name={"label"} type='text' onChange={handleChange} value={setting.label} />
-			<Input id='code' prefix='名前: ' disabled={true} name={"code"} type='text' onChange={handleChange} value={setting.code} />
+			<Input id='code' prefix='名前: ' name={"code"} type='text' onChange={handleChange} value={setting.code} />
 			<div className="flex gap-4">
 				{/* <Input label="選択肢" name={"rules.options"} type="text" onChange={handleChange} value={setting.prefix} /> */}
 			</div>
+
+			{/* @ts-expect-error typeがおかしいってさ */}
 			<Input prefix='デフォルト値: ' id={"defaultValue"} type={setting.type || "text"} onChange={handleChange} value={setting.defaultValue} />
 
 			<div className="flex gap-4">

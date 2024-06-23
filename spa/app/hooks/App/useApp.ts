@@ -13,6 +13,8 @@ import ColumnCode from '~/model/App/ColumnCode';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import { inputItems } from '~/model/App/View/InputTypes';
+import AppRepository from '~/repository/App';
+import { useNavigate } from '@remix-run/react';
 
 const isApp = (app: WithoutMethods<App | NewApp>): app is App => app instanceof App;
 const _App = (app: WithoutMethods<AppBase>) => isApp(app) ? new App(app) : new NewApp(app);
@@ -25,7 +27,6 @@ export default function useApp<T extends AppBase = App | NewApp>(initialAppState
 	function updateApp<K extends keyName>(key: K, value: T[K]) {
 		setApp(app => _App({ ...app, [key]: value }));
 	}
-	const prevColumns = useRef(app.columns);
 	function setLayout(newLayout: AppDetailsLayout) {
 		setApp(app => _App({ ...app, layout: newLayout }));
 	}
@@ -74,12 +75,30 @@ export default function useApp<T extends AppBase = App | NewApp>(initialAppState
 		}
 		move([sourceRow, sourceCol], [destRow, destCol]);
 	}
+
+	const navigate = useNavigate();
+	async function save(){
+		if (app instanceof NewApp) {
+			if (!confirm(`アプリを作成しますか？`)) { return; }
+			const repo = new AppRepository();
+			const res = await repo.create(
+				new NewApp(app)
+			);
+			navigate(`/app/${res.code}`);
+		} else if (app instanceof App) {
+			if (!confirm(`アプリを更新しますか？`)) { return; }
+			const appRepo = new AppRepository();
+			const res = await appRepo.update(app);
+			navigate(`/app/${res.code}`);
+		}
+	}
 	return {
 		app,
 		updateApp,
 		updateWidget,
 		removeWidget,
-		onDragEnd
+		onDragEnd,
+		save
 	};
 }
 
