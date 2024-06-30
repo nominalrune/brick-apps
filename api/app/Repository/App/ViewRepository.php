@@ -5,18 +5,18 @@ use App\Models\App;
 use App\Models\View;
 use Illuminate\Support\Facades\Log;
 
-class UserDefinedViewRepository
+class ViewRepository
 {
 	private string $dir;
 	private string $path;
-	private View $view;
-	private string $className;
-	public function __construct(View $view)
+	private array $view;
+	private string $code;
+	public function __construct(array $view)
 	{
 		$this->view = $view;
-		$this->dir = app_path("Models/UserDefined/{$view->app->className}/views");
-		$this->className = $view->code;
-		$this->path = $this->dir . '/' . $view->code . '.json';
+		$this->dir = $view['file'];
+		$this->code = $view['code'];
+		$this->path = $view['file'];
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
@@ -25,7 +25,7 @@ class UserDefinedViewRepository
 	public function create()
 	{
 		if ($this->exists()) {
-			throw new \Exception("class file already exists: {$this->className}");
+			throw new \Exception("view json file already exists: {$this->path}");
 		}
 		$content = $this->generateJson();
 		$result = file_put_contents($this->path, $content);
@@ -47,7 +47,7 @@ class UserDefinedViewRepository
 	public function delete()
 	{
 		if (! $this->exists()) {
-			throw new \Exception("class file not found:{$this->className}");
+			throw new \Exception("class file not found:{$this->code}");
 		}
 		$result = unlink($this->path);
 		if ($result === false) {
@@ -58,7 +58,7 @@ class UserDefinedViewRepository
 	public function require()
 	{
 		if (! $this->exists()) {
-			throw new \Exception("class file not found:{$this->className}");
+			throw new \Exception("class file not found:{$this->code}");
 		}
 		require_once $this->path;
 	}
@@ -72,13 +72,16 @@ class UserDefinedViewRepository
 	}
 	private function exists() : bool
 	{
-		$list = $this->listFiles();
-		Log::info("", ["files" => $list]);
-		return in_array($this->className . ".json", $list);
+		return file_exists($this->path);
 	}
 	private function generateJson()
 	{
-		$content = json_encode($this->view->toArray());
+		$content = json_encode([
+			'name' => $this->view['name'],
+			'description' => $this->view['description'],
+			'list' => $this->view['list'],
+			'detail' => $this->view['detail'],
+		]);
 		return $content;
 	}
 }

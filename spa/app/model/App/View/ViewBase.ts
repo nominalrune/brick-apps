@@ -15,7 +15,6 @@ export default class ViewBase {
 		this.app_code = view.app_code;
 		if (view.list?.content) {
 			this.list = new ListLayout(
-				//@ts-expect-error
 				view.list.content
 			);
 		} else {
@@ -29,7 +28,8 @@ export default class ViewBase {
 			name: this.name,
 			description: this.description,
 			app_code: this.app_code,
-			layout: this.detail.toJSON(),
+			list: this.list.toJSON(),
+			detail: this.detail.toJSON(),
 		};
 	}
 }

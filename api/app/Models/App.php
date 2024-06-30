@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\App\UserDefinedModelClassRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,12 +24,28 @@ class App extends Model
 		'description',
 		'icon',
 		'columns',
-		'contents',
 		'default_view',
 	];
 	protected $casts = [
 		'columns' => "array",//Columns::class,
 	];
+
+	protected function boot()
+	{
+		parent::boot();
+		$this->created(function () {
+			$repository = new UserDefinedModelClassRepository($this);
+			$repository->create();
+		});
+		$this->updated(function () {
+			$repository = new UserDefinedModelClassRepository($this);
+			$repository->update();
+		});
+		$this->deleted(function () {
+			$repository = new UserDefinedModelClassRepository($this);
+			$repository->delete();
+		});
+	}
 	// public function records()
 	// {
 	// 	$query = $this->hasMany(Record::class);
@@ -57,7 +74,7 @@ class App extends Model
 	{
 		return $this->hasOne(View::class, 'code', 'default_view');
 	}
-	public function views(User $user, int $permission = Permission::READ)
+	public function views()
 	{
 		$relation = $this->hasMany(View::class);
 		$query = $relation->getQuery()

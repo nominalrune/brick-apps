@@ -2,6 +2,7 @@
 
 namespace App\Services\App;
 
+use App\Repository\App\ViewRepository;
 use Illuminate\Support\Facades\DB;
 use App\Models\App;
 use Illuminate\Database\Schema\Blueprint;
@@ -32,7 +33,7 @@ class CreateAppService
 		$this->createAppTable($code, $columns);
 		$this->createDefaultView($app, [
 			'name' => '(all)',
-			'code' => "$app->code-all",
+			'code' => "default_view",
 			'description' => 'default view(all records)',
 			'layout' => [[
 					'code' => "{$app->code}-all",
@@ -76,6 +77,7 @@ class CreateAppService
 			'updated_by' => $app->created_by,
 		]);
 		$app->update(['default_view' => $view->code]);
+		$this->createViewJsonFile($view);
 		return $view;
 	}
 	private function createAppTable(string $code, array $columns)
@@ -104,6 +106,11 @@ class CreateAppService
 	{
 		$repository = new UserDefinedModelClassRepository($app);
 		$repository->create();
+	}
+	private function createViewJsonFile(View $view)
+	{
+		$service = new ViewRepository($view);
+		$service->create();
 	}
 
 	private function declareColumn(Blueprint $table, string $name, string $valueType)

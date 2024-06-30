@@ -23,7 +23,6 @@ return new class extends Migration {
 			$table->string('icon', 255);
 			$table->text('description');
 			$table->json('columns');
-			$table->json('layout');
 		});
 	}
 
