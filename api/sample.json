@@ -1,0 +1,46 @@
+{
+    "code":"age-app-all",
+    "list": {
+        "type": "table",
+        "contents": [
+            {
+                "code": "name",
+                "label": "name",
+                "content":"(name)=><div className=\"text-red-600 text-left\">{name} さん</div>"
+            },
+            {
+                "code": "age",
+                "label": "age",
+                "content":"(age)=><>{age} y.o.</>"
+            },
+            {
+                "code": "memo",
+                "label": "memo",
+                "content":"(memo)=><pre>{memo}</pre>"
+            }
+        ]
+    },
+    "detail": {
+        "type": "modal",
+        "layout": [
+            [
+            {
+                "code": "name",
+                "label": "name",
+                "type":"text"
+            },
+            {
+                "code": "age",
+                "label": "age",
+                "type":"number"
+            }
+        ],
+        [
+            {
+                "code": "memo",
+                "label": "memo",
+                "type":"textarea"
+            }
+        ]
+    }
+}
