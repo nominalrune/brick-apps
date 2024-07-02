@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Log;
 class ViewRepository
 {
 	private string $dir;
-	private string $path;
+	private string $file;
 	private string $code;
 	public function __construct(View $view)
 	{
 		$this->dir = dirname($view->file);
 		$this->code = $view->code;
-		$this->path = $view->file;
+		$this->file = $view->file;
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
@@ -26,7 +26,7 @@ class ViewRepository
 			throw new \Exception("view json file already exists: {$this->file}");
 		}
 		$content = $this->generateJson($name, $description, $list, $detail);
-		$result = file_put_contents($this->path, $content);
+		$result = file_put_contents($this->file, $content);
 		if ($result === false) {
 			throw new \Exception("failed to create class file: {$this->file}");
 		}
@@ -35,7 +35,7 @@ class ViewRepository
 	public function upsert(string $name, string $description, array $list, array $detail)
 	{
 		$content = $this->generateJson($name, $description, $list, $detail);
-		$result = file_put_contents($this->path, $content);
+		$result = file_put_contents($this->file, $content);
 		if ($result === false) {
 			throw new \Exception("failed to update class file:{$this->file}");
 		}
@@ -98,15 +98,15 @@ class ViewRepository
 	}
 	private function save(string $content)
 	{
-		$result = file_put_contents($this->path, $content);
+		$result = file_put_contents($this->file, $content);
 		if ($result === false) {
-			throw new \Exception("failed to update class file:{$this->path}");
+			throw new \Exception("failed to update class file:{$this->file}");
 		}
-		return $this->path;
+		return $this->file;
 	}
 	public function loadContent()
 	{
-		$json = file_get_contents($this->path);
+		$json = file_get_contents($this->file);
 		$content = json_decode($json, true);
 		return $content;
 	}

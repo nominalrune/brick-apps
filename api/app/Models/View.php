@@ -19,6 +19,10 @@ class View extends Model
 		'file',
 		'created_by',
 		'updated_by',
+		'name',
+		'description',
+		'list',
+		'detail',
 	];
 	protected $appends = [
 		'name',
@@ -27,9 +31,9 @@ class View extends Model
 		'detail',
 	];
 	protected string|null $name = null;
-	protected string|null $description = null;
-	protected array|null $list = null;
-	protected array|null $detail = null;
+	protected string|null $_description = null;
+	protected array|null $_list = null;
+	protected array|null $_detail = null;
 
 	protected static function boot()
 	{
@@ -38,9 +42,9 @@ class View extends Model
 			$repository = new ViewRepository($view);
 			$content = $repository->loadContent();
 			$view->name = $content['name'];
-			$view->description = $content['description'];
-			$view->list = $content['list'];
-			$view->detail = $content['detail'];
+			$view->_description = $content['description'];
+			$view->_list = $content['list'];
+			$view->_detail = $content['detail'];
 		});
 		self::deleted(function ($view) {
 			$repository = new ViewRepository($view);
@@ -51,16 +55,17 @@ class View extends Model
 	{
 		$repository = new ViewRepository($this);
 		if (is_null($this->name) ||
-			is_null($this->description) ||
-			is_null($this->list) ||
-			is_null($this->detail)) {
+			is_null($this->_description) ||
+			is_null($this->_list) ||
+			is_null($this->_detail)) {
 			throw new \Exception("name, description, list, detail are required");
 		}
-		$repository->upsert($this->name, $this->description, $this->list, $this->detail);
-		unset($this->name);
+		$repository->upsert($this->name, $this->_description, $this->_list, $this->_detail);
+		// unset($this->name);
 		unset($this->description);
 		unset($this->list);
 		unset($this->detail);
+		// dd($this);
 		return parent::save($options);
 	}
 
@@ -72,6 +77,7 @@ class View extends Model
 			},
 			set: function ($value) {
 				$this->name = $value;
+				return $value;
 			},
 		);
 	}
@@ -80,10 +86,10 @@ class View extends Model
 	{
 		return Attribute::make(
 			get: function () {
-				return $this->description;
+				return $this->_description;
 			},
 			set: function ($value) {
-				$this->description = $value;
+				$this->_description = $value;
 			},
 		);
 	}
@@ -92,10 +98,10 @@ class View extends Model
 	{
 		return Attribute::make(
 			get: function () {
-				return $this->list;
+				return $this->_list;
 			},
 			set: function ($value) {
-				$this->list = $value;
+				$this->_list = $value;
 			},
 		);
 	}
@@ -104,10 +110,10 @@ class View extends Model
 	{
 		return Attribute::make(
 			get: function () {
-				return $this->detail;
+				return $this->_detail;
 			},
 			set: function ($value) {
-				$this->detail = $value;
+				$this->_detail = $value;
 			},
 		);
 	}

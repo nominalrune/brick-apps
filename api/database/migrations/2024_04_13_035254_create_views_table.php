@@ -19,6 +19,7 @@ return new class extends Migration {
 			$table->foreignId('updated_by')->nullable()
 				->constrained('users')->onDelete('set null');
 			$table->string('code', 255)->unique();
+			$table->string('name', 255);
 			$table->string('app_code', 255);
 			$table->foreign('app_code')
 				->references('code')->on('apps')

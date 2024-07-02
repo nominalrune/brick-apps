@@ -59,12 +59,12 @@ class DemoSeeder extends Seeder
 				'list' => [
 					'listType' => 'table',
 					'content' => [
-						["code" => "name", "type" => "text", "label" => "name", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
+						["code" => "name", "type" => "text", "label" => "名前", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
 						["code" => "email", "type" => "text", "label" => "email", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
 					],
 				],
 				'detail' => [[
-					["code" => "name", "type" => "text", "label" => "name", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
+					["code" => "name", "type" => "text", "label" => "名前", "rules" => null, "prefix" => "", "suffix" => "さん", "defaultValue" => ""],
 					["code" => "email", "type" => "text", "label" => "email", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
 				]],
 			],
