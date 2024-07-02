@@ -28,61 +28,52 @@ class View extends Model
 		'list',
 		'detail',
 	];
-	protected function boot()
+	protected string|null $name = null;
+	protected string|null $description = null;
+	protected array|null $list = null;
+	protected array|null $detail = null;
+
+	protected static function boot()
 	{
 		parent::boot();
-		$this->created(function () {
-			$repository = new ViewRepository($this->toArray());
-			$repository->create();
-		}
-		);
-		$this->updated(function () {
-			$repository = new ViewRepository($this->toArray());
-			$repository->update();
-		}
-		);
-		$this->deleted(function () {
-			$repository = new ViewRepository($this->toArray());
+		self::retrieved(function ($view) {
+			$repository = new ViewRepository($view);
+			$content = $repository->loadContent();
+			$view->name = $content['name'];
+			$view->description = $content['description'];
+			$view->list = $content['list'];
+			$view->detail = $content['detail'];
+		});
+		self::deleted(function ($view) {
+			$repository = new ViewRepository($view);
 			$repository->delete();
 		});
 	}
-	protected array $_data;
-	protected function data() : Attribute
+	public function save($options = [])
 	{
-		return new Attribute(
-			get: function () {
-				if (is_null($this->_data)) {
-					$this->loadJson($this->path);
-				}
-				return $this->_data;
-			},
-			set: function ($value) {
-				$this->_data = $value;
-			},
-		);
-	}
-	protected function loadJson(string $path)
-	{
-		if (! file_exists($path)) {
-			$this->data = [
-				'name' => '',
-				'description' => '',
-				'list' => [],
-				'detail' => [],
-			];
-			return;
+		$repository = new ViewRepository($this);
+		if (is_null($this->name) ||
+			is_null($this->description) ||
+			is_null($this->list) ||
+			is_null($this->detail)) {
+			throw new \Exception("name, description, list, detail are required");
 		}
-		$this->data = json_decode(file_get_contents($path), true);
+		$repository->upsert($this->name, $this->description, $this->list, $this->detail);
+		unset($this->name);
+		unset($this->description);
+		unset($this->list);
+		unset($this->detail);
+		return parent::save($options);
 	}
 
 	public function name() : Attribute
 	{
 		return Attribute::make(
 			get: function () {
-				return $this->data['name'];
+				return $this->name;
 			},
 			set: function ($value) {
-				$this->data['name'] = $value;
+				$this->name = $value;
 			},
 		);
 	}
@@ -91,10 +82,10 @@ class View extends Model
 	{
 		return Attribute::make(
 			get: function () {
-				return $this->data['description'];
+				return $this->description;
 			},
 			set: function ($value) {
-				$this->data['description'] = $value;
+				$this->description = $value;
 			},
 		);
 	}
@@ -103,10 +94,10 @@ class View extends Model
 	{
 		return Attribute::make(
 			get: function () {
-				return $this->data['list'];
+				return $this->list;
 			},
 			set: function ($value) {
-				$this->data['list'] = $value;
+				$this->list = $value;
 			},
 		);
 	}
@@ -115,10 +106,10 @@ class View extends Model
 	{
 		return Attribute::make(
 			get: function () {
-				return $this->data['detail'];
+				return $this->detail;
 			},
 			set: function ($value) {
-				$this->data['detail'] = $value;
+				$this->detail = $value;
 			},
 		);
 	}

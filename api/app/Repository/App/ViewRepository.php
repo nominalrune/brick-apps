@@ -9,40 +9,81 @@ class ViewRepository
 {
 	private string $dir;
 	private string $path;
-	private array $view;
 	private string $code;
-	public function __construct(array $view)
+	public function __construct(View $view)
 	{
-		$this->view = $view;
-		$this->dir = $view['file'];
-		$this->code = $view['code'];
-		$this->path = $view['file'];
+		$this->dir = dirname($view->file);
+		$this->code = $view->code;
+		$this->path = $view->file;
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
 		}
 	}
-	public function create()
+	public function create(string $name, string $description, array $list, array $detail)
 	{
 		if ($this->exists()) {
 			throw new \Exception("view json file already exists: {$this->path}");
 		}
-		$content = $this->generateJson();
+		$content = $this->generateJson($name, $description, $list, $detail);
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
 			throw new \Exception("failed to create class file: {$this->path}");
 		}
 		return $this->path;
 	}
-	public function update()
+	public function upsert(string $name, string $description, array $list, array $detail)
 	{
-		$this->delete();
-		$content = $this->generateJson();
+		$content = $this->generateJson($name, $description, $list, $detail);
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
 			throw new \Exception("failed to update class file:{$this->path}");
 		}
 		return $this->path;
+	}
+	public function updateName(string $name)
+	{
+		$original = $this->loadContent();
+		$content = $this->generateJson(
+			$name,
+			$original['description'],
+			$original['list'],
+			$original['detail']
+		);
+		return $this->save($content);
+	}
+	public function updateDescription(string $description)
+	{
+		$original = $this->loadContent();
+		$content = $this->generateJson(
+			$original['name'],
+			$description,
+			$original['list'],
+			$original['detail']
+		);
+		return $this->save($content);
+	}
+	public function updateList(array $list)
+	{
+		$original = $this->loadContent();
+		$content = $this->generateJson(
+			$original['name'],
+			$original['description'],
+			$list,
+			$original['detail']
+		);
+		return $this->save($content);
+	}
+	public function updateDetail(array $detail)
+	{
+		$original = $this->loadContent();
+		$content = $this->generateJson(
+			$original['name'],
+			$original['description'],
+			$original['list'],
+			$detail
+		);
+		return $this->save($content);
 	}
 	public function delete()
 	{
@@ -55,12 +96,19 @@ class ViewRepository
 		}
 		return $this->path;
 	}
-	public function require()
+	private function save(string $content)
 	{
-		if (! $this->exists()) {
-			throw new \Exception("class file not found:{$this->code}");
+		$result = file_put_contents($this->path, $content);
+		if ($result === false) {
+			throw new \Exception("failed to update class file:{$this->path}");
 		}
-		require_once $this->path;
+		return $this->path;
+	}
+	public function loadContent()
+	{
+		$json = file_get_contents($this->path);
+		$content = json_decode($json, true);
+		return $content;
 	}
 	private function listFiles() : array
 	{
@@ -74,13 +122,13 @@ class ViewRepository
 	{
 		return file_exists($this->path);
 	}
-	private function generateJson()
+	private function generateJson(string $name, string $description, array $list, array $detail)
 	{
 		$content = json_encode([
-			'name' => $this->view['name'],
-			'description' => $this->view['description'],
-			'list' => $this->view['list'],
-			'detail' => $this->view['detail'],
+			'name' => $name,
+			'description' => $description,
+			'list' => $list,
+			'detail' => $detail,
 		]);
 		return $content;
 	}
