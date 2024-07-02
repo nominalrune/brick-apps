@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Repository\App\UserDefinedModelClassRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,19 +31,19 @@ class App extends Model
 		'columns' => "array",//Columns::class,
 	];
 
-	protected function boot()
+	protected static function boot()
 	{
 		parent::boot();
-		$this->created(function () {
-			$repository = new UserDefinedModelClassRepository($this);
+		static::created(function ($app) {
+			$repository = new UserDefinedModelClassRepository($app);
 			$repository->create();
 		});
-		$this->updated(function () {
-			$repository = new UserDefinedModelClassRepository($this);
+		static::updated(function ($app) {
+			$repository = new UserDefinedModelClassRepository($app);
 			$repository->update();
 		});
-		$this->deleted(function () {
-			$repository = new UserDefinedModelClassRepository($this);
+		static::deleted(function ($app) {
+			$repository = new UserDefinedModelClassRepository($app);
 			$repository->delete();
 		});
 	}
@@ -76,6 +77,7 @@ class App extends Model
 	}
 	public function views()
 	{
+		$user = auth()->user();
 		$relation = $this->hasMany(View::class);
 		$query = $relation->getQuery()
 			->distinct()
@@ -84,7 +86,7 @@ class App extends Model
 			->join('groups', 'view_permissions.group_id', '=', 'groups.id')
 			->join('user_group', 'groups.id', '=', 'user_group.group_id')
 			->where('user_group.user_id', $user->id)
-			->whereRaw("(view_permissions.permission & $permission) = $permission")
+			// ->whereRaw("(view_permissions.permission & $permission) = $permission")
 			->getQuery()
 		;
 		$relation->setQuery($query);
@@ -154,9 +156,13 @@ class App extends Model
 			}
 		);
 	}
+	public function recordQuery() : \Illuminate\Database\Query\Builder
+	{
+		return DB::query()->from($this->code);
+	}
 	public function records()
 	{
-		$classFiler = new \App\Repository\App\UserDefinedModelClassRepository($this);
+		$classFiler = new UserDefinedModelClassRepository($this);
 		// the class will not be autoloaded so manually require it
 		$classFiler->require();
 		$hasMany = $this->hasMany($this->classFullName);

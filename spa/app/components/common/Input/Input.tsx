@@ -13,7 +13,7 @@ type InputProps = {
 	value: any;
 	disabled?: boolean;
 	options?: [label: Exclude<ReactNode, null | undefined>, value: any][];
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['input'], "value" | "onChange">;
 
@@ -23,7 +23,7 @@ type SelectProps = {
 	value: any;
 	disabled?: boolean;
 	options: [label: Exclude<ReactNode, null | undefined>, value: any][];
-	onChange: ({ value, label }: { value: any, label: string; }) => void;
+	onChange?: ({ value, label }: { value: any, label: string; }) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['select'], "value" | "onChange">;
 type TextareaProps = {
@@ -31,7 +31,7 @@ type TextareaProps = {
 	id: string;
 	value: any;
 	disabled?: boolean;
-	onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['textarea'], "value" | "onChange">;
 

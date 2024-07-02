@@ -10,6 +10,7 @@ import Widget from '~/model/App/View/Widget';
 import { DropResult } from 'react-beautiful-dnd';
 import App from '~/model/App/App';
 import NewApp from '~/model/App/NewApp';
+import NewView from '~/model/App/View/NewView';
 interface Props {
 	app: App | NewApp,
 	updateWidget: (position: Position, widget: Widget) => void,
@@ -29,7 +30,7 @@ export default function AppLayoutEdit(props: Props) {
 
 			<div className='col-span-3 flex flex-col'>
 				<AppForm
-					table={props.app.layout.content}
+					table={props.app.defaultView||NewView.blank()}
 					update={props.updateWidget}
 					remove={props.removeWidget}
 				/>

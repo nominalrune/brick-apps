@@ -17,10 +17,8 @@ class View extends Model
 		'app_code',
 		'code',
 		'file',
-		'name',
-		'description',
-		'list',
-		'detail',
+		'created_by',
+		'updated_by',
 	];
 	protected $appends = [
 		'name',

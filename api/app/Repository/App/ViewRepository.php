@@ -23,23 +23,23 @@ class ViewRepository
 	public function create(string $name, string $description, array $list, array $detail)
 	{
 		if ($this->exists()) {
-			throw new \Exception("view json file already exists: {$this->path}");
+			throw new \Exception("view json file already exists: {$this->file}");
 		}
 		$content = $this->generateJson($name, $description, $list, $detail);
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
-			throw new \Exception("failed to create class file: {$this->path}");
+			throw new \Exception("failed to create class file: {$this->file}");
 		}
-		return $this->path;
+		return $this->file;
 	}
 	public function upsert(string $name, string $description, array $list, array $detail)
 	{
 		$content = $this->generateJson($name, $description, $list, $detail);
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
-			throw new \Exception("failed to update class file:{$this->path}");
+			throw new \Exception("failed to update class file:{$this->file}");
 		}
-		return $this->path;
+		return $this->file;
 	}
 	public function updateName(string $name)
 	{
@@ -90,11 +90,11 @@ class ViewRepository
 		if (! $this->exists()) {
 			throw new \Exception("class file not found:{$this->code}");
 		}
-		$result = unlink($this->path);
+		$result = unlink($this->file);
 		if ($result === false) {
-			throw new \Exception("failed to delete class file:{$this->path}");
+			throw new \Exception("failed to delete class file:{$this->file}");
 		}
-		return $this->path;
+		return $this->file;
 	}
 	private function save(string $content)
 	{
@@ -120,7 +120,7 @@ class ViewRepository
 	}
 	private function exists() : bool
 	{
-		return file_exists($this->path);
+		return file_exists($this->file);
 	}
 	private function generateJson(string $name, string $description, array $list, array $detail)
 	{

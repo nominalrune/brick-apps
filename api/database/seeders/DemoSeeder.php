@@ -51,56 +51,28 @@ class DemoSeeder extends Seeder
 			'Test App',
 			'Test App Description',
 			'/icons/record.svg',
-			[["code"=>"name",'valueType'=>'varchar'],["code"=>"email",'valueType'=>'varchar']],
+			[["code" => "name", 'valueType' => 'varchar'], ["code" => "email", 'valueType' => 'varchar']],
 			[
-				'code' => 'test-default', 'name' => 'default',
+				'code' => 'test-default',
+				'name' => 'default',
 				'description' => 'default view',
-				'content' => [[
-					["code"=>"name","type"=>"text","label"=>"name","rules"=>null,"prefix"=>"","suffix"=>"","defaultValue"=>""],
-					["code"=>"email","type"=>"text","label"=>"email","rules"=>null,"prefix"=>"","suffix"=>"","defaultValue"=>""],
+				'list' => [
+					'listType' => 'table',
+					'content' => [
+						["code" => "name", "type" => "text", "label" => "name", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
+						["code" => "email", "type" => "text", "label" => "email", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
+					],
+				],
+				'detail' => [[
+					["code" => "name", "type" => "text", "label" => "name", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
+					["code" => "email", "type" => "text", "label" => "email", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
 				]],
 			],
 			$user
 		);
-		// $app = App::factory()
-		// 	// ->has(AppPermission::factory()->state(fn (array $attributes, App $app) => [
-		// 	// 	'app_code' => $app->code,
-		// 	// 	'group_code' => $group->code,
-		// 	// 	'permission' => Permission::READ | Permission::UPDATE | Permission::DELETE,
-		// 	// ]))
-		// 	->create([
-		// 		'name' => 'Test App',
-		// 		'code' => 'test',
-		// 		'icon' => '/icons/record.svg',
-		// 		'columns' => '[{"code":"name","valueType":"text"}]',
-		// 		'default_view' => null,
-		// 		'created_by' => $user->id,
-		// 		'updated_by' => $user->id,
-		// 	]);
-		// 	Schema::create("app-$app->code", function ($table) {
-		// 		$table->id();
-		// 		$table->string('name');
-		// 		$table->timestamps();
-		// 	});
-		Log::info('App created', ['app' => $app->toArray()]);
-		// $view = View::factory()
-		// 	// ->has(
-		// 	// 	ViewPermission::factory()->state(fn (array $attributes, View $view) => [
-		// 	// 		'view_code' => $view->code,
-		// 	// 		'group_code' => $group->code,
-		// 	// 		'permission' => Permission::READ | Permission::UPDATE | Permission::DELETE,
-		// 	// 	])
-		// 	// )
-		// 	->create([
-		// 		'app_code' => $app->code,
-		// 		'name' => 'Test View',
-		// 		'code' => 'test',
-		// 		'content' => '[["code":"name","type":"text","label":"name","rules":null,"prefix":"","suffix":"","defaultValue":""]]',
-		// 		'created_by' => $user->id,
-		// 		'updated_by' => $user->id,
-		// 	]);
-		// Log::info('View created', ['view' => $view->toArray()]);
-		// $app->default_view = $view->code;
-		// $app->save();
+		$app->recordQuery()->insert([
+			'name' => 'Test Record',
+			'email' => 'example@example.com',
+		]);
 	}
 }

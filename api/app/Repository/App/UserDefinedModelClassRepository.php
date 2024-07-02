@@ -11,13 +11,14 @@ class UserDefinedModelClassRepository
 	private string $path;
 	private App $app;
 	private string $className;
-	public function __construct(App $app, View $view)
+	public function __construct(App $app)
 	{
 		$this->app = $app;
-		$this->dir = app_path('Models/UserDefined');
+		$this->dir = app_path("Models/UserDefined/{$app->code}");
 		$this->className = $app->className;
 		$this->path = $this->dir . '/' . $app->className . '.php';
 		$this->className = $app->className;
+		info("", ["dir" => $this->dir, "path" => $this->path, "className" => $this->className]);
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
@@ -76,8 +77,6 @@ class UserDefinedModelClassRepository
 		$list = $this->listFiles();
 		Log::info("", ["files" => $list]);
 		return in_array($this->className . ".php", $list);
-	}
-	private function generateJson(){
 	}
 	private function generateModel()
 	{

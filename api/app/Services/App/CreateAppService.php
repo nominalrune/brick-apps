@@ -25,32 +25,18 @@ class CreateAppService
 		string $description,
 		string $icon,
 		array $columns,
-		array $layout,
+		array $defaultView,
 		User $creator
 	) {
-		$app = $this->createAppRecord($code, $name, $description, $icon, $columns, $layout, $creator);
-		Log::info('app', ['app' => $app]);
+		$app = $this->createAppRecord($code, $name, $description, $icon, $columns, $creator);
+		info('app', ['app' => $app]);
 		$this->createAppTable($code, $columns);
-		$this->createDefaultView($app, [
-			'name' => '(all)',
-			'code' => "default_view",
-			'description' => 'default view(all records)',
-			'layout' => [[
-					'code' => "{$app->code}-all",
-					'type' => 'table',
-					'suffix' => null,
-					'prefix' => null,
-				collect($columns)->map(function ($column) {
-				return [
-				];
-			})->toArray()]],
-		]);
-		$this->createUserDefinedModelClassFile($app);
+		$this->createDefaultView($app, $defaultView);
 		Log::info('app created', ['app' => $app]);
 
 		return $app;
 	}
-	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, array $layout, User $creator)
+	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, User $creator)
 	{
 		$app = App::create([
 			'code' => $code,
@@ -58,7 +44,6 @@ class CreateAppService
 			'description' => $description,
 			'icon' => $icon,
 			'columns' => $columns,
-			'layout' => $layout,
 			'default_view' => null,
 			'created_by' => $creator->id,
 			'updated_by' => $creator->id,
@@ -69,15 +54,16 @@ class CreateAppService
 	{
 		$view = View::create([
 			'app_code' => $app->code,
-			'name' => $view['name'],
 			'code' => $view['code'],
+			'file' => app_path("Models/UserDefined/{$app->code}/{$view['code']}.json"),
+			'name' => $view['name'],
 			'description' => $view['description'],
-			'layout' => $view['layout'],
+			'list' => $view['list'],
+			'detail' => $view['detail'],
 			'created_by' => $app->created_by,
 			'updated_by' => $app->created_by,
 		]);
 		$app->update(['default_view' => $view->code]);
-		$this->createViewJsonFile($view);
 		return $view;
 	}
 	private function createAppTable(string $code, array $columns)
@@ -101,16 +87,6 @@ class CreateAppService
 				$this->declareColumn($table, $code, $valueType);
 			}
 		});
-	}
-	private function createUserDefinedModelClassFile(App $app)
-	{
-		$repository = new UserDefinedModelClassRepository($app);
-		$repository->create();
-	}
-	private function createViewJsonFile(View $view)
-	{
-		$service = new ViewRepository($view);
-		$service->create();
 	}
 
 	private function declareColumn(Blueprint $table, string $name, string $valueType)

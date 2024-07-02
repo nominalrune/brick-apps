@@ -33,13 +33,12 @@ export default function AppEdit({ app: _app }: Prop) {
 		removeWidget,
 		onDragEnd,
 		save
-	} = useApp(
-		_app ?? new NewApp({ ...NewApp.blank(), columns: [] }));
+	} = useApp(_app ?? NewApp.blank());
 	function handleAppChange(name: string, value: string) {
 		if (name !== "name" && name !== "description" && name !== "icon" && name !== 'code') return;
 		updateApp(name, value);
 	}
-	async function handleSubmit(e: ReactMouseEvent<HTMLButtonElement, MouseEvent>) {
+	async function handleSubmit() {
 		save();
 
 	}
@@ -52,7 +51,7 @@ export default function AppEdit({ app: _app }: Prop) {
 			data={app}
 			update={handleAppChange}
 			onCancel={handleCancel}
-			onSubmit={() => handleSubmit(app)}
+			onSubmit={() => handleSubmit()}
 			onDelete={() => { }}
 		/>
 		<AppLayoutEdit

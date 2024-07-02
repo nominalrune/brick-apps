@@ -41,8 +41,8 @@ class Reset extends Command
 		}
 		$seeder = $this->choice('Which seeder do you want to run?', $this->listSeeders());
 
-		$this->call('migrate:fresh');
 		$this->call('app:clear-user-defined-classes');
+		$this->call('migrate:fresh');
 		$this->call('db:seed', [
 			"--class" => $seeder,
 		]);

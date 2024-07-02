@@ -17,5 +17,5 @@ const Droppable = (prop: { droppableId: string, direction?: Direction, children:
 		{prop.children}
 	</_Droppable>;
 };
-export default Droppable;
+// export default Droppable;
 export {Droppable, Draggable, DragDropContext };

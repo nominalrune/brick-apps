@@ -18,16 +18,18 @@ class ClearUserDefinedClassesCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description';
+	protected $description = 'clear user-defined classes and json files.';
 
 	/**
 	 * Execute the console command.
 	 */
 	public function handle()
 	{
-		array_map('unlink', glob(app_path("Models/UserDefined").'/*.php'));
-		rmdir(app_path("Models/UserDefined"));
-		mkdir(app_path("Models/UserDefined"), 0777, true);
+		$directories = glob(app_path("Models/UserDefined/*"), GLOB_ONLYDIR);
+		foreach ($directories as $directory) {
+			array_map('unlink', glob($directory.'/*'));
+			rmdir($directory);
+		}
 		$this->info("successfully finished the command.");
 		return 0;
 	}

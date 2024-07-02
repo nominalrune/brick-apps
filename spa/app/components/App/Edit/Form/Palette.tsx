@@ -5,9 +5,7 @@ import { InputTypeOption } from '~/model/App/View/InputTypes';
 import { useEffect, useState } from 'react';
 import Column from '~/model/App/Column';
 import Columns from '~/model/App/Columns';
-export default Palette;
-
-function Palette({ items, name }: { items: readonly InputTypeOption[], name: string, }) {
+export default function Palette({ items, name }: { items: readonly InputTypeOption[], name: string, }) {
 	return <Droppable droppableId={name} >
 		{provided => (
 			<div ref={provided.innerRef} {...provided.droppableProps} className='flex flex-col'>

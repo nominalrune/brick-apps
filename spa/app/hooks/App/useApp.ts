@@ -15,32 +15,35 @@ import { useRef } from 'react';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppRepository from '~/repository/App';
 import { useNavigate } from '@remix-run/react';
+import NewView from '~/model/App/View/NewView';
+import View from '~/model/App/View/View';
 
 const isApp = (app: WithoutMethods<App | NewApp>): app is App => app instanceof App;
-const _App = (app: WithoutMethods<AppBase>) => isApp(app) ? new App(app) : new NewApp(app);
+const _App = (app: WithoutMethods<App | NewApp>) => isApp(app) ? new App(app) : new NewApp(app);
+const _View = (view: WithoutMethods<View | NewView>) => view instanceof View ? new View(view) : new NewView(view);
 /**
  * App編集にて、Model/Appの編集を担う
  */
-export default function useApp<T extends AppBase = App | NewApp>(initialAppState: App | NewApp) {
+export default function useApp<T extends App | NewApp = App | NewApp>(initialAppState: App | NewApp) {
 	const [app, setApp] = useState<App | NewApp>(initialAppState);
 	type keyName = 'name' | "description" | 'code' | 'icon' | 'columns';
 	function updateApp<K extends keyName>(key: K, value: T[K]) {
 		setApp(app => _App({ ...app, [key]: value }));
 	}
-	function setLayout(newLayout: AppDetailsLayout) {
-		setApp(app => _App({ ...app, layout: newLayout }));
+	function setLayout(newLayout: DetailLayout|undefined) {
+		setApp(app => _App({ ...app, columns:newLayout?.map(item=>item).flat().map(i=>i.column)??[], defaultView: _View({...app.defaultView, detail:newLayout??new DetailLayout([])}) }));
 	}
 	function insert([x, y]: Position, inputData: Widget) {
-		setLayout(app.layout.insert([x, y], new Widget(inputData)));
+		setLayout(app.defaultView?.detail.insert([x, y], new Widget(inputData)));
 	}
 	function move(from: Position, to: Position) {
-		setLayout(app.layout.move(from, to));
+		setLayout(app.defaultView?.detail.move(from, to));
 	}
 	function updateWidget([x, y]: Position, widget: Widget) {
-		setLayout(app.layout.update([x, y], widget));
+		setLayout(app.defaultView?.detail.update([x, y], widget));
 	}
 	function removeWidget([x, y]: Position) {
-		setLayout(app.layout.remove([x, y]));
+		setLayout(app.defaultView?.detail.remove([x, y]));
 	}
 	function onDragEnd({ draggableId, destination, source }: DropResult) {
 		console.log({ draggableId, destination, source });
@@ -53,12 +56,12 @@ export default function useApp<T extends AppBase = App | NewApp>(initialAppState
 
 		if (source.droppableId === "palette") {
 			const type = inputItems[source.index];
-			const code = type + "-" + (1 + Math.max(0, ...app.layout.content.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite)));
+			const code = type + "-" + (1 + Math.max(0, ...(app.defaultView?.detail.content.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite) ?? [])));
 			insert([destRow, destCol], new Widget({
-				type: "text",
+				type: type,
 				code,
-				label: "",
-				column: { code: "", valueType: "varchar" },
+				label: code,
+				column: { code: code, valueType: "varchar" },
 				defaultValue: "",
 				prefix: "",
 				suffix: "",
@@ -77,7 +80,7 @@ export default function useApp<T extends AppBase = App | NewApp>(initialAppState
 	}
 
 	const navigate = useNavigate();
-	async function save(){
+	async function save() {
 		if (app instanceof NewApp) {
 			if (!confirm(`アプリを作成しますか？`)) { return; }
 			const repo = new AppRepository();

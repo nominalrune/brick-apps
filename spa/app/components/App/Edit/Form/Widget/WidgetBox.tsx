@@ -15,10 +15,11 @@ export default function WidgetBox({ item, index, onConfig, remove }: { item: Wid
 				{...provided.dragHandleProps}
 			>
 				<div className='bg-slate-200 rounded p-1 m-1 cursor-grab'></div>
-				{/* @ts-expect-error attribute が足りない */}
+				{/* @ts-expect-error types are incompatible */}
 				<Input
 					label={item.label || "(no name)"}
 					disabled
+					id={item.code}
 					type={inputType}
 					name={item.code}
 					value={item.defaultValue}

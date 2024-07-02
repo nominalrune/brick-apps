@@ -3,8 +3,10 @@ import Widget from '~/model/App/View/Widget';
 import { useState, type FormEvent } from 'react';
 import WidgetSettingModal from './Widget/WidgetSettingModal';
 import AppFormRow from './Row';
+import View from '~/model/App/View/View';
+import NewView from '~/model/App/View/NewView';
 interface Param {
-	table: Widget[][],
+	table: NewView,
 	update: ([x, y]: Position, value: Widget) => void,
 	remove: ([x, y]: Position) => void,
 }
@@ -24,16 +26,16 @@ export default function AppForm({ table, update, remove }: Param) {
 			onClose={() => setSelectedInput(undefined)}
 			onSubmit={handleConfigChange}
 		/>
-		{table.map((row, i) => <AppFormRow
+		{table.detail.map((row, i) => <AppFormRow
 			key={i}
 			row={row}
-			rowIndex={i}
+			rowIndex={i as number}
 			select={(param) => setSelectedInput(param)}
 			remove={remove}
 		/>)}
 		<AppFormRow
 			row={[]}
-			rowIndex={table.length}
+			rowIndex={table.detail.content.length}
 			select={(param) => setSelectedInput(param)}
 			remove={remove}
 		/>
