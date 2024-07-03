@@ -55,11 +55,11 @@ class CreateAppService
 		$view = View::create([
 			'app_code' => $app->code,
 			'code' => $view['code'],
-			'file' => app_path("Models/UserDefined/{$app->code}/{$view['code']}.json"),
 			'name' => $view['name'],
 			'description' => $view['description'],
 			'list' => $view['list'],
 			'detail' => $view['detail'],
+			'file' => app_path("Models/UserDefined/{$app->code}/{$view['code']}.json"),
 			'created_by' => $app->created_by,
 			'updated_by' => $app->created_by,
 		]);
