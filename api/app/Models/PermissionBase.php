@@ -15,6 +15,11 @@ class PermissionBase extends Model
 		'target_id',
 		'permission'
 	];
+	protected $hidden = [
+		'id',
+		'created_at',
+		'updated_at',
+	];
 	public function groups()
 	{
 		return $this->belongsTo(Group::class, 'group_code', 'code');

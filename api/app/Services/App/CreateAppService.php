@@ -28,26 +28,19 @@ class CreateAppService
 		array $defaultView,
 		User $creator
 	) {
-		$app = $this->createAppRecord($code, $name, $description, $icon, $columns, $creator);
-		info('app', ['app' => $app]);
+		$repository = new UserDefinedModelClassRepository($code);
+		$repository->create($name, $description, $icon, $columns);
 		$this->createAppTable($code, $columns);
+		$app = $this->createAppRecord($code, $name, $creator);
 		$this->createDefaultView($app, $defaultView);
 		Log::info('app created', ['app' => $app]);
-		$repository = new UserDefinedModelClassRepository(
-			$app,
-			
-		);
-		$repository->create();
 		return $app;
 	}
-	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, User $creator)
+	private function createAppRecord(string $code, string $name, User $creator)
 	{
 		$app = App::create([
 			'code' => $code,
 			'name' => $name,
-			'description' => $description,
-			'icon' => $icon,
-			'columns' => $columns,
 			'default_view' => null,
 			'created_by' => $creator->id,
 			'updated_by' => $creator->id,

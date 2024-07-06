@@ -30,6 +30,11 @@ class View extends Model
 		'list',
 		'detail',
 	];
+	protected $hidden = [
+		'id',
+		'created_at',
+		'updated_at',
+	];
 	protected string|null $name = null;
 	protected string|null $_description = null;
 	protected array|null $_list = null;
@@ -41,11 +46,12 @@ class View extends Model
 		self::retrieved(function (View $view) {
 			$repository = new ViewRepository($view);
 			$content = $repository->loadContent();
-			$view->name = $content['name'];
+
 			$view->_description = $content['description'];
 			$view->_list = $content['list'];
 			$view->_detail = $content['detail'];
-			if ($view->hasChanged('name')) {
+			if ($view->name !== $content['name']) {
+				$view->name = $content['name'];
 				$view->save();
 			}
 		});

@@ -14,11 +14,7 @@ class RecordController extends Controller
 	{
 		$app = App::findByCode($app_code)->withView($view_code);
 		// Log::info('records index', ['app' => $app]);
-		$records = $app->records;
-		return response()->json([
-			"app" => $app,
-			"records" => $records,
-		]);
+		return response()->json($app);
 	}
 	public function show(Request $request, string $app_code, string $view_code, int $record_id)
 	{

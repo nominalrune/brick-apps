@@ -11,17 +11,26 @@ class UserDefinedModelClassRepository
 	private string $path;
 	private string $code;
 	private string $className;
-	public function __construct(App $app)
+	public function __construct(string $code)
 	{
-		$this->dir = app_path("Models/UserDefined/{$app->code}");
-		$this->className = $app->className;
-		$this->code = $app->code;
-		$this->path = $this->dir . '/' . $app->className . '.php';
-		$this->className = $app->className;
+		$className = $this->snakeCaseToCamelCase($code);
+		$this->dir = app_path("Models/UserDefined/{$className}");
+		$this->className = $className;
+		$this->code = $code;
+		$this->path = $this->dir . '/' . $className . '.php';
+		$this->className = $className;
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
 		}
+	}
+	private function snakeCaseToCamelCase(string $target)
+	{
+		$words = preg_split("/[\-_\=\+]+/", $target);
+		foreach ($words as $key => $word) {
+			$words[$key] = ucfirst($word);
+		}
+		return implode('', $words);
 	}
 	public function create(
 		string $name,
@@ -33,11 +42,6 @@ class UserDefinedModelClassRepository
 		if ($this->exists()) {
 			throw new \Exception("class file already exists:{$this->className}");
 		}
-		$this->name = $name;
-		$this->description = $description;
-		$this->icon = $icon;
-		$this->columns = $columns;
-
 		$content = $this->generateModel($name, $description, $icon, $columns);
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
@@ -53,11 +57,6 @@ class UserDefinedModelClassRepository
 		)
 	{
 		$this->delete();
-
-		$this->name = $name;
-		$this->description = $description;
-		$this->icon = $icon;
-		$this->columns = $columns;
 
 		$content = $this->generateModel($name, $description, $icon, $columns);
 		$result = file_put_contents($this->path, $content);
@@ -104,14 +103,14 @@ class UserDefinedModelClassRepository
 		string $icon,
 		array $columns)
 	{
-		$fillables = implode(',' . PHP_EOL . '		', array_map(fn ($column) => ("'{$column['code']}'"), $this->app->columns));
+		$fillables = implode(',' . PHP_EOL . '		', array_map(fn ($column) => ("'{$column['code']}'"), $this->columns));
 		$columns = implode(
 			',',
 			array_map(
 				fn (array $col) => (
 					'['. PHP_EOL . '			' . implode(
 						',' . PHP_EOL . '			',
-						array_map(fn (string $value, string $key) => "\"{$key}\" => {$value}", $col, array_keys($col))
+						array_map(fn (string $value, string $key) => "\"{$key}\" => \"{$value}\"", $col, array_keys($col))
 					) . ',' . PHP_EOL . '		]'
 				),
 				$columns
@@ -121,7 +120,7 @@ class UserDefinedModelClassRepository
 <?php
 declare(strict_types=1);
 
-namespace App\Models\UserDefined;
+namespace App\Models\UserDefined\\{$this->className};
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;

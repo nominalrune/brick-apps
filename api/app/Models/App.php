@@ -31,6 +31,11 @@ class App extends Model
 		'columns',
 		'icon',
 	];
+	protected $hidden = [
+		'id',
+		'created_at',
+		'updated_at',
+	];
 
 	protected static function boot()
 	{
@@ -39,24 +44,23 @@ class App extends Model
 			$app->requireClass();
 		});
 	}
-	public function icon() :Attribute
+	public function icon() : Attribute
 	{
 		return new Attribute(function () {
-			// ダメだったらevalを使う？
-			return $this->classFullName::icon;
+			return $this->classFullName::$icon;
 		});
 	}
-	public function description() :Attribute
+	public function description() : Attribute
 	{
 
 		return new Attribute(function () {
-			return $this->classFullName::icon;
+			return $this->classFullName::$description;
 		});
 	}
 	public function columns() : Attribute
 	{
 		return new Attribute(function () {
-			return $this->classFullName::columns;
+			return $this->classFullName::$columns;
 		});
 	}
 	public View $_view;
@@ -158,7 +162,7 @@ class App extends Model
 	{
 		return new Attribute(
 			get: function () {
-				return '\\App\\Models\\UserDefined\\' . $this->className;
+				return '\\App\\Models\\UserDefined\\' . $this->className . '\\' . $this->className;
 			}
 		);
 	}
@@ -168,7 +172,7 @@ class App extends Model
 	}
 	protected function requireClass()
 	{
-		$classFiler = new UserDefinedModelClassRepository($this);
+		$classFiler = new UserDefinedModelClassRepository($this->code);
 		// the class will not be autoloaded so manually require it
 		$classFiler->require();
 	}

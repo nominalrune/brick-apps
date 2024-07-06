@@ -20,4 +20,9 @@ class Profile extends Model
 		'description',
 		'avatar',
 	];
+	protected $hidden = [
+		'id',
+		'created_at',
+		'updated_at',
+	];
 }

@@ -16,4 +16,7 @@ class UserGroup extends Model
 	protected $table = 'user_group';
 	public $timestamps = false;
 	protected $fillable = ['user_id', 'group_id'];
+	protected $hidden = [
+		'id',
+	];
 }
