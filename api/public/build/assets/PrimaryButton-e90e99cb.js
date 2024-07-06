@@ -1,1 +1,0 @@
-import{j as e}from"./app-e8b3b534.js";function n({children:t,className:o,...r}){return e.jsx("button",{className:"inline-flex items-center p-2 px-4 rounded bg-sky-700 text-white hover:bg-sky-600 hover:drop-shadow-md active:bg-sky-400 transition-colors duration-200 "+o,...r,children:t})}export{n as P};

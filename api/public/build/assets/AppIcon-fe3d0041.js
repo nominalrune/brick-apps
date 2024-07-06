@@ -1,1 +1,0 @@
-import{j as r}from"./app-e8b3b534.js";import{i as s}from"./app_icons-2904f611.js";function p({src:o,className:t="w-12 h-12 rounded"}){console.log({src:o,icons:s});const n=s[o]??"http://localhost:8088/icons/mail.webp";return r.jsx("img",{src:n,className:t})}export{p as A};

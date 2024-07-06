@@ -1,1 +1,0 @@
-import{j as e,a as r}from"./app-e8b3b534.js";function o(){return e.jsxs(e.Fragment,{children:[e.jsx(r,{title:"Welcome"}),e.jsx("h1",{children:"Welcome"}),e.jsx("p",{children:'Hello "", welcome to your first Inertia app!'})]})}export{o as default};
