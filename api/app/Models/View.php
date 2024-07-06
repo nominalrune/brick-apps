@@ -38,13 +38,16 @@ class View extends Model
 	protected static function boot()
 	{
 		parent::boot();
-		self::retrieved(function ($view) {
+		self::retrieved(function (View $view) {
 			$repository = new ViewRepository($view);
 			$content = $repository->loadContent();
 			$view->name = $content['name'];
 			$view->_description = $content['description'];
 			$view->_list = $content['list'];
 			$view->_detail = $content['detail'];
+			if ($view->hasChanged('name')) {
+				$view->save();
+			}
 		});
 		self::deleted(function ($view) {
 			$repository = new ViewRepository($view);
