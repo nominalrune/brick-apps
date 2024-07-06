@@ -30,7 +30,7 @@ class AppController extends Controller
 	public function store(StoreRequest $request)
 	{
 		$service = new CreateAppService();
-		$app = $service->createApp(
+		$app = $service->create(
 			$request->code,
 			$request->name,
 			$request->description ?? "",

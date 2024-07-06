@@ -9,37 +9,57 @@ class UserDefinedModelClassRepository
 {
 	private string $dir;
 	private string $path;
-	private App $app;
+	private string $code;
 	private string $className;
 	public function __construct(App $app)
 	{
-		$this->app = $app;
 		$this->dir = app_path("Models/UserDefined/{$app->code}");
 		$this->className = $app->className;
+		$this->code = $app->code;
 		$this->path = $this->dir . '/' . $app->className . '.php';
 		$this->className = $app->className;
-		info("", ["dir" => $this->dir, "path" => $this->path, "className" => $this->className]);
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
 		}
 	}
-	public function create()
+	public function create(
+		string $name,
+		string $description,
+		string $icon,
+		array $columns
+		)
 	{
 		if ($this->exists()) {
 			throw new \Exception("class file already exists:{$this->className}");
 		}
-		$content = $this->generateModel();
+		$this->name = $name;
+		$this->description = $description;
+		$this->icon = $icon;
+		$this->columns = $columns;
+
+		$content = $this->generateModel($name, $description, $icon, $columns);
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
 			throw new \Exception("failed to create class file:{$this->path}");
 		}
 		return $this->path;
 	}
-	public function update()
+	public function update(
+		string $name,
+		string $description,
+		string $icon,
+		array $columns
+		)
 	{
 		$this->delete();
-		$content = $this->generateModel();
+
+		$this->name = $name;
+		$this->description = $description;
+		$this->icon = $icon;
+		$this->columns = $columns;
+
+		$content = $this->generateModel($name, $description, $icon, $columns);
 		$result = file_put_contents($this->path, $content);
 		if ($result === false) {
 			throw new \Exception("failed to update class file:{$this->path}");
@@ -78,9 +98,25 @@ class UserDefinedModelClassRepository
 		Log::info("", ["files" => $list]);
 		return in_array($this->className . ".php", $list);
 	}
-	private function generateModel()
+	private function generateModel(
+		string $name,
+		string $description,
+		string $icon,
+		array $columns)
 	{
-		$fillables = implode(',' . PHP_EOL . '        ', array_map(fn ($column) => ("'{$column['code']}'"), $this->app->columns));
+		$fillables = implode(',' . PHP_EOL . '		', array_map(fn ($column) => ("'{$column['code']}'"), $this->app->columns));
+		$columns = implode(
+			',',
+			array_map(
+				fn (array $col) => (
+					'['. PHP_EOL . '			' . implode(
+						',' . PHP_EOL . '			',
+						array_map(fn (string $value, string $key) => "\"{$key}\" => {$value}", $col, array_keys($col))
+					) . ',' . PHP_EOL . '		]'
+				),
+				$columns
+			)
+		);
 		$content = <<<EOL
 <?php
 declare(strict_types=1);
@@ -92,18 +128,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class {$this->className} extends Model
 {
-    protected \$fillable = [
-        $fillables
-    ];
-    protected \$table = "{$this->app->code}";
-    public function createdBy()
-    {
-        return \$this->belongsTo(User::class);
-    }
-    public function updatedBy()
-    {
-        return \$this->belongsTo(User::class);
-    }
+	protected \$fillable = [
+		$fillables
+	];
+	public \$table = "{$this->code}";
+	public static \$code = "{$this->code}";
+	public static \$name = "{$name}";
+	public static \$description = "{$description}";
+	public static \$icon = "{$icon}";
+	public static \$columns = [
+		{$columns}
+	];
+
+	public function createdBy()
+	{
+		return \$this->belongsTo(User::class);
+	}
+	public function updatedBy()
+	{
+		return \$this->belongsTo(User::class);
+	}
 }
 EOL;
 		return $content;

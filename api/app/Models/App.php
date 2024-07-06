@@ -22,37 +22,43 @@ class App extends Model
 	protected $fillable = [
 		'code',
 		'name',
-		'description',
-		'icon',
-		'columns',
 		'default_view',
 	];
 	protected $casts = [
-		'columns' => "array",//Columns::class,
+	];
+	protected $appends = [
+		'description',
+		'columns',
+		'icon',
 	];
 
 	protected static function boot()
 	{
 		parent::boot();
-		static::created(function ($app) {
-			$repository = new UserDefinedModelClassRepository($app);
-			$repository->create();
-		});
-		static::updated(function ($app) {
-			$repository = new UserDefinedModelClassRepository($app);
-			$repository->update();
-		});
-		static::deleted(function ($app) {
-			$repository = new UserDefinedModelClassRepository($app);
-			$repository->delete();
+		static::retrieved(function (App $app) {
+			$app->requireClass();
 		});
 	}
-	// public function records()
-	// {
-	// 	$query = $this->hasMany(Record::class);
-	// 	$query->setQuery($query->getQuery()->from("app-{$this->code}")->getQuery());
-	// 	return $query;
-	// }
+	public function icon() :Attribute
+	{
+		return new Attribute(function () {
+			// ダメだったらevalを使う？
+			return $this->classFullName::icon;
+		});
+	}
+	public function description() :Attribute
+	{
+
+		return new Attribute(function () {
+			return $this->classFullName::icon;
+		});
+	}
+	public function columns() : Attribute
+	{
+		return new Attribute(function () {
+			return $this->classFullName::columns;
+		});
+	}
 	public View $_view;
 	public function view() : Attribute
 	{
@@ -160,11 +166,14 @@ class App extends Model
 	{
 		return DB::query()->from($this->code);
 	}
-	public function records()
+	protected function requireClass()
 	{
 		$classFiler = new UserDefinedModelClassRepository($this);
 		// the class will not be autoloaded so manually require it
 		$classFiler->require();
+	}
+	public function records()
+	{
 		$hasMany = $this->hasMany($this->classFullName);
 		$hasMany->setQuery(DB::query()->from($this->code));
 		return $hasMany;

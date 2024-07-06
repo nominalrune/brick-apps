@@ -19,7 +19,7 @@ class CreateAppService
      * @param string $description
      * @param array $form
      */
-    public function createApp(string $code, string $name, string $description, string $icon, array $form, array $form_keys)
+    public function create(string $code, string $name, string $description, string $icon, array $form, array $form_keys)
     {
         $app = $this->createAppRecord($code, $name, $description, $icon, $form, $form_keys);
         $this->createAppTable($code, $form);

@@ -33,7 +33,7 @@ class AppController extends Controller
     public function store(UpdateRequest $request)
     {
         $service = new CreateAppService();
-        $app = $service->createApp($request->code, $request->name, $request->description ?? "", $request->icon, $request->form, $request->form_keys);
+        $app = $service->create($request->code, $request->name, $request->description ?? "", $request->icon, $request->form, $request->form_keys);
         return to_route("record.index", [
             "app_code" => $app->code
         ]);

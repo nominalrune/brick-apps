@@ -46,7 +46,7 @@ class DemoSeeder extends Seeder
 			'group_id' => $group->id,
 		]);
 		$appService = new CreateAppService();
-		$app = $appService->createApp(
+		$app = $appService->create(
 			'test',
 			'Test App',
 			'Test App Description',

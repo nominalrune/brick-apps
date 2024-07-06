@@ -19,7 +19,7 @@ class CreateAppService
 	}
 	/**
 	 */
-	public function createApp(
+	public function create(
 		string $code,
 		string $name,
 		string $description,
@@ -33,7 +33,11 @@ class CreateAppService
 		$this->createAppTable($code, $columns);
 		$this->createDefaultView($app, $defaultView);
 		Log::info('app created', ['app' => $app]);
-
+		$repository = new UserDefinedModelClassRepository(
+			$app,
+			
+		);
+		$repository->create();
 		return $app;
 	}
 	private function createAppRecord(string $code, string $name, string $description, string $icon, array $columns, User $creator)
