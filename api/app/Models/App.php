@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Repository\App\UserDefinedModelClassRepository;
+use App\Services\Util\StringUtil;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -149,20 +150,17 @@ class App extends Model
 		return $relation;
 	}
 
-
-
-
 	public function className() : Attribute
 	{
 		return new Attribute(function () {
-			return $this->snakeCaseToCamelCase($this->code);
+			return StringUtil::snakeToCamel($this->code);
 		});
 	}
 	public function classFullName() : Attribute
 	{
 		return new Attribute(
 			get: function () {
-				return '\\App\\Models\\UserDefined\\' . $this->className . '\\' . $this->className;
+				return "\\App\\Models\\UserDefined\\$this->className\\$this->className";
 			}
 		);
 	}
@@ -189,17 +187,5 @@ class App extends Model
 			throw new \Exception("app not found with code {$appCode}");
 		}
 		return $app;
-	}
-
-	/**
-	 * e.g. from user_group to UserGroup
-	 */
-	private function snakeCaseToCamelCase(string $target)
-	{
-		$words = preg_split("/[\-_\=\+]+/", $target);
-		foreach ($words as $key => $word) {
-			$words[$key] = ucfirst($word);
-		}
-		return implode('', $words);
 	}
 }
