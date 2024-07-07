@@ -21,8 +21,7 @@ export default class Calendar {
 	}
 	static isCalendar(item: unknown): item is Calendar {
 		return (
-			typeof item === "object"
-			&& item !== null
+			item instanceof Object
 			&& "listType" in item
 			&& item["listType"] === "calendar"
 		);

@@ -20,8 +20,7 @@ export default class Cards {
 	}
 	static isCards(item: unknown): item is Cards {
 		return (
-			typeof item === "object"
-			&& item !== null
+			item instanceof Object
 			&& "listType" in item
 			&& item["listType"] === "cards"
 		);

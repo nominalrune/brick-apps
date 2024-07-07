@@ -15,8 +15,7 @@ export default class Table {
 	}
 	static isTable(item: unknown): item is Table {
 		return (
-			typeof item === "object"
-			&& item !== null
+			item instanceof Object
 			&& "listType" in item
 			&& item["listType"] === "table"
 		);
