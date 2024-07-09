@@ -1,16 +1,13 @@
 import { ReactNode } from 'react';
 import { InputTypeOption, ReferringAppCode } from './InputTypes';
-import JsValueType from '../JsValueType';
-import ValueTypeOption from '../ValueTypeOption';
-import Column from '../Column';
 
-export default interface ViewItemData<U extends any = any> {
+export default interface ViewItemData {
 	code: string;
 	type: InputTypeOption;
 	label: string;
 	prefix?: string;
 	suffix?: string;
-	defaultValue: U | undefined;
+	defaultValue: unknown;
 	referringAppCode?: ReferringAppCode;
 	rules?: {
 		required?: boolean,

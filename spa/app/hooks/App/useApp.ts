@@ -1,26 +1,30 @@
-import Column from '~/model/App/Column';
 import { useState } from 'react';
 import NewApp from '~/model/App/NewApp';
 import App from '~/model/App/App';
-import AppBase from '~/model/App/AppBase';
 import WithoutMethods from '~/model/common/WithoutMethods';
 import Widget from '~/model/App/View/Widget';
 import Position from '~/model/Position';
 import { DropResult } from 'react-beautiful-dnd';
 import DetailLayout from '~/model/App/View/DetailLayout';
-import Columns from '~/model/App/Columns';
-import ColumnCode from '~/model/App/ColumnCode';
-import { useEffect } from 'react';
-import { useRef } from 'react';
 import { inputItems } from '~/model/App/View/InputTypes';
 import AppRepository from '~/repository/App';
 import { useNavigate } from '@remix-run/react';
 import NewView from '~/model/App/View/NewView';
 import View from '~/model/App/View/View';
 
-const isApp = (app: WithoutMethods<App | NewApp>): app is App => app instanceof App;
-const _App = (app: WithoutMethods<App | NewApp>) => isApp(app) ? new App(app) : new NewApp(app);
-const _View = (view: WithoutMethods<View | NewView>) => view instanceof View ? new View(view) : new NewView(view);
+// TODO この判定式おかしいので修正。WithoutMethods<App | NewApp> は App でも NewApp でもない型を受け入れる
+const isApp = (app: WithoutMethods<App | NewApp>): app is WithoutMethods<App> => app instanceof App;
+const isNewApp = (app: WithoutMethods<App | NewApp>): app is WithoutMethods<NewApp> => app instanceof NewApp;
+const _App = (app: WithoutMethods<App | NewApp>) => {
+	if (isApp(app)) { return new App(app); }
+	if (isNewApp(app)) { return new NewApp(app); }
+	throw new Error('Invalid app instance given');
+};
+const _View = (view: WithoutMethods<View | NewView>) => {
+	if(view instanceof View){return new View(view);}
+	if(view instanceof NewView){return new NewView(view);}
+	throw new Error('Invalid view instance given');
+};
 /**
  * App編集にて、Model/Appの編集を担う
  */
@@ -30,8 +34,15 @@ export default function useApp<T extends App | NewApp = App | NewApp>(initialApp
 	function updateApp<K extends keyName>(key: K, value: T[K]) {
 		setApp(app => _App({ ...app, [key]: value }));
 	}
-	function setLayout(newLayout: DetailLayout|undefined) {
-		setApp(app => _App({ ...app, columns:newLayout?.map(item=>item).flat().map(i=>i.column)??[], defaultView: _View({...app.defaultView, detail:newLayout??new DetailLayout([])}) }));
+	function setLayout(newLayout: DetailLayout | undefined) {
+		setApp(app => _App({
+			...app,
+			columns: newLayout?.map(item => item).flat().map(i => i.column) ?? [],
+			defaultView: _View({
+				...app.defaultView,
+				detail: newLayout ?? new DetailLayout([])
+			})
+		}));
 	}
 	function insert([x, y]: Position, inputData: Widget) {
 		setLayout(app.defaultView?.detail.insert([x, y], new Widget(inputData)));
@@ -66,6 +77,7 @@ export default function useApp<T extends App | NewApp = App | NewApp>(initialApp
 				prefix: "",
 				suffix: "",
 				rules: undefined,
+				error: '',
 			}));
 			return;
 		}

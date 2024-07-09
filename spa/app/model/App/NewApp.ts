@@ -4,9 +4,9 @@ import NewView from './View/NewView';
 
 export default class NewApp extends AppBase {
 	public defaultView: NewView;
-	constructor(app: WithoutMethods<NewApp> & { defaultView: NewView; }) {
+	constructor(app: WithoutMethods<NewApp>) {
 		super(app);
-		this.defaultView = app.defaultView;
+		this.defaultView = new NewView(app.defaultView);
 	}
 	toJSON() {
 		return {

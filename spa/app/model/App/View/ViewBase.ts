@@ -13,14 +13,8 @@ export default class ViewBase {
 		this.name = view.name;
 		this.description = view.description;
 		this.app_code = view.app_code;
-		if (view.list?.content) {
-			this.list = new ListLayout(
-				view.list.content
-			);
-		} else {
-			throw new Error("Invalid argument. Given argument is not an array. (list)");
-		}
-		this.detail = new DetailLayout(view.detail?.content ?? []);
+		this.list = new ListLayout(view.list.content);
+		this.detail = new DetailLayout(view.detail.content);
 	}
 	toJSON() {
 		return {

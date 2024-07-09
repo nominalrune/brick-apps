@@ -1,11 +1,12 @@
 import Widget from '~/model/App/View/Widget';
 import Position from '~/model/Position';
+import WithoutMethods from '~/model/common/WithoutMethods';
 
 export default class DetailLayout {
 	public readonly content: Widget[][];
-	constructor(_content: Widget[][]) {
-		if(!Array.isArray(_content)) throw new Error("Invalid argument. Given argument is not an array.");
-		this.content = _content.filter(row => row.length !== 0);
+	constructor(content: WithoutMethods<Widget>[][]) {
+		if (!Array.isArray(content)) throw new Error("Invalid argument. Given argument is not an array.");
+		this.content = content.filter(row => row.length !== 0).map(arr => arr.map(i => new Widget(i)));
 	}
 	map<T>(callbackfn: (inputs: Widget[], i?: number, arr?: Widget[][]) => T) {
 		return this.content.map(callbackfn);

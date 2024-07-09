@@ -4,7 +4,6 @@ import Position from '~/model/Position';
 import Widget from '~/model/App/View/Widget';
 import { DropResult } from 'react-beautiful-dnd';
 import Column from '~/model/App/Column';
-import Columns from '~/model/App/Columns';
 import ColumnCode from '~/model/App/ColumnCode';
 
 /**
@@ -14,7 +13,7 @@ import ColumnCode from '~/model/App/ColumnCode';
  * ViewContentのitemsはcolumnsに依存
  * columnが変更になると、持ってるcolumnsも変わる。
  */
-export default function useViewContent(columns: Columns, initialLayout?: DetailLayout) {
+export default function useViewContent(columns: Column[], initialLayout?: DetailLayout) {
 	const [prevColumns, setPrev] = useState(columns);
 	const [content, setContent] = useState<DetailLayout>(initialLayout ?? new DetailLayout([]));
 	useEffect(() => {
@@ -26,7 +25,7 @@ export default function useViewContent(columns: Columns, initialLayout?: DetailL
 	 * 何かもっといい方法ないかしら。
 	 *
 	 */
-	function onColumnsUpdated(newColumns: Columns) {
+	function onColumnsUpdated(newColumns: Column[]) {
 		const changed: { old: ColumnCode, new: Column; }[] = [];
 		const removed: ColumnCode[] = [];
 		prevColumns.forEach((oldC, i) => {
@@ -58,7 +57,7 @@ export default function useViewContent(columns: Columns, initialLayout?: DetailL
 	}
 	function insert([x, y]: Position, inputData: Widget) {
 		setContent(content.insert([x, y], new Widget(inputData)));
-		
+
 	}
 	function move(from: Position, to: Position) {
 		setContent(table => table.move(from, to));
@@ -81,7 +80,7 @@ export default function useViewContent(columns: Columns, initialLayout?: DetailL
 			const column = columns[source.index];
 			if (!column || !column.code) { return; }
 			const code = column.code;
-			const newItem = new Widget({ type: "text", code, label: column.code, column, defaultValue: "", prefix: "", suffix: "", rules: undefined, });
+			const newItem = new Widget({ type: "text", code, label: column.code, column, defaultValue: "", prefix: "", suffix: "", rules: undefined, error: '', });
 			insert([destRow, destCol], newItem);
 			return;
 		}

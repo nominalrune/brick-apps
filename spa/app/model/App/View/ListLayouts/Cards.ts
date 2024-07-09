@@ -1,5 +1,4 @@
 import Widget from '~/model/App/View/Widget';
-import Position from '~/model/Position';
 
 /**
  * defines List view.

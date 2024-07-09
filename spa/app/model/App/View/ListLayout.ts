@@ -1,10 +1,6 @@
-import Widget from '~/model/App/View/Widget';
-import Position from '~/model/Position';
 import Cards from './ListLayouts/Cards';
 import Calendar from './ListLayouts/Calendar';
 import Table from './ListLayouts/Table';
-import WithoutMethods from '~/model/common/WithoutMethods';
-
 
 /**
  * defines List view.

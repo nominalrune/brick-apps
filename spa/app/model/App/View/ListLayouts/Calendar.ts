@@ -1,8 +1,6 @@
-import Widget from '~/model/App/View/Widget';
-import Position from '~/model/Position';
-
 /**
- *  */
+ *
+ */
 export default class Calendar {
 	public readonly listType:"calendar" = "calendar";
 	constructor(

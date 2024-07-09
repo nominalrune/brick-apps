@@ -1,8 +1,5 @@
 import WithoutMethods from '../common/WithoutMethods';
-import Columns from './Columns';
-import ViewBase from './View/ViewBase';
-import DetailLayout from './View/DetailLayout';
-import Widget from './View/Widget';
+import Column from './Column';
 
 export default class AppBase {
 	public name: string;
@@ -10,7 +7,7 @@ export default class AppBase {
 	public code: string;
 	public icon: string;
 	/** a set of DB columns. can be renamed or removed. Note that removed item just turn to be null and keeps its place in the array */
-	public columns: Columns;
+	public columns: Column[];
 	public archived_at?: Date | null;
 	constructor(app: WithoutMethods<AppBase>) {
 		this.name = app.name;
