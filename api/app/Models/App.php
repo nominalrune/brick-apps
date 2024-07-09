@@ -33,7 +33,6 @@ class App extends Model
 		'icon',
 	];
 	protected $hidden = [
-		'id',
 		'created_at',
 		'updated_at',
 	];

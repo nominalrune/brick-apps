@@ -31,7 +31,6 @@ class View extends Model
 		'detail',
 	];
 	protected $hidden = [
-		'id',
 		'created_at',
 		'updated_at',
 	];
