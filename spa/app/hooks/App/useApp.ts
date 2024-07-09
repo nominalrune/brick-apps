@@ -11,50 +11,65 @@ import AppRepository from '~/repository/App';
 import { useNavigate } from '@remix-run/react';
 import NewView from '~/model/App/View/NewView';
 import View from '~/model/App/View/View';
+import AppWithView from '~/model/App/AppWithView';
+import AppData from '~/model/App/AppData';
+import { is, validate } from 'typia';
+import Table from '~/model/App/View/ListLayouts/Table';
 
-// TODO この判定式おかしいので修正。WithoutMethods<App | NewApp> は App でも NewApp でもない型を受け入れる
-const isApp = (app: WithoutMethods<App | NewApp>): app is WithoutMethods<App> => app instanceof App;
-const isNewApp = (app: WithoutMethods<App | NewApp>): app is WithoutMethods<NewApp> => app instanceof NewApp;
-const _App = (app: WithoutMethods<App | NewApp>) => {
-	if (isApp(app)) { return new App(app); }
-	if (isNewApp(app)) { return new NewApp(app); }
+type _App = WithoutMethods<AppWithView | NewApp>;
+function _App(app: _App) {
+	if (is<WithoutMethods<AppWithView>>(app)) { return new AppWithView(app, app.view); }
+	if (is<WithoutMethods<NewApp>>(app)) { return new NewApp(app); }
 	throw new Error('Invalid app instance given');
 };
+
 const _View = (view: WithoutMethods<View | NewView>) => {
-	if(view instanceof View){return new View(view);}
-	if(view instanceof NewView){return new NewView(view);}
-	throw new Error('Invalid view instance given');
+	if (is<WithoutMethods<View>>(view)) { return new View(view); }
+	if (is<WithoutMethods<NewView>>(view)) { return new NewView(view); }
+	const result = validate<WithoutMethods<View | NewView>>(view);
+	throw new Error(`Invalid view instance given. ${result.errors.map((e, i) => `${i}. ${e.path}:${e.expected} expected, ${e.value} given`)}`);
 };
+
 /**
  * App編集にて、Model/Appの編集を担う
  */
-export default function useApp<T extends App | NewApp = App | NewApp>(initialAppState: App | NewApp) {
-	const [app, setApp] = useState<App | NewApp>(initialAppState);
+export default function useApp(initialAppState: AppWithView | NewApp) {
+	const [app, setApp] = useState<AppWithView | NewApp>(initialAppState);
 	type keyName = 'name' | "description" | 'code' | 'icon' | 'columns';
-	function updateApp<K extends keyName>(key: K, value: T[K]) {
+	function updateApp<K extends keyName>(key: K, value: _App[K]) {
 		setApp(app => _App({ ...app, [key]: value }));
 	}
 	function setLayout(newLayout: DetailLayout | undefined) {
 		setApp(app => _App({
 			...app,
 			columns: newLayout?.map(item => item).flat().map(i => i.column) ?? [],
-			defaultView: _View({
-				...app.defaultView,
+			view: app.view ? _View({
+				...app.view,
 				detail: newLayout ?? new DetailLayout([])
-			})
+			}) : new NewView({
+				name: "new view",
+				code: "new-view",
+				app_code: app.code,
+				description: "",
+				detail: newLayout ?? new DetailLayout([]),
+				list: {
+					listType: "table",
+					content: new Table([])
+				},
+			}),
 		}));
 	}
 	function insert([x, y]: Position, inputData: Widget) {
-		setLayout(app.defaultView?.detail.insert([x, y], new Widget(inputData)));
+		setLayout(app.view?.detail.insert([x, y], new Widget(inputData)));
 	}
 	function move(from: Position, to: Position) {
-		setLayout(app.defaultView?.detail.move(from, to));
+		setLayout(app.view?.detail.move(from, to));
 	}
 	function updateWidget([x, y]: Position, widget: Widget) {
-		setLayout(app.defaultView?.detail.update([x, y], widget));
+		setLayout(app.view?.detail.update([x, y], widget));
 	}
 	function removeWidget([x, y]: Position) {
-		setLayout(app.defaultView?.detail.remove([x, y]));
+		setLayout(app.view?.detail.remove([x, y]));
 	}
 	function onDragEnd({ draggableId, destination, source }: DropResult) {
 		console.log({ draggableId, destination, source });
@@ -67,7 +82,7 @@ export default function useApp<T extends App | NewApp = App | NewApp>(initialApp
 
 		if (source.droppableId === "palette") {
 			const type = inputItems[source.index];
-			const code = type + "-" + (1 + Math.max(0, ...(app.defaultView?.detail.content.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite) ?? [])));
+			const code = type + "-" + (1 + Math.max(0, ...(app.view?.detail.content.flat().map(item => Number(item.code.split("-").at(-1))).filter(Number.isFinite) ?? [])));
 			insert([destRow, destCol], new Widget({
 				type: type,
 				code,

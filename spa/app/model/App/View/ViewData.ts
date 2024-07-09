@@ -8,7 +8,5 @@ export default interface ViewData {
 	description: string;
 	list: { listType: string, content: unknown[]; };
 	detail: ViewItemData[][];
-	created_at: string;
-	updated_at: string;
 	archived_at: string | null;
 }

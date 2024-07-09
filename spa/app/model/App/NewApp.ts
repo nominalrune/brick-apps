@@ -3,15 +3,15 @@ import AppBase from './AppBase';
 import NewView from './View/NewView';
 
 export default class NewApp extends AppBase {
-	public defaultView: NewView;
+	public view: NewView;
 	constructor(app: WithoutMethods<NewApp>) {
 		super(app);
-		this.defaultView = new NewView(app.defaultView);
+		this.view = new NewView(app.view);
 	}
 	toJSON() {
 		return {
 			...super.toJSON(),
-			defaultView: this.defaultView.toJSON(),
+			view: this.view.toJSON(),
 		};
 	}
 	static blank() {
@@ -22,7 +22,7 @@ export default class NewApp extends AppBase {
 			icon: '',
 			columns: [],
 			archived_at: null,
-			defaultView: NewView.blank(),
+			view: NewView.blank(),
 		});
 	}
 }

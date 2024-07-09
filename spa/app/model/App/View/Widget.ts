@@ -4,7 +4,6 @@ import ViewItemData from './ViewItemData';
 import { InputTypeOption, } from './InputTypes';
 import WithoutMethods from '~/model/common/WithoutMethods';
 import Column from '../Column';
-import Columns from '../Columns';
 export default class Widget implements ViewItemData {
 	private _error = "";
 	get error() { return this._error; }

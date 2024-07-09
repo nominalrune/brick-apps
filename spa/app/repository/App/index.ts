@@ -32,7 +32,7 @@ export default class AppRepository extends RepositoryBase<NewApp, App> {
 		return App.fromData(data);
 	}
 	async createWithView(app: NewApp, view: NewView) {
-		const data = await super.create(new NewApp({...app, defaultView: view}));
+		const data = await super.create(new NewApp({...app, view: view}));
 		return App.fromData(data);
 	}
 	async update(app: App) {
