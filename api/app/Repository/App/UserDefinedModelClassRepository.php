@@ -3,6 +3,7 @@ namespace App\Repository\App;
 
 use App\Models\App;
 use App\Models\View;
+use App\Services\Util\StringUtil;
 use Illuminate\Support\Facades\Log;
 
 class UserDefinedModelClassRepository
@@ -13,24 +14,15 @@ class UserDefinedModelClassRepository
 	private string $className;
 	public function __construct(string $code)
 	{
-		$className = $this->snakeCaseToCamelCase($code);
-		$this->dir = app_path("Models/UserDefined/{$className}");
+		$className = StringUtil::snakeToCamel($code);
 		$this->className = $className;
+		$this->dir = app_path("Models/UserDefined/{$className}");
 		$this->code = $code;
 		$this->path = $this->dir . '/' . $className . '.php';
-		$this->className = $className;
 
 		if (! file_exists($this->dir)) {
 			mkdir($this->dir, 0777, true);
 		}
-	}
-	private function snakeCaseToCamelCase(string $target)
-	{
-		$words = preg_split("/[\-_\=\+]+/", $target);
-		foreach ($words as $key => $word) {
-			$words[$key] = ucfirst($word);
-		}
-		return implode('', $words);
 	}
 	public function create(
 		string $name,
