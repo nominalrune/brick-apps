@@ -95,7 +95,7 @@ class UserDefinedModelClassRepository
 		string $icon,
 		array $columns)
 	{
-		$fillables = implode(',' . PHP_EOL . '		', array_map(fn ($column) => ("'{$column['code']}'"), $this->columns));
+		$fillables = implode(',' . PHP_EOL . '		', array_map(fn ($column) => ("'{$column['code']}'"), $columns));
 		$columns = implode(
 			',',
 			array_map(
