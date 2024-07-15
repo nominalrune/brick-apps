@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\App;
 use App\Models\User;
 use App\Services\App\CreateAppService;
+use App\Services\App\DeleteAppService;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -119,5 +120,10 @@ abstract class TestCase extends BaseTestCase
 			],
 			creator: $this->userA,
 		);
+	}
+	protected function tearDown() : void
+	{
+		DeleteAppService::delete($this->appA);
+		DeleteAppService::delete($this->appB);
 	}
 }
