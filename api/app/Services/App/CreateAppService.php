@@ -56,7 +56,7 @@ class CreateAppService
 			'description' => $view['description'],
 			'list' => $view['list'],
 			'detail' => $view['detail'],
-			'file' => app_path("Models/UserDefined/{$app->code}/{$view['code']}.json"),
+			'file' => app_path("Models/UserDefined/{$app->recordClassName}/{$view['code']}.json"),
 			'created_by' => $app->created_by,
 			'updated_by' => $app->created_by,
 		]);

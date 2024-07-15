@@ -47,20 +47,19 @@ class App extends Model
 	public function icon() : Attribute
 	{
 		return new Attribute(function () {
-			return $this->classFullName::$icon;
+			return $this->recordClass::$icon;
 		});
 	}
 	public function description() : Attribute
 	{
-
 		return new Attribute(function () {
-			return $this->classFullName::$description;
+			return $this->recordClass::$description;
 		});
 	}
 	public function columns() : Attribute
 	{
 		return new Attribute(function () {
-			return $this->classFullName::$columns;
+			return $this->recordClass::$columns;
 		});
 	}
 	public View $_view;
@@ -70,16 +69,19 @@ class App extends Model
 			get: function () {
 				return $this->_view;
 			},
+			set: function ($view) {
+				$this->_view = $view;
+			}
 		);
 	}
 	public function withView(?string $view_code)
 	{
 		if (! is_null($view_code)) {
-			$this->_view = View::where('code', $view_code)->first();
+			$this->view = View::where('code', $view_code)->first();
 		} else {
-			$this->_view = $this->defaultView;
+			$this->view = $this->defaultView;
 		}
-		return $this->setAppends(['view']);
+		return $this->setAppends([...$this->appends, 'view']);
 	}
 	public function defaultView()
 	{
@@ -149,17 +151,17 @@ class App extends Model
 		return $relation;
 	}
 
-	public function className() : Attribute
+	public function recordClassName() : Attribute
 	{
 		return new Attribute(function () {
-			return StringUtil::snakeToCamel($this->code);
+			return StringUtil::snakeToCamel($this->code ?? '');
 		});
 	}
-	public function classFullName() : Attribute
+	public function recordClass() : Attribute
 	{
 		return new Attribute(
 			get: function () {
-				return "\\App\\Models\\UserDefined\\$this->className\\$this->className";
+				return "\\App\\Models\\UserDefined\\$this->recordClassName\\$this->recordClassName";
 			}
 		);
 	}
@@ -175,9 +177,20 @@ class App extends Model
 	}
 	public function records()
 	{
-		$hasMany = $this->hasMany($this->classFullName);
+		info('records method', ['app' => $this]);
+		// return new \Illuminate\Database\Eloquent\Relations\HasMany(
+		// 	$this->recordClass->query(),
+		// 	$this,
+		// 	"{$this->code}.id",
+		// 	'id'
+		// );
+		$hasMany = $this->hasMany($this->recordClass);
 		$hasMany->setQuery(DB::query()->from($this->code));
 		return $hasMany;
+		// return DB::query()->from($this->code);
+		// return $this->newHasMany(
+		//     DB::query()->from($this->code), $this, $this->code.'.'.$foreignKey, $localKey
+		// );
 	}
 	public static function findByCode(string $appCode) : App
 	{

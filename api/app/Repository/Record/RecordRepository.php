@@ -14,7 +14,7 @@ class RecordRepository
 	private Builder $table;
 	public function __construct(App $app)
 	{
-		$tableName = "app-$app->code";
+		$tableName = $app->code;
 		$this->table = DB::table($tableName);
 	}
 	public function get(int $id)

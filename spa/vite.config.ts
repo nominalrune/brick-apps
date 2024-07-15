@@ -7,7 +7,7 @@ export default defineConfig({
     remix({
       ssr: false,
     }),
-    tsconfigPaths(),
 	UnpluginTypia(),
+    tsconfigPaths(),
   ],
 });

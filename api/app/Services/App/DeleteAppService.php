@@ -25,7 +25,7 @@ class DeleteAppService{
         $connection->getSchemaBuilder()->dropIfExists($code);
     }
     private function deleteUserDefinedModelClassFile(AppModel $app){
-		$path = app_path('Models/UserDefined/' . $app->className . '.php');
+		$path = app_path('Models/UserDefined/' . $app->recordClassName . '.php');
 		if (file_exists($path)) {
 			unlink($path);
 		}

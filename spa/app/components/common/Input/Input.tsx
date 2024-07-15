@@ -12,7 +12,7 @@ type InputProps = {
 	id: string;
 	value: any;
 	disabled?: boolean;
-	options?: [label: Exclude<ReactNode, null | undefined>, value: any][];
+	options?: ([value: string | number] | [label: Exclude<ReactNode, null | undefined>, value: any])[];
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['input'], "value" | "onChange">;
@@ -22,7 +22,7 @@ type SelectProps = {
 	id: string;
 	value: any;
 	disabled?: boolean;
-	options: [label: Exclude<ReactNode, null | undefined>, value: any][];
+	options: ([value: string|number] | [label: Exclude<ReactNode, null | undefined>, value: any])[];
 	onChange?: ({ value, label }: { value: any, label: string; }) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['select'], "value" | "onChange">;
@@ -35,7 +35,7 @@ type TextareaProps = {
 	className?: string;
 } & Omit<JSX.IntrinsicElements['textarea'], "value" | "onChange">;
 
-export default function Input(props: LabelProps & (InputProps | SelectProps | TextareaProps)) {
+export default function Input<T extends InputType | "select" | "textarea">(props: { type: T; } & LabelProps & (T extends "select" ? SelectProps : T extends "textarea" ? TextareaProps : InputProps)) {
 	const _id = useId();
 	return <div className="text-nowrap">
 		<label htmlFor={_id}>{props.label}</label>
@@ -78,7 +78,7 @@ function Textarea({ props }: { props: Omit<TextareaProps, "type" | "options">; }
 		const target = e.target;
 		target.style.height = "auto";
 		target.style.height = `calc(${target.scrollHeight}px + 0.5rem)`;
-		props.onChange(e);
+		props.onChange && props.onChange(e);
 	}
 	return <>
 		<textarea

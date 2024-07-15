@@ -8,7 +8,7 @@ export default class RecordRepository extends RepositoryBase<NewRecord, Record> 
 		super(`app/${app_code}`);
 	}
 	async get(urlParams?: object) {
-		return await super.get(urlParams);
+		return await super.get(urlParams) as App;
 	}
 	async find(id: number) {
 		const data = await super.find(id);

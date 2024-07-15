@@ -16,7 +16,7 @@ export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: stylesheet },
 ];
 
-export function Layout({ children }: { children: React.ReactNode; }) {
+export function Layout({ children, title }: { children: React.ReactNode; title?: string; }) {
 	return (
 		<html lang="en">
 			<head>
@@ -28,7 +28,9 @@ export function Layout({ children }: { children: React.ReactNode; }) {
 			<body>
 				<Contexts>
 					<NavBar />
-					{children}
+					<div className="max-w-[95vw] mx-auto my-4">
+						{children}
+					</div>
 				</Contexts>
 				<ScrollRestoration />
 				<Scripts />

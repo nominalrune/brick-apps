@@ -23,7 +23,7 @@ export default class Widget implements ViewItemData {
 		max?: number,
 		pattern?: string,
 		customValidator?: (value: string) => { validity: boolean, errorMessage: string; };
-		options?: ([value: any] | [value: any, label: ReactNode])[];
+		options?: ([value: string|number] | [value: any, label: ReactNode])[];
 	} | undefined;
 	constructor(data: WithoutMethods<Widget>) {
 		this.type = data.type;

@@ -24,13 +24,16 @@ class UserDefinedModelClassRepository
 			mkdir($this->dir, 0777, true);
 		}
 	}
+	public function get()
+	{
+		return "\\App\\Models\\UserDefined\\{$this->className}\\{$this->className}";
+	}
 	public function create(
 		string $name,
 		string $description,
 		string $icon,
 		array $columns
-		)
-	{
+	) {
 		if ($this->exists()) {
 			throw new \Exception("class file already exists:{$this->className}");
 		}
@@ -46,8 +49,7 @@ class UserDefinedModelClassRepository
 		string $description,
 		string $icon,
 		array $columns
-		)
-	{
+	) {
 		$this->delete();
 
 		$content = $this->generateModel($name, $description, $icon, $columns);
@@ -100,7 +102,7 @@ class UserDefinedModelClassRepository
 			',',
 			array_map(
 				fn (array $col) => (
-					'['. PHP_EOL . '			' . implode(
+					'[' . PHP_EOL . '			' . implode(
 						',' . PHP_EOL . '			',
 						array_map(fn (string $value, string $key) => "\"{$key}\" => \"{$value}\"", $col, array_keys($col))
 					) . ',' . PHP_EOL . '		]'

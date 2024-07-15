@@ -13,30 +13,31 @@ class RecordController extends Controller
 	public function index(Request $request, string $app_code, ?string $view_code = null)
 	{
 		$app = App::findByCode($app_code)->withView($view_code);
+		info('app @RecordController',['app' => $app]);
+		// $app->load('records');
+		$records = $app->records;
+		// $app->setAttribute('records', $records);
+		info('records @RecordController',['records' => $records]);
 		// Log::info('records index', ['app' => $app]);
 		return response()->json($app);
 	}
 	public function show(Request $request, string $app_code, string $view_code, int $record_id)
 	{
-		$app = App::findByCode($app_code);
-		$repository = new RecordRepository($app_code);
+		$app = App::findByCode($app_code)->withView($view_code);
+		$repository = new RecordRepository($app);
 		$record = $repository->get($record_id);
 		return response()->json([
 			"app" => $app,
 			"record" => $record,
 		]);
 	}
-	public function store(Request $request, string $app_code)
+	public function store(Request $request, string $app_code, string $view_code = null)
 	{
 		$app = App::findByCode($app_code);
-		$inputs = $request->only($app->form_keys);
-		$repository = new RecordRepository($app);
-		$id = $repository->create($inputs);
-		$record = $repository->get($id);
-		return to_route("record.show", [
-			"app_code" => $app_code,
-			"record_id" => $record->id,
-		]);
+		$inputs = $request->only(collect($app->columns)->pluck('code')->toArray());
+		$record = $app->recordClass::create($inputs);
+
+		return response()->json($record);
 	}
 
 	public function update(Request $request, string $app_code, int $record_id)

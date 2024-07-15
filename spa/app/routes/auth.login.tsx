@@ -32,7 +32,7 @@ export default function Login() {
 		return <div>ログイン済み</div>;
 	}
 	return (
-		<div>
+		<div className='max-w-md mx-auto my-8 p-4 rounded border border-slate-500 '>
 			<Form
 				actions={[
 					{ "label": "ログイン", onClick: (data) => {login(data) } },
