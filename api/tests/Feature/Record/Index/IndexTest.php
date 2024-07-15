@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Index;
+namespace Tests\Feature\Record\Index;
 
 use App\Models\App;
 use Tests\TestCase;
