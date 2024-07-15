@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 use App\Repository\App\UserDefinedModelClassRepository;
 
-use App\Services\DB\Column;
+use App\Repository\DB\Column;
 
 class UpdateAppService
 {
