@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repository\App\UserDefinedModelClassRepository;
 use App\Models\User;
 use App\Models\View;
-use App\Services\DB\Column;
+use App\Repository\DB\Column;
 
 class CreateAppService
 {
@@ -19,7 +19,7 @@ class CreateAppService
 	}
 	/**
 	 */
-	public function create(
+	public static function create(
 		string $code,
 		string $name,
 		string $description,
@@ -30,13 +30,12 @@ class CreateAppService
 	) {
 		$repository = new UserDefinedModelClassRepository($code);
 		$repository->create($name, $description, $icon, $columns);
-		$this->createAppTable($code, $columns);
-		$app = $this->createAppRecord($code, $name, $creator);
-		$this->createDefaultView($app, $defaultView);
-		Log::info('app created', ['app' => $app]);
+		self::createAppTable($code, $columns);
+		$app = self::createAppRecord($code, $name, $creator);
+		self::createDefaultView($app, $defaultView);
 		return $app;
 	}
-	private function createAppRecord(string $code, string $name, User $creator)
+	private static function createAppRecord(string $code, string $name, User $creator)
 	{
 		$app = App::create([
 			'code' => $code,
@@ -47,7 +46,7 @@ class CreateAppService
 		]);
 		return $app;
 	}
-	private function createDefaultView(App $app, array $view)
+	private static function createDefaultView(App $app, array $view)
 	{
 		$view = View::create([
 			'app_code' => $app->code,
@@ -63,11 +62,11 @@ class CreateAppService
 		$app->update(['default_view' => $view->code]);
 		return $view;
 	}
-	private function createAppTable(string $code, array $columns)
+	private static function createAppTable(string $code, array $columns)
 	{
 		$connection = DB::connection(env('DB_CONNECTION'));
 		if ($connection->getSchemaBuilder()->hasTable($code)) {
-			throw new \Exception('table already exists' . "name:{$code}");
+			throw new \Exception("table already exists, name:{$code}");
 		}
 		$connection->getSchemaBuilder()->create($code, function (Blueprint $table) use ($columns) {
 			$table->id();
@@ -81,12 +80,12 @@ class CreateAppService
 					$table->foreignId($code)->nullable()->constrained($column['referringAppName'])->onUpdate('restrict')->onDelete('set null');
 					continue;
 				}
-				$this->declareColumn($table, $code, $valueType);
+				self::declareColumn($table, $code, $valueType);
 			}
 		});
 	}
 
-	private function declareColumn(Blueprint $table, string $name, string $valueType)
+	private static function declareColumn(Blueprint $table, string $name, string $valueType)
 	{
 		Column::declareColumn($table, $name, $valueType);
 	}
