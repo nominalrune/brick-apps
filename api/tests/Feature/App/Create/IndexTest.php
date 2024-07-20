@@ -1,20 +1,53 @@
 <?php
 
-namespace Tests\Feature\App\Index;
+namespace Tests\Feature\App\Create;
 
 use App\Models\App;
 use Tests\TestCase;
 
-class IndexTest extends TestCase
+class CreateTest extends TestCase
 {
+	protected array $validRequestBody;
+	protected array $invalidRequestBody;
+
 	protected function setUp() : void
 	{
 		parent::setUp();
+		$this->validRequestBody = [
+			'code' =>'code',
+			'name' => 'name',
+			'description' => 'description',
+			'icon' => '/icon.png',
+			'columns' => [[
+				'code'=>'code',
+				'valueType'=>'varchar',
+				]],
+			'defaultView'=>[
+				'code'=>'code',
+				'description'=>'description',
+				'detail'=>[[[
+					'code'=>'code',
+					'type'=>'text',
+					'suffix'=>'',
+					'prefix'=>'',
+					'label'=>'label',
+					'defaultValue'=>'',
+					]]],
+					'list'=>[
+					'listType' => 'table',
+					'content' => [
+						["code" => "column_a", "type" => "text", "label" => "Column A", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
+						["code" => "column_b", "type" => "text", "label" => "Column B", "rules" => null, "prefix" => "", "suffix" => "", "defaultValue" => ""],
+					],
+				],
+					],
+				],
+		];
 	}
 	public function test_returns_404_for_non_authenticated_request() : void
 	{
 	}
-	public function test_returns_list_of_apps_for_authenticated_user_with_permissions() : void
+	public function test_creates_an_app_for_vaild_request() : void
 	{
 		$this
 			->actingAs($this->userA)
