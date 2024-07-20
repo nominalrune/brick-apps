@@ -3,10 +3,11 @@ import { useContext } from 'react';
 import AuthContext from '~/contexts/Auth/AuthContext';
 import NavItem from './NavItem';
 import Profile from './Profile';
-import ignoreList from './ignoreList.json';
+import BreadCrumbs from './BreadCrumbs';
 
 export default function NavBar() {
 	const { user, logout } = useContext(AuthContext);
+	const url = useLocation().pathname;
 	return (
 		<div className='flex flex-col'>
 			<nav className='w-screen h-12 bg-slate-100 flex justify-between px-2'>
@@ -31,21 +32,8 @@ export default function NavBar() {
 					}
 				</div>
 			</nav>
-			<BreadCrumbs />
+			<BreadCrumbs url={url} />
 		</div>
 	);
 }
 
-function BreadCrumbs() {
-	const url = useLocation().pathname;
-	const parts = url.split('/').filter(i => !!i);
-	return <nav className='pl-4 py-1 border-b text-slate-700 flex gap-2'>
-		{
-			parts.map((part, i) => {
-				if (!ignoreList.includes(part)) { return <></>; }
-				const path = parts.slice(0, i + 1).join('/');
-				return <>{i !== 0 && ">"}<Link key={i} to={path}>{part}</Link></>;
-			})
-		}
-	</nav>;
-}

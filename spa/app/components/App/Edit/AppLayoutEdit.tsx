@@ -1,5 +1,5 @@
 import Palette from '~/components/App/Edit/Form/Palette';
-import AppForm from '~/components/App/Edit/Form/Form';
+import AppForm from '~/components/App/Edit/Form/AppForm';
 import useApp from '~/hooks/App/useApp';
 import { DragDropContext } from '~/components/common/Dnd';
 import DetailLayout from '~/model/App/View/DetailLayout';
@@ -30,7 +30,7 @@ export default function AppLayoutEdit(props: Props) {
 
 			<div className='col-span-3 flex flex-col'>
 				<AppForm
-					table={props.app.defaultView||NewView.blank()}
+					table={props.app.view||NewView.blank()}
 					update={props.updateWidget}
 					remove={props.removeWidget}
 				/>

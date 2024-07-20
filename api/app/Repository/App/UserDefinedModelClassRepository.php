@@ -88,7 +88,7 @@ class UserDefinedModelClassRepository
 	private function exists() : bool
 	{
 		$list = $this->listFiles();
-		Log::info("", ["files" => $list]);
+		// Log::info("", ["files" => $list]);
 		return in_array($this->className . ".php", $list);
 	}
 	private function generateModel(

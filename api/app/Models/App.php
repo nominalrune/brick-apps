@@ -62,7 +62,7 @@ class App extends Model
 			return $this->recordClass::$columns;
 		});
 	}
-	public View $_view;
+	public View|null $_view;
 	public function view() : Attribute
 	{
 		return Attribute::make(

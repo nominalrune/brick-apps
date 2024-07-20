@@ -16,7 +16,7 @@ export default function AppForm({ table, update, remove }: Param) {
 
 	function handleConfigChange(setting: Widget) {
 		if (!selectedInput || !setting) { return; }
-		console.log({ setting });
+		// console.log({ setting });
 		update(selectedInput.position, setting);
 		setSelectedInput(undefined);
 	}

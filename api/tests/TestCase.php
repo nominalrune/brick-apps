@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\App\CreateAppService;
 use App\Services\App\DeleteAppService;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Artisan;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -123,7 +124,9 @@ abstract class TestCase extends BaseTestCase
 	}
 	protected function tearDown() : void
 	{
-		DeleteAppService::delete($this->appA);
-		DeleteAppService::delete($this->appB);
+		Artisan::call('app:clear-user-defined-classes');
+		DeleteAppService::delete($this->appA->code);
+		DeleteAppService::delete($this->appB->code);
+		parent::tearDown();
 	}
 }

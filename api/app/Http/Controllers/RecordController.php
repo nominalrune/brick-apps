@@ -13,11 +13,11 @@ class RecordController extends Controller
 	public function index(Request $request, string $app_code, ?string $view_code = null)
 	{
 		$app = App::findByCode($app_code)->withView($view_code);
-		info('app @RecordController',['app' => $app]);
+		// info('app @RecordController',['app' => $app]);
 		// $app->load('records');
 		$records = $app->records;
 		// $app->setAttribute('records', $records);
-		info('records @RecordController',['records' => $records]);
+		// info('records @RecordController',['records' => $records]);
 		// Log::info('records index', ['app' => $app]);
 		return response()->json($app);
 	}

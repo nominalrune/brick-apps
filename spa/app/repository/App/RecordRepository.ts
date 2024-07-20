@@ -4,8 +4,8 @@ import RepositoryBase from '../common/RepositoryBase';
 import App from '~/model/App/App';
 
 export default class RecordRepository extends RepositoryBase<NewRecord, Record> {
-	constructor(app_code: string) {
-		super(`app/${app_code}`);
+	constructor(app_code: string, view_code: string) {
+		super(`app/${app_code}/${view_code}`);
 	}
 	async get(urlParams?: object) {
 		return await super.get(urlParams) as App;
