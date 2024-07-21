@@ -13,6 +13,12 @@ use App\Http\Requests\App\StoreRequest;
 
 class AppController extends Controller
 {
+	/**
+	 * lists accessible apps.
+	 * @param \Illuminate\Http\Request $request
+	 * @return mixed|\Illuminate\Http\JsonResponse
+	 * @response array<int, App>
+	 */
 	public function index(Request $request)
 	{
 		// $apps = App::withCount("records")->get();
