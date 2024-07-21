@@ -39,6 +39,9 @@ importers:
         specifier: ^6.4.3
         version: 6.4.3(typescript@5.5.2)
     devDependencies:
+      '@previewjs/config':
+        specifier: ^6.0.0
+        version: 6.0.0(@types/node@20.12.13)
       '@remix-run/dev':
         specifier: ^2.9.2
         version: 2.9.2(@remix-run/react@2.9.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.2))(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(typescript@5.5.2)(vite@5.2.12(@types/node@20.12.13))
@@ -708,6 +711,9 @@ packages:
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
+
+  '@previewjs/config@6.0.0':
+    resolution: {integrity: sha512-YGA3Mqc4lIoM2pdxBsgZnxZGWW5kJB01AsGW/NDB1z/F4l86DzZ5D2gHk2hl7moDrh49A90axBb1bW6ed09dkQ==}
 
   '@react-aria/focus@3.17.1':
     resolution: {integrity: sha512-FLTySoSNqX++u0nWZJPPN5etXY0WBxaIe/YuL/GTEeuqUIuC/2bJSaw5hlsM6T2yjy6Y/VAxBcKSdAFUlU6njQ==}
@@ -4451,6 +4457,18 @@ snapshots:
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
+
+  '@previewjs/config@6.0.0(@types/node@20.12.13)':
+    dependencies:
+      vite: 5.2.12(@types/node@20.12.13)
+    transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - terser
 
   '@react-aria/focus@3.17.1(react@18.3.1)':
     dependencies:

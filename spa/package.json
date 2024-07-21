@@ -24,6 +24,7 @@
     "typia": "^6.4.3"
   },
   "devDependencies": {
+    "@previewjs/config": "^6.0.0",
     "@remix-run/dev": "^2.9.2",
     "@ryoppippi/unplugin-typia": "npm:@jsr/ryoppippi__unplugin-typia@^0.5.4",
     "@tailwindcss/forms": "^0.5.7",

@@ -1,11 +1,8 @@
-
-import { inputItems } from '~/model/App/View/InputTypes';
 import Widget from '~/model/App/View/Widget';
 import Input from '../common/Input/Input';
 import { ChangeEvent } from 'react';
 
 export default function WidgetComponent({ value, widget, onChange }: { value: unknown, widget: Widget, onChange: (value: string | number | boolean | object) => void; }) {
-
 	return <div className="flex flex-col gap-1">
 		<label htmlFor={widget.code} className="text-sm text-slate-600">{widget.label}</label>
 		{widget.type !== "reference" ? (

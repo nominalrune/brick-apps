@@ -1,12 +1,8 @@
+import ListLayout from '../ListLayout';
 import Widget from '../Widget';
 
-export default class Table {
-	public readonly listType = "table";
-	public readonly content: Widget[];
-	constructor(content: Widget[]) {
-		if (!Array.isArray(content)) throw new Error("Invalid argument. Given argument is not an array.");
-		this.content = content;
-	}
+export default class Table extends ListLayout<Widget[]>{
+
 	toJSON() {
 		return {
 			listType: "table",

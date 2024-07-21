@@ -1,16 +1,11 @@
 import { ClientLoaderFunctionArgs, useLoaderData } from '@remix-run/react';
-import { Fragment } from 'react/jsx-runtime';
-import AppForm from '~/components/App/Edit/Form/AppForm';
-import useAppContext from '~/contexts/useAppContext';
 import App from '~/model/App/App';
 import Record from '~/model/App/Record/Record';
-import View from '~/model/App/View/View';
 import RecordRepository from '~/repository/App/RecordRepository';
 
 async function getClientData(code: string, view_code: string, record_id: number) {
 	const repository = new RecordRepository(code, view_code);
 	const result = await repository.find(record_id);
-	console.log({ record_id, result });
 	return result as { app: App, record: Record; };
 }
 

@@ -70,7 +70,7 @@ class DemoSeeder extends Seeder
 			],
 			$user
 		);
-		$app->recordQuery()->insert([
+		$app->records()->insert([
 			'name' => 'Test Record',
 			'email' => 'example@example.com',
 		]);

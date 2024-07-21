@@ -59,7 +59,7 @@ class App extends Model
 	public function columns() : Attribute
 	{
 		return new Attribute(function () {
-			return $this->recordClass::$columns;
+			return collect($this->recordClass::$columns);
 		});
 	}
 	public View|null $_view;
@@ -165,10 +165,6 @@ class App extends Model
 			}
 		);
 	}
-	public function recordQuery() : \Illuminate\Database\Query\Builder
-	{
-		return DB::query()->from($this->code);
-	}
 	protected function requireClass()
 	{
 		$classFiler = new UserDefinedModelClassRepository($this->code);
@@ -177,20 +173,9 @@ class App extends Model
 	}
 	public function records()
 	{
-		info('records method', ['app' => $this]);
-		// return new \Illuminate\Database\Eloquent\Relations\HasMany(
-		// 	$this->recordClass->query(),
-		// 	$this,
-		// 	"{$this->code}.id",
-		// 	'id'
-		// );
 		$hasMany = $this->hasMany($this->recordClass);
 		$hasMany->setQuery(DB::query()->from($this->code));
 		return $hasMany;
-		// return DB::query()->from($this->code);
-		// return $this->newHasMany(
-		//     DB::query()->from($this->code), $this, $this->code.'.'.$foreignKey, $localKey
-		// );
 	}
 	public static function findByCode(string $appCode) : App
 	{
