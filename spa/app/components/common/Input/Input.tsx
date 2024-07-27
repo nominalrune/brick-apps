@@ -22,20 +22,29 @@ type SelectProps = {
 	id: string;
 	value: any;
 	disabled?: boolean;
-	options: ([value: string|number] | [label: Exclude<ReactNode, null | undefined>, value: any])[];
+	options: ([value: string | number] | [label: Exclude<ReactNode, null | undefined>, value: any])[];
 	onChange?: ({ value, label }: { value: any, label: string; }) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['select'], "value" | "onChange">;
 type TextareaProps = {
 	type: "textarea";
-	id: string;
+	id?: string;
 	value: any;
 	disabled?: boolean;
 	onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 	className?: string;
 } & Omit<JSX.IntrinsicElements['textarea'], "value" | "onChange">;
 
-export default function Input<T extends InputType | "select" | "textarea">(props: { type: T; } & LabelProps & (T extends "select" ? SelectProps : T extends "textarea" ? TextareaProps : InputProps)) {
+type ReferenceProps = {
+	type: "reference";
+	id: string;
+	value: any;
+	disabled?: boolean;
+	onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	className?: string;
+}&Omit<JSX.IntrinsicElements['input'], "value" | "onChange">;
+
+export default function Input<T extends InputType | "select" | "textarea" | "reference">(props: { type: T; } & LabelProps & (T extends "select" ? SelectProps : T extends "textarea" ? TextareaProps : T extends "reference" ? ReferenceProps : InputProps)) {
 	const _id = useId();
 	return <div className="text-nowrap">
 		<label htmlFor={_id}>{props.label}</label>
@@ -52,13 +61,15 @@ export default function Input<T extends InputType | "select" | "textarea">(props
 	</div>;
 }
 
-function BaseInput(props: (InputProps | SelectProps | TextareaProps)) {
+function BaseInput<T extends (InputProps | SelectProps | TextareaProps | ReferenceProps)>(props: T) {
 	const listId = useId();
 	switch (props.type) {
 		case "select":
 			return <_Select props={props} />;
 		case "textarea":
 			return <Textarea props={props} />;
+		case "reference":
+			return <>reference. to be implemented</>;
 		default:
 			return <>
 				<input

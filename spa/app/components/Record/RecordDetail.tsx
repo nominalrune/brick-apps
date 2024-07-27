@@ -20,6 +20,7 @@ export default function RecordShow({ id, view, record, onSubmit, edit }: Param) 
 				{
 					inputs.map(input => <Fragment key={input.code}>
 						<Input
+							id={input.code}
 							label={input.label || "(no name)"}
 							type={input.type}
 							name={input.code}
