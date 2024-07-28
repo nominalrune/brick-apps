@@ -15,7 +15,7 @@ type AppData = {
     icon: string;
     columns: Column[];
     archived_at: Date | null | undefined;
-	view?: ViewData;
+	view: ViewData;
 	records?: Record[];
 }
 export default AppData;

@@ -53,7 +53,7 @@ class DemoSeeder extends Seeder
 			'/icons/record.svg',
 			[["code" => "name", 'valueType' => 'varchar'], ["code" => "email", 'valueType' => 'varchar']],
 			[
-				'code' => 'test-default',
+				'code' => 'test_default',
 				'name' => 'default',
 				'description' => 'default view',
 				'list' => [

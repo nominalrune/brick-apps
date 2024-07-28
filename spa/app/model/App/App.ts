@@ -9,14 +9,15 @@ import { is } from 'typia';
 export default class App extends AppBase {
 	public id: number;
 	public default_view: string;
-	public view?: View;
+	public view: View;
 	public records?: Record[];
 	public archived_at?: Date | null;
 	constructor(app: WithoutMethods<App>) {
 		super(app);
 		this.id = app.id;
 		this.default_view = app.default_view;
-		this.view = app.view;
+		console.log("app.view",app.view);
+		this.view = new View(app.view);
 		this.records = app.records;
 		this.archived_at = app.archived_at ? new Date(app.archived_at) : null;
 	}
@@ -25,7 +26,7 @@ export default class App extends AppBase {
 			...super.toJSON(),
 			id: this.id,
 			default_view: this.default_view,
-			view: this.view?.toJSON(),
+			view: this.view.toJSON(),
 			records: this.records,
 			archived_at: this.archived_at,
 		};
@@ -40,7 +41,7 @@ export default class App extends AppBase {
 			columns: data.columns,
 			default_view: data.default_view,
 			archived_at: data.archived_at,
-			view: is<{ view: ViewData; }>(data) ? View.fromData(data.view, data.columns) : undefined,
+			view: View.fromData(data.view, data.columns),
 			records: is<{ records: Record[]; }>(data) ? data.records : undefined,
 		});
 	}

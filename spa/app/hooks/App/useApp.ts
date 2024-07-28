@@ -114,12 +114,12 @@ export default function useApp(initialAppState: AppWithView | NewApp) {
 			const res = await repo.create(
 				new NewApp(app)
 			);
-			navigate(`/app/${res.code}`);
+			navigate(`/app/${res.code}/${res.default_view}`);
 		} else if (app instanceof App) {
 			if (!confirm(`アプリを更新しますか？`)) { return; }
 			const appRepo = new AppRepository();
 			const res = await appRepo.update(app);
-			navigate(`/app/${res.code}`);
+			navigate(`/app/${res.code}/${res.default_view}`);
 		}
 	}
 	return {

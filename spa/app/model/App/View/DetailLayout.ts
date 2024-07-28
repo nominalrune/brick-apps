@@ -5,7 +5,7 @@ import WithoutMethods from '~/model/common/WithoutMethods';
 export default class DetailLayout {
 	public readonly content: Widget[][];
 	constructor(content: WithoutMethods<Widget>[][]) {
-		if (!Array.isArray(content)) throw new Error("Invalid argument. Given argument is not an array.");
+		if (!Array.isArray(content)) throw new Error("Invalid argument. Given argument is not an array. it's "+JSON.stringify(content));
 		this.content = content.filter(row => row.length !== 0).map(arr => arr.map(i => new Widget(i)));
 	}
 	map<T>(callbackfn: (inputs: Widget[], i?: number, arr?: Widget[][]) => T) {

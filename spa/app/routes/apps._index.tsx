@@ -3,6 +3,7 @@ import AppList from '~/components/App/AppList';
 import FloatingAddButton from '~/components/common/Button/FloatingAddButton';
 import AppRepository from '~/repository/App';
 import { useNavigate } from "@remix-run/react";
+import ErrorBoundary from '~/components/layouts/ErrorBoundary';
 
 async function getClientData(request: Request) {
 	const repository = new AppRepository();
@@ -24,12 +25,14 @@ export default function Component() {
 	const data = useLoaderData();
 	const navigate = useNavigate();
 	return <>
-		<div className='mx-6 gap-4 items-center'>
-			<div className='m-1 flex justify-end'>
-			<FloatingAddButton onClick={() => {navigate("./create")}} className="w-12 h-12 text-3xl" />
-				
+		<ErrorBoundary>
+			<div className='mx-6 gap-4 items-center'>
+				<div className='m-1 flex justify-end'>
+					<FloatingAddButton onClick={() => { navigate("./create"); }} className="w-12 h-12 text-3xl" />
+
+				</div>
+				<AppList apps={data} />
 			</div>
-			<AppList apps={data} />
-		</div>
+		</ErrorBoundary>
 	</>;
 }
