@@ -1,0 +1,46 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"declaration": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"jsx": "react-jsxdev",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noErrorTruncation": true,
+		"outDir": "dist",
+		"paths": {
+			"@/*": [
+				"src/*",
+			],
+			"common/*": [
+				"src/common/*",
+			]
+		},
+		"resolveJsonModule": true,
+		"strict": true,
+		"target": "esnext",
+		"types": [
+			"jest",
+		],
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		]
+	},
+	"exclude": [
+		"dist",
+		"node_modules"
+	],
+	"include": [
+		"src/**/*"
+	]
+}

@@ -1,0 +1,7 @@
+@media (prefers-color-scheme: dark) {
+	.dark {
+		color-scheme: dark;
+		color: #f0f0ff;
+		background-color: #0a0b1f;
+	}
+}
