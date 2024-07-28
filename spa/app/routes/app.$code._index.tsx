@@ -11,6 +11,7 @@ import { Link } from "@remix-run/react";
 import { useContext } from 'react';
 import AppContext from '~/contexts/AppContext';
 import useAppContext from '~/contexts/useAppContext';
+import ErrorBoundary from '~/components/layouts/ErrorBoundary';
 
 // async function getClientData(code: string) {
 // 	const repository = new RecordRepository(code);
@@ -30,24 +31,26 @@ export default function Index() {
 	// const app = new App(useLoaderData<typeof getClientData>() as WithoutMethods<App>);
 	const app = useAppContext();
 	return <>
-		<div className='flex gap-4 items-center'>
-			<AppIcon src={app.icon} />
-			<Link to={`/app/${app.code}`} className='text-xl '>{app.name}</Link>
-			<div className='flex-grow flex gap-4 justify-end items-center'>
-				<Link to={`/app/${app.code}/create`} ><Button>新規作成</Button></Link>
-				<Link to={`/apps/${app.code}/edit`} ><MdSettings className="text-3xl text-slate-600 hover:text-slate-800 hover:drop-shadow transition-colors" /></Link>
+		<ErrorBoundary>
+			<div className='flex gap-4 items-center'>
+				<AppIcon src={app.icon} />
+				<Link to={`/app/${app.code}`} className='text-xl '>{app.name}</Link>
+				<div className='flex-grow flex gap-4 justify-end items-center'>
+					<Link to={`/app/${app.code}/create`} ><Button>新規作成</Button></Link>
+					<Link to={`/apps/${app.code}/edit`} ><MdSettings className="text-3xl text-slate-600 hover:text-slate-800 hover:drop-shadow transition-colors" /></Link>
+				</div>
 			</div>
-		</div>
-		<div className="py-12">
-			<div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-				<RecordList app={app} />
+			<div className="py-12">
+				<div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+					<RecordList app={app} />
+				</div>
 			</div>
-		</div>
-		<div className='fixed right-2 bottom-2'>
-			<Link to={`/app/${app.code}/create`}>
-				<FloatingAddButton />
-			</Link>
-		</div>
+			<div className='fixed right-2 bottom-2'>
+				<Link to={`/app/${app.code}/create`}>
+					<FloatingAddButton />
+				</Link>
+			</div>
+		</ErrorBoundary>
 	</>;
 
 }

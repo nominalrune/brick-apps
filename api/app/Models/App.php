@@ -31,6 +31,7 @@ class App extends Model
 		'description',
 		'columns',
 		'icon',
+		'view',
 	];
 	protected $hidden = [
 		'created_at',

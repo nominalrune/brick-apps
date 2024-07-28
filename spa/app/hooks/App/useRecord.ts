@@ -17,7 +17,7 @@ export default function useRecord(initialState: Record, app: App) {
 	}
 	async function submit() {
 		setProcessing(true);
-		const url = record?.id ? `/app/${app.code}/${app.view?.code}/${record.id}` : `/app/${app.code}/${app.view?.code}`;
+		const url = record?.id ? `/app/${app.code}/${app.view.code}/${record.id}` : `/app/${app.code}/${app.view.code}`;
 		return await api.post(url, record).then((response) => {
 			const data = response;
 			console.log(`create finished with data:`, data)

@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::delete('/apps/{app_code}', [AppController::class, 'destroy'])->name('app.delete');
 
 	// Record
+	Route::get('/app/{app_code}', [RecordController::class, 'index'])->name('record.index');
 	Route::get('/app/{app_code}/{view_code}', [RecordController::class, 'index'])->name('record.index');
 	Route::post('/app/{app_code}/{view_code}', [RecordController::class, 'store'])->name('record.store');
 	Route::get('/app/{app_code}/{view_code}/{record_id}', [RecordController::class, 'show'])->name('record.show');
